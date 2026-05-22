@@ -20,15 +20,32 @@ REM ============================================================
 set "REMOVED_SOMETHING=0"
 
 REM ---- Path 1: official installer leaves a binary in either ----
-REM  ~/.local/bin/grok (Git Bash default) or ~/.x.ai/bin/grok.
-REM  Use bash so we hit the same filesystem the installer wrote to.
-where bash >nul 2>nul
-if errorlevel 1 goto :npm_path
-
+REM  ~/.local/bin/grok (Git Bash default), ~/.x.ai/bin/grok, or
+REM  ~/.grok/bin/grok. On Windows those map under %USERPROFILE%,
+REM  so we can clean them up directly without invoking bash (which
+REM  on stock Windows resolves to the WSL launcher and prints a
+REM  spurious "system cannot find the path specified" warning when
+REM  the current drive is not visible inside WSL).
 echo.
 echo Looking for an official-installer copy of Grok...
-call bash -lc "for p in \"$HOME/.local/bin/grok\" \"$HOME/.x.ai/bin/grok\" \"$HOME/.grok/bin/grok\"; do if [ -e \"$p\" ]; then echo \"Removing $p\"; rm -f \"$p\"; fi; done; if [ -d \"$HOME/.x.ai\" ] && [ -z \"$(ls -A \"$HOME/.x.ai\" 2>/dev/null)\" ]; then rmdir \"$HOME/.x.ai\"; fi"
-if not errorlevel 1 set "REMOVED_SOMETHING=1"
+for %%P in (
+    "%USERPROFILE%\.local\bin\grok"
+    "%USERPROFILE%\.local\bin\grok.exe"
+    "%USERPROFILE%\.x.ai\bin\grok"
+    "%USERPROFILE%\.x.ai\bin\grok.exe"
+    "%USERPROFILE%\.grok\bin\grok"
+    "%USERPROFILE%\.grok\bin\grok.exe"
+) do (
+    if exist %%P (
+        echo Removing %%~P
+        del /f /q %%P
+        set "REMOVED_SOMETHING=1"
+    )
+)
+REM  Tidy up the now-empty ~/.x.ai install dir (rmdir without /s
+REM  only succeeds if the dir is empty, so it is safe to call).
+if exist "%USERPROFILE%\.x.ai\bin\" rmdir "%USERPROFILE%\.x.ai\bin" 2>nul
+if exist "%USERPROFILE%\.x.ai\" rmdir "%USERPROFILE%\.x.ai" 2>nul
 
 :npm_path
 REM ---- Path 2: npm fallback package 'grok-build' ---------------

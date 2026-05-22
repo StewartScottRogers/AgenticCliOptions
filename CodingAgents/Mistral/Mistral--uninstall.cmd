@@ -22,6 +22,16 @@ if errorlevel 1 (
     goto :end
 )
 
+REM  Pre-check: if the tool is not installed, 'uv tool uninstall'
+REM  returns a nonzero exit code, which would otherwise trigger
+REM  the alarming ":failed" branch below. Treat "not installed"
+REM  as a no-op success instead.
+call uv tool list 2>nul | findstr /I /B /C:"mistral-vibe" >nul
+if errorlevel 1 (
+    echo Mistral Vibe is not installed as a uv tool - nothing to do.
+    goto :end
+)
+
 echo.
 echo Uninstalling Mistral Vibe...
 echo     uv tool uninstall mistral-vibe
