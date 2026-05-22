@@ -28,6 +28,7 @@
     <None Include="$(MSBuildThisFileDirectory)Mistral\Mistral--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Grok\Grok--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Grok\Grok--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)SetOpenRouterKey.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Trae\Trae--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Trae\Trae--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Trae\Trae--settings-lmstudio.cmd" />
