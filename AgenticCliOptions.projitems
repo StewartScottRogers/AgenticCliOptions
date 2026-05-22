@@ -14,11 +14,11 @@
     <None Include="$(MSBuildThisFileDirectory)Claude\Claude--dangerously-skip-permissions.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Claude\Claude--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Qwen\Qwen--install.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)Qwen\Qwen--openrouter-settings-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Qwen\Qwen--openrouter.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Qwen\Qwen--settings-lmstudio.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Claude\LMStudio.Claude.Settings.json" />
-    <Content Include="$(MSBuildThisFileDirectory)Qwen\LMStudio.Qwen.Settings.json" />
+    <Content Include="$(MSBuildThisFileDirectory)Qwen\.qwen\settings.json" />
   </ItemGroup>
 </Project>
