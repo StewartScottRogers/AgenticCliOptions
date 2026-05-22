@@ -9,7 +9,7 @@ if "%LMSTUDIO_MODEL%"=="" (
     goto :end
 )
 echo Connecting to LMStudio model: %LMSTUDIO_MODEL%
-call claude --verbose --dangerously-skip-permissions --settings LMStudio.Settings.json --model %LMSTUDIO_MODEL%
+call claude --verbose --dangerously-skip-permissions --settings LMStudio.Claude.Settings.json --model %LMSTUDIO_MODEL%
 :end
 popd
 endlocal
