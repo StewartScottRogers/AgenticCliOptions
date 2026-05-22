@@ -1,0 +1,18 @@
+﻿{
+  "env": {
+    "ANTHROPIC_BASE_URL": "http://192.168.12.174:1234",
+    "ANTHROPIC_AUTH_TOKEN": "lmstudio"
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -command \"try { Write-Output ('LMStudio model currently loaded: ' + (Invoke-RestMethod 'http://192.168.12.174:1234/v1/models').data[0].id) } catch { Write-Output 'LMStudio: could not determine loaded model' }\""
+          }
+        ]
+      }
+    ]
+  }
+}
