@@ -10,10 +10,11 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--settings-lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Install-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)RunClaude.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--dangerously-skip-permissions--openrouter.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--dangerously-skip-permissions--settings-lmstudio.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--dangerously-skip-permissions.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--openrouter.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--settings-lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--openrouter.cmd" />

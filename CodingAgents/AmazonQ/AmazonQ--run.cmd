@@ -31,7 +31,9 @@ where wsl >nul 2>nul
 if errorlevel 1 goto :notools
 
 echo Launching Amazon Q chat through WSL...
-call wsl -e bash -lc "q chat"
+REM  The CLI was rebranded from Amazon Q ('q') to Kiro CLI
+REM  ('kiro-cli'); use whichever the WSL install produced.
+call wsl -e bash -lc "if command -v q >/dev/null 2>&1; then q chat; else kiro-cli chat; fi"
 goto :end
 
 :notools

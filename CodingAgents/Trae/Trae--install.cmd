@@ -2,39 +2,39 @@
 setlocal
 
 REM ============================================================
-REM  Install / update Trae Agent (ByteDance CLI coding agent)
+REM  Install / update Trae Agent (ByteDance)  --  turn-key installer
 REM  ------------------------------------------------------------
-REM  Trae Agent is a Python tool (command: 'trae-cli'). This
-REM  script installs it with uv if available, otherwise pip.
+REM  Checks for and installs EVERY dependency automatically:
+REM    - uv (Astral's Python tool installer) - via winget if missing
+REM    - a suitable Python - uv downloads one automatically
+REM    - Trae Agent itself - installed/updated via 'uv tool'
+REM  Re-running this script updates an existing install.
 REM
-REM  Requires Python 3.12 or newer - https://python.org
+REM  winget (Windows Package Manager) installs uv. It ships with
+REM  Windows 11 and current Windows 10.
 REM
-REM  If the package install fails, install from source instead:
+REM  If the 'trae-agent' package cannot be found on PyPI, install
+REM  from source instead:
 REM      git clone https://github.com/bytedance/trae-agent.git
 REM      cd trae-agent
 REM      uv sync --all-extras
 REM ============================================================
 
-where uv >nul 2>nul
-if not errorlevel 1 (
-    echo Installing Trae Agent with uv...
-    echo     uv tool install --upgrade trae-agent
-    echo.
-    call uv tool install --upgrade trae-agent
-    if errorlevel 1 goto :failed
-    goto :done
-)
-
-where pip >nul 2>nul
-if errorlevel 1 goto :nopy
-
-echo 'uv' not found - installing Trae Agent with pip...
-echo     pip install --upgrade trae-agent
-echo.
-call pip install --upgrade trae-agent
+call :ensure_uv
 if errorlevel 1 goto :failed
 
-:done
+echo.
+echo Installing / updating Trae Agent...
+echo     uv tool install --upgrade trae-agent
+echo.
+call uv tool install --upgrade trae-agent
+if errorlevel 1 goto :failed
+
+REM  Make sure uv's tool-bin directory is on PATH for new terminals,
+REM  then refresh PATH here so the 'trae-cli' command works now.
+call uv tool update-shell >nul 2>nul
+call :refresh_path
+
 echo.
 echo Trae Agent installed. Reported version:
 call trae-cli --version
@@ -43,12 +43,47 @@ echo Done. Launch it with Trae--openrouter.cmd or
 echo Trae--settings-lmstudio.cmd.
 goto :end
 
-:nopy
-echo ERROR: Neither 'uv' nor 'pip' was found on your PATH.
-echo Install Python 3.12 or newer first, then re-run this script:
+
+REM ============================================================
+REM  Helper routines
+REM ============================================================
+
+:ensure_uv
+REM  Ensure uv is available; install it via winget if missing,
+REM  then make it visible to this already-running shell. uv will
+REM  download a suitable Python by itself when it installs a tool.
+where uv >nul 2>nul && exit /b 0
 echo.
-echo     https://python.org
-goto :end
+echo uv (the Python tool installer) was not found - installing it...
+call :ensure_winget
+if errorlevel 1 exit /b 1
+winget install --id astral-sh.uv --exact --silent --accept-package-agreements --accept-source-agreements
+call :refresh_path
+where uv >nul 2>nul && exit /b 0
+echo ERROR: uv was installed but is still not on PATH.
+echo Close this window, open a new terminal, and re-run this script.
+exit /b 1
+
+:ensure_winget
+REM  winget drives the uv install in this script.
+where winget >nul 2>nul && exit /b 0
+echo ERROR: 'winget' (Windows Package Manager) was not found.
+echo Install "App Installer" from the Microsoft Store, then
+echo re-run this script:  https://aka.ms/getwinget
+exit /b 1
+
+:refresh_path
+REM  winget updates the registry PATH but not this already-running
+REM  shell. Prepend the well-known install dirs so a freshly
+REM  installed tool is usable now, without opening a new terminal.
+call :prepend_path "%LOCALAPPDATA%\Microsoft\WinGet\Links"
+call :prepend_path "%USERPROFILE%\.local\bin"
+exit /b 0
+
+:prepend_path
+if exist "%~1\" set "PATH=%~1;%PATH%"
+exit /b 0
+
 
 :failed
 echo.
@@ -58,5 +93,5 @@ echo source - see the note at the top of this script.
 
 :end
 echo.
-pause
+if not defined AGENTS_INSTALL_ALL pause
 endlocal
