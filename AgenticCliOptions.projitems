@@ -44,7 +44,7 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--settings-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\AmazonQ\AmazonQ--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\AmazonQ\AmazonQ--run.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)Trae--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Uninstall-All.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\LMStudio.Claude.Settings.json" />
