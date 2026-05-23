@@ -87,6 +87,7 @@ call :install_agent Oh-My-Pi
 call :install_agent OpenSquilla
 call :install_agent Crush
 call :install_agent Aider
+call :install_agent Junie
 
 echo.
 echo [3/3] Amazon Q  -  installed last; WSL setup may need a reboot.

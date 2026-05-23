@@ -76,6 +76,10 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Aider\Aider--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Aider\Aider--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Aider\Aider--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--openrouter.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-lmstudio.cmd" />
   </ItemGroup>
