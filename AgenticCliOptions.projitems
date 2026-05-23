@@ -68,6 +68,10 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenSquilla\OpenSquilla--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenSquilla\OpenSquilla--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenSquilla\OpenSquilla--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Crush\Crush--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Crush\Crush--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Crush\Crush--openrouter.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Crush\Crush--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-lmstudio.cmd" />
   </ItemGroup>
