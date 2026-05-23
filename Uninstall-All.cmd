@@ -29,6 +29,7 @@ echo ============================================================
 echo.
 
 call :uninstall_agent AmazonQ
+call :uninstall_agent Aider
 call :uninstall_agent Crush
 call :uninstall_agent OpenSquilla
 call :uninstall_agent Oh-My-Pi

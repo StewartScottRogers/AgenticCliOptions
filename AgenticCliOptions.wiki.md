@@ -1,6 +1,6 @@
 # AgenticCliOptions
 
-A turn-key Windows toolkit that installs, configures, runs and removes **fifteen
+A turn-key Windows toolkit that installs, configures, runs and removes **sixteen
 terminal-based coding-agent CLIs** side by side, plus an optional local
 **LM Studio** OpenAI-compatible server. Everything is driven by plain
 `.cmd` scripts so the workflow is "double-click, walk away".
@@ -14,7 +14,7 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ## Table of contents
 
-- [The fifteen agents at a glance](#the-fifteen-agents-at-a-glance)
+- [The sixteen agents at a glance](#the-sixteen-agents-at-a-glance)
 - [Solution layout](#solution-layout)
 - [Top-level scripts](#top-level-scripts)
 - [Per-agent script conventions](#per-agent-script-conventions)
@@ -32,7 +32,7 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ---
 
-## The fifteen agents at a glance
+## The sixteen agents at a glance
 
 | Agent          | Vendor       | Install channel                | Native creds                              | OpenRouter launcher | LM Studio launcher |
 |----------------|--------------|--------------------------------|-------------------------------------------|---------------------|--------------------|
@@ -50,6 +50,7 @@ inside Visual Studio / Rider's Solution Explorer.
 | **Oh-My-Pi**   | can1357      | PowerShell installer (`omp.sh/install.ps1 -Binary`) | `OPENROUTER_API_KEY` (and many others) | yes | no |
 | **OpenSquilla** | OpenSquilla | `uv tool install` from latest GitHub release wheel | `OPENROUTER_API_KEY` (via `onboard --api-key-env`) | yes | no |
 | **Crush**      | Charmbracelet | `winget install charmbracelet.crush` | `OPENROUTER_API_KEY` (built-in provider) | yes (TUI model picker) | no |
+| **Aider**      | Aider community | `uv tool install aider-chat` | `OPENROUTER_API_KEY` (and many others) | yes | no |
 | **AmazonQ / Kiro** | Amazon   | WSL + official Linux `install.sh` | AWS Builder ID / IAM Identity Center | no (AWS Nova only) | no (AWS Nova only) |
 
 > Agents that don't have an OpenRouter / LM Studio launcher are tied to
@@ -90,7 +91,8 @@ AgenticCliOptions/
     ├── Codebuff/  Codebuff--{install,uninstall,run}.cmd
     ├── Oh-My-Pi/  Oh-My-Pi--{install,uninstall,openrouter,run}.cmd
     ├── OpenSquilla/ OpenSquilla--{install,uninstall,openrouter,run}.cmd
-    └── Crush/     Crush--{install,uninstall,openrouter,run}.cmd
+    ├── Crush/     Crush--{install,uninstall,openrouter,run}.cmd
+    └── Aider/     Aider--{install,uninstall,openrouter,run}.cmd
 ```
 
 ---
@@ -184,6 +186,7 @@ clean slate.
 | Oh-My-Pi  | `%USERPROFILE%\.omp`, `%LOCALAPPDATA%\omp`          |
 | OpenSquilla | `%USERPROFILE%\.opensquilla`                      |
 | Crush     | `%LOCALAPPDATA%\crush`                              |
+| Aider     | `%USERPROFILE%\.aider.conf.yml`, `%USERPROFILE%\.aider.tags.cache.v3` |
 | Amazon Q  | `~/.local/share/amazon-q` *inside WSL*              |
 | LM Studio | `%USERPROFILE%\.lmstudio`, `%APPDATA%\LMStudio`     |
 
@@ -306,6 +309,14 @@ hand-holding. Watch for them when upstreams change.
   expects you to pick the OpenRouter model from its model
   picker. Uninstaller is `winget uninstall
   charmbracelet.crush`.
+- **Aider** — the classic AI pair-programmer for the terminal.
+  Installed via `uv tool install --force --python 3.12
+  --upgrade aider-chat`. Needs Git installed at runtime to
+  track edits; the installer pulls Git for Windows if missing.
+  OpenRouter via `--model openrouter/<provider>/<model>` with
+  `OPENROUTER_API_KEY` in the environment.
+  `aider --list-models openrouter/` enumerates every routable
+  model Aider knows about.
 - **Amazon Q / Kiro** — runs *inside WSL*. The installer is staged:
   Stage 1 installs WSL (requires a reboot), Stage 2 installs Ubuntu,
   Stage 3 installs the CLI inside WSL via the official
@@ -334,7 +345,8 @@ To keep the project coherent, follow this checklist:
 5. **Wire the agent into `Install-All.cmd` and `Uninstall-All.cmd`**.
    Install order is: Claude, Codex, Gemini, Pi, Qwen, Grok, Mistral,
    Trae, Hermes, OpenClaw, Codebuff, Oh-My-Pi, OpenSquilla, Crush,
-   then Amazon Q **last** (reboot). Uninstall is the reverse.
+   Aider, then Amazon Q **last** (reboot). Uninstall is the
+   reverse.
 6. **Add the agent's config dir to the "leaves alone" list** in both
    `Uninstall-All.cmd` and the agent's own uninstaller.
 7. **Add a row** to the [agent matrix above](#the-nine-agents-at-a-glance)
