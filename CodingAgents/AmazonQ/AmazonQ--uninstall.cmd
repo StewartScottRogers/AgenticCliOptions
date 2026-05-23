@@ -89,8 +89,8 @@ if errorlevel 1 (
     echo  data have been LEFT IN PLACE. If you want them gone too,
     echo  remove them manually:
     echo.
-    echo    wsl --unregister Ubuntu          (deletes the distro)
-    echo    wsl --uninstall                  (removes WSL itself)
+    echo    wsl --unregister Ubuntu          ^(deletes the distro^)
+    echo    wsl --uninstall                  ^(removes WSL itself^)
     echo ============================================================
 ) else (
     echo.
