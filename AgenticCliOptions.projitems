@@ -60,6 +60,10 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codebuff\Codebuff--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codebuff\Codebuff--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codebuff\Codebuff--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Oh-My-Pi\Oh-My-Pi--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Oh-My-Pi\Oh-My-Pi--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Oh-My-Pi\Oh-My-Pi--openrouter.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Oh-My-Pi\Oh-My-Pi--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-lmstudio.cmd" />
   </ItemGroup>

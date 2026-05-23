@@ -83,6 +83,7 @@ call :install_agent Trae
 call :install_agent Hermes
 call :install_agent OpenClaw
 call :install_agent Codebuff
+call :install_agent Oh-My-Pi
 
 echo.
 echo [3/3] Amazon Q  -  installed last; WSL setup may need a reboot.
