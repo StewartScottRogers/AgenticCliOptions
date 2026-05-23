@@ -6,28 +6,32 @@ REM  Install / update Trae Agent (ByteDance)  --  turn-key installer
 REM  ------------------------------------------------------------
 REM  Checks for and installs EVERY dependency automatically:
 REM    - uv (Astral's Python tool installer) - via winget if missing
-REM    - a suitable Python - uv downloads one automatically
-REM    - Trae Agent itself - installed/updated via 'uv tool'
+REM    - CPython 3.12 - uv downloads it automatically (Trae's
+REM      tree-sitter-languages pin has no wheels for Python 3.13+)
+REM    - Trae Agent itself - installed/updated via 'uv tool' from
+REM      its GitHub repo (Trae is not published on PyPI)
 REM  Re-running this script updates an existing install.
 REM
 REM  winget (Windows Package Manager) installs uv. It ships with
 REM  Windows 11 and current Windows 10.
 REM
-REM  If the 'trae-agent' package cannot be found on PyPI, install
-REM  from source instead:
-REM      git clone https://github.com/bytedance/trae-agent.git
-REM      cd trae-agent
-REM      uv sync --all-extras
+REM  The [evaluation] extra is required even for normal use: Trae's
+REM  base_agent.py unconditionally imports docker_manager, which in
+REM  turn imports the 'docker' and 'pexpect' packages that live in
+REM  that extra.
 REM ============================================================
+
+set "TRAE_SOURCE=git+https://github.com/bytedance/trae-agent.git"
+set "TRAE_SPEC=trae-agent[evaluation] @ %TRAE_SOURCE%"
 
 call :ensure_uv
 if errorlevel 1 goto :failed
 
 echo.
-echo Installing / updating Trae Agent...
-echo     uv tool install --upgrade trae-agent
+echo Installing / updating Trae Agent from source...
+echo     uv tool install --python 3.12 --upgrade "%TRAE_SPEC%"
 echo.
-call uv tool install --upgrade trae-agent
+call uv tool install --python 3.12 --upgrade "%TRAE_SPEC%"
 if errorlevel 1 goto :failed
 
 REM  Make sure uv's tool-bin directory is on PATH for new terminals,

@@ -35,9 +35,12 @@ echo.
 where winget >nul 2>nul
 if errorlevel 1 goto :nowinget
 
-where npm >nul 2>nul || (
+where npm >nul 2>nul
+if errorlevel 1 (
     echo Installing Node.js LTS for Claude, Codex, Gemini and Qwen...
     winget install --id OpenJS.NodeJS.LTS --exact --silent --accept-package-agreements --accept-source-agreements
+) else (
+    call :ensure_node_22
 )
 
 where uv >nul 2>nul || (
@@ -110,6 +113,32 @@ if exist "%ROOT%CodingAgents\%~1\%~1--install.cmd" (
     echo ERROR: install script for %~1 was not found.
 )
 echo.
+exit /b 0
+
+REM ============================================================
+REM  Helper: ensure Node.js is at least v22 (Qwen's requirement).
+REM  If an older Node is present, uninstall the old winget package
+REM  and install the current LTS. Needs UAC; we let winget prompt.
+REM ============================================================
+:ensure_node_22
+REM  'node --version' prints e.g. v20.18.1 - split on 'v' and '.'
+REM  to grab the major version (token 2; token 1 is empty).
+set "NODE_MAJOR="
+for /f "tokens=2 delims=v." %%a in ('node --version 2^>nul') do set "NODE_MAJOR=%%a"
+if not defined NODE_MAJOR exit /b 0
+if %NODE_MAJOR% GEQ 22 exit /b 0
+echo.
+echo Node.js v%NODE_MAJOR% is installed but Qwen requires v22+.
+echo Upgrading to the current Node.js LTS via winget...
+echo (You may see a UAC prompt - accept it to allow the upgrade.)
+echo.
+REM  Strip any legacy versioned package id (e.g. OpenJS.NodeJS.20)
+REM  so the LTS install does not collide with it. Each line is
+REM  best-effort; missing packages just exit nonzero and are OK.
+for %%V in (16 18 20 22) do (
+    winget uninstall --id OpenJS.NodeJS.%%V --exact --silent --disable-interactivity >nul 2>nul
+)
+winget install --id OpenJS.NodeJS.LTS --exact --silent --accept-package-agreements --accept-source-agreements
 exit /b 0
 
 REM ============================================================
