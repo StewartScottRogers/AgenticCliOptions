@@ -57,6 +57,9 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenClaw\OpenClaw--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenClaw\OpenClaw--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenClaw\OpenClaw--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codebuff\Codebuff--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codebuff\Codebuff--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codebuff\Codebuff--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-lmstudio.cmd" />
   </ItemGroup>
