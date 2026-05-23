@@ -29,11 +29,26 @@ call :ensure_git
 echo.
 echo Installing / updating Oh-My-Pi (omp) via the official
 echo PowerShell installer (binary mode)...
-echo     & ([scriptblock]::Create((irm %INSTALL_URL%))) -Binary
 echo.
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$ProgressPreference='SilentlyContinue'; & ([scriptblock]::Create((irm '%INSTALL_URL%'))) -Binary"
+REM  The upstream installer accepts -Binary, but the
+REM  scriptblock-from-irm pattern uses nested parens that cmd
+REM  cannot parse safely. Stage the script to a temp .ps1 and
+REM  invoke that instead.
+REM
+REM  Important: the upstream install.ps1 contains Unicode
+REM  characters (check marks, warning signs) but ships without
+REM  a BOM. Windows PowerShell 5.1 reads BOM-less files as
+REM  Windows-1252, which mangles the multi-byte UTF-8 and
+REM  breaks parsing. We download as UTF-8 text and rewrite the
+REM  file with a UTF-8 BOM so PS 5.1 parses it correctly.
+set "OMP_PS1=%TEMP%\omp-install.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$ProgressPreference='SilentlyContinue'; $wc=New-Object Net.WebClient; $raw=$wc.DownloadData('%INSTALL_URL%'); $text=[Text.Encoding]::UTF8.GetString($raw); $bom=[byte[]](0xEF,0xBB,0xBF); $bytes=$bom + [Text.Encoding]::UTF8.GetBytes($text); [IO.File]::WriteAllBytes('%OMP_PS1%', $bytes)"
 if errorlevel 1 goto :failed
+powershell -NoProfile -ExecutionPolicy Bypass -File "%OMP_PS1%" -Binary
+set "RC=%ERRORLEVEL%"
+del /q "%OMP_PS1%" >nul 2>nul
+if not "%RC%"=="0" goto :failed
 
 REM  The installer adds %LOCALAPPDATA%\omp to the User PATH but
 REM  this shell still has the old PATH. Prepend it now so 'omp'
