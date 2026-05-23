@@ -44,7 +44,7 @@ inside Visual Studio / Rider's Solution Explorer.
 | **Grok**       | xAI          | official bash installer + npm fallback `grok-build` | SuperGrok account or `GROK_CODE_XAI_API_KEY` | no (xAI-only API) | no (xAI-only API) |
 | **Mistral**    | Mistral AI   | `uv tool install mistral-vibe` | `MISTRAL_API_KEY`                         | yes (caveat — uses `MISTRAL_BASE_URL`) | no |
 | **Trae**       | ByteDance    | `uv tool install` from GitHub (Python 3.12, `[evaluation]` extra) | provider-agnostic via env vars | yes                 | yes                  |
-| **Hermes**     | Nous Research | official PowerShell installer (`install.ps1`) → `%LOCALAPPDATA%\hermes` | Nous Portal OAuth or `OPENROUTER_API_KEY` | yes                 | no (early-beta on Windows) |
+| **Hermes**     | Nous Research | official PowerShell installer (`install.ps1`) → `%LOCALAPPDATA%\hermes\hermes-agent\venv\Scripts` | Nous Portal OAuth or `OPENROUTER_API_KEY` | yes                 | no                  |
 | **OpenClaw**   | OpenClaw     | npm `openclaw` (requires Node 22.19+) | onboarding wizard or `OPENROUTER_API_KEY` | yes                 | no                  |
 | **Codebuff**   | Codebuff AI  | npm `codebuff` (needs Git/bash on Windows) | codebuff.com login | no (platform-managed routing) | no |
 | **Oh-My-Pi**   | can1357      | PowerShell installer (`omp.sh/install.ps1 -Binary`) | `OPENROUTER_API_KEY` (and many others) | yes | no |
@@ -157,14 +157,15 @@ Conventions baked into every script:
 
 ## Shared dependencies
 
-| Dependency              | Used by                                  | Installed by                           |
-|-------------------------|------------------------------------------|----------------------------------------|
-| Node.js LTS (>= 22)     | Claude, Codex, Gemini, Pi, Qwen (and Grok npm fallback) | `winget install OpenJS.NodeJS.LTS` |
-| uv (Astral)             | Mistral, Trae                            | `winget install astral-sh.uv`          |
-| Git for Windows         | Grok (provides `bash` + `curl`)          | `winget install Git.Git`               |
-| WSL + Ubuntu            | Amazon Q (no native Windows build)       | `wsl --install` + `wsl --install -d Ubuntu` |
-| Python 3.12             | Trae (tree-sitter-languages pin)         | uv downloads it automatically          |
-| LM Studio (optional)    | every `*--settings-lmstudio.cmd`         | `winget install ElementLabs.LMStudio`  |
+| Dependency              | Used by                                                                                          | Installed by                           |
+|-------------------------|--------------------------------------------------------------------------------------------------|----------------------------------------|
+| Node.js LTS (>= 22)     | Claude, Codex, Gemini, Pi, Qwen, OpenClaw, Codebuff, Nanocoder (and Grok npm fallback)           | `winget install OpenJS.NodeJS.LTS`     |
+| uv (Astral)             | Mistral, Trae, Hermes (used internally by its installer), OpenSquilla, Aider                     | `winget install astral-sh.uv`          |
+| Git for Windows         | Grok, Codebuff, Oh-My-Pi, Aider (provides `bash.exe` + `git.exe` at runtime)                     | `winget install Git.Git`               |
+| WSL + Ubuntu            | Amazon Q (no native Windows build)                                                               | `wsl --install` + `wsl --install -d Ubuntu` |
+| Python 3.11 / 3.12      | Trae (`tree-sitter-languages` pin → 3.12); Hermes installer pins 3.11; OpenSquilla pins 3.12     | uv downloads them automatically        |
+| winget                  | Crush (`charmbracelet.crush`) is winget-native; every other agent uses winget for shared deps    | ships with Windows 11 (App Installer)  |
+| LM Studio (optional)    | every `*--settings-lmstudio.cmd`                                                                 | `winget install ElementLabs.LMStudio`  |
 
 > **Node 22 enforcement.** `Install-All.cmd :ensure_node_22` detects an
 > older Node (e.g. legacy `OpenJS.NodeJS.20`), uninstalls it via winget,
@@ -262,15 +263,21 @@ hand-holding. Watch for them when upstreams change.
   no wheels for 3.13+. The `[evaluation]` extra is required even for
   normal use because `base_agent.py` unconditionally imports
   `docker_manager`, which pulls in `docker` and `pexpect`.
-- **Hermes** — Nous Research's agent. Native Windows is **early
-  beta**. The installer is the upstream PowerShell one-liner
-  (`iex (irm .../install.ps1)`); no admin rights needed. It
-  provisions Python (via uv), Node, PortableGit, ripgrep and
-  ffmpeg under `%LOCALAPPDATA%\hermes` and adds `hermes` to the
-  User PATH. The uninstaller calls Hermes' own `hermes uninstall`
-  subcommand. OpenRouter launcher passes
-  `--provider openrouter --model <slug>`; `OPENROUTER_API_KEY` is
-  recognised natively.
+- **Hermes** — Nous Research's agent. Native Windows is
+  documented as **early beta** but in practice installs and
+  runs cleanly. The installer is the upstream PowerShell
+  one-liner (`iex (irm .../install.ps1)`); no admin rights
+  needed. It provisions Python 3.11 via uv, Node, PortableGit,
+  ripgrep, ffmpeg and a Playwright-managed Chromium under
+  `%LOCALAPPDATA%\hermes`. **The actual binary lives at
+  `%LOCALAPPDATA%\hermes\hermes-agent\venv\Scripts\hermes.exe`**,
+  not in a `\bin` subdir — every Hermes script in this repo
+  prepends that exact path. The uninstaller calls Hermes' own
+  `hermes uninstall` subcommand and then prunes that PATH
+  entry from the User registry (Hermes' own uninstaller does
+  not always clean it on Windows). OpenRouter launcher passes
+  `--provider openrouter --model <slug>`; `OPENROUTER_API_KEY`
+  is recognised natively.
 - **OpenClaw** — open-source personal AI assistant. Installed
   globally via `npm install -g openclaw@latest`. **Needs Node
   22.19+** — the existing `:ensure_node_22` helper in
@@ -299,6 +306,20 @@ hand-holding. Watch for them when upstreams change.
   has no uninstaller, so `Oh-My-Pi--uninstall.cmd` removes the
   install dir manually and prunes the PATH entry from the
   registry. OpenRouter via `--model openrouter/<provider>/<model>`.
+  **Two installer gotchas we already work around** — both
+  hidden in `Oh-My-Pi--install.cmd`, no action needed unless
+  upstream rewrites their `install.ps1`:
+    1. The upstream usage pattern `& ([scriptblock]::Create((irm
+       ...))) -Binary` uses nested parens that cmd cannot parse;
+       we stage the script to a temp file instead.
+    2. `install.ps1` contains Unicode characters (✓, ⚠) but
+       ships with **no BOM**. Windows PowerShell 5.1 reads
+       BOM-less files as Windows-1252, which mangles the
+       multi-byte UTF-8 and crashes the parser with `Unexpected
+       token 'Path", "Machine")'`. We download via
+       `Net.WebClient`, decode as UTF-8, and re-save **with a
+       UTF-8 BOM** before invoking. Watch for this pattern in
+       any future PowerShell-installer agent.
 - **OpenSquilla** — token-efficient microkernel agent. **Not
   on PyPI**: the upstream installer only accepts a published
   wheel URL from GitHub Releases. `OpenSquilla--install.cmd`
@@ -344,11 +365,15 @@ hand-holding. Watch for them when upstreams change.
   OpenRouter is the **default** provider, so the install is
   the lightest of any agent here once a key is set. Installed
   via the upstream PowerShell installer that drops
-  `autohand.exe` under `%LOCALAPPDATA%\autohand` and adds that
-  to the User PATH. No upstream uninstaller, so
-  `Autohand--uninstall.cmd` removes the install dir and prunes
-  the PATH entry by hand. OpenRouter launcher passes
-  `--provider openrouter --model <slug>`.
+  `autohand.exe` under `%LOCALAPPDATA%\autohand`. **Upstream
+  caveat:** the installer does NOT add that dir to the User
+  PATH — it only prints copy-paste instructions for the user
+  to do it themselves. `Autohand--install.cmd` patches that
+  by appending the directory to the User PATH itself (matching
+  the convention every other agent here follows). No upstream
+  uninstaller either, so `Autohand--uninstall.cmd` removes the
+  install dir and prunes the PATH entry by hand. OpenRouter
+  launcher passes `--provider openrouter --model <slug>`.
 - **Nanocoder** — local-first community-built coding agent.
   Installed globally via `npm install -g
   @nanocollective/nanocoder`. **Windows support is not
@@ -405,8 +430,12 @@ To keep the project coherent, follow this checklist:
    **last** (reboot). Uninstall is the reverse.
 6. **Add the agent's config dir to the "leaves alone" list** in both
    `Uninstall-All.cmd` and the agent's own uninstaller.
-7. **Add a row** to the [agent matrix above](#the-nine-agents-at-a-glance)
+7. **Add a row** to the [agent matrix above](#the-twenty-agents-at-a-glance)
    and a per-agent note in [maintenance notes](#per-agent-maintenance-notes).
+   Bump the "**N agents at a glance**" count in the intro
+   paragraph, the table of contents anchor, and the section
+   heading so they stay in sync — they're three separate
+   places to update.
 8. **Optional: `<Name>--openrouter.cmd`** if the agent speaks an
    OpenAI- or Anthropic-compatible API. It must read the shared
    `OPENROUTER_API_KEY` env var and accept an overridable
@@ -414,6 +443,30 @@ To keep the project coherent, follow this checklist:
 9. **Optional: `<Name>--settings-lmstudio.cmd`** if the agent can be
    pointed at an OpenAI-compatible base URL. Auto-detect the loaded
    model from `${LMSTUDIO_URL}/v1/models`.
+10. **Smoke-test the install end-to-end.** Set
+    `AGENTS_INSTALL_ALL=1` so the script runs unattended, run
+    `<Name>--install.cmd`, then run the binary's `--version`
+    flag (or its closest equivalent — some agents like
+    OpenSquilla have no `--version`; fall back to
+    `uv tool list` or `where <bin>`). Common surprises to
+    look out for:
+    - **Upstream installer prints PATH instructions instead
+      of setting them** (Autohand). Patch your install script
+      to append the dir to the User PATH itself via
+      `[Environment]::SetEnvironmentVariable('Path', ..., 'User')`.
+    - **Binary lives in a non-obvious subdir** (Hermes →
+      `\hermes-agent\venv\Scripts`). Don't trust the docs;
+      run the installer once and run `where <bin>` to find
+      out where it actually lands.
+    - **`--version` is not a recognised flag** (OpenSquilla).
+      Pivot to a version probe that does work, e.g. reading
+      `uv tool list` output.
+    - **Upstream `install.ps1` mis-parses on PS 5.1**
+      (Oh-My-Pi). If the script contains non-ASCII chars
+      (check marks, warning signs) and ships without a BOM,
+      PS 5.1 reads it as Windows-1252 and corrupts the
+      multi-byte UTF-8. Download via `Net.WebClient`, re-save
+      with a UTF-8 BOM before invoking.
 
 ### Adding an OpenRouter or LM Studio launcher to an existing agent
 
@@ -520,3 +573,33 @@ prompt) before declaring it working.
   build doesn't honour that env var. Use `Mistral--run.cmd` against
   the native Mistral API, or drive Mistral models through OpenRouter
   with a different OpenAI-compatible CLI (Codex, Qwen, Trae).
+- **Hermes installs but `where hermes` returns nothing** — the
+  binary lives at
+  `%LOCALAPPDATA%\hermes\hermes-agent\venv\Scripts\hermes.exe`,
+  not under a `\bin` subdir. Open a new terminal (the
+  installer added it to the User PATH) or invoke that path
+  directly.
+- **Oh-My-Pi install fails with `Unexpected token 'Path", "Machine")'`** —
+  upstream `install.ps1` contains Unicode characters without a
+  BOM and Windows PowerShell 5.1 reads BOM-less files as
+  Windows-1252. `Oh-My-Pi--install.cmd` already works around
+  this by re-saving the script with a UTF-8 BOM. If you see
+  this error from another agent's installer, apply the same
+  pattern to its install script.
+- **`autohand` is installed but not on PATH for new
+  terminals** — the upstream installer only *prints*
+  instructions to add itself to PATH. `Autohand--install.cmd`
+  patches that, but if you ran the upstream one-liner by hand
+  instead, re-run `Autohand--install.cmd` to fix the PATH.
+- **VT Code installer reports "No recent releases include a
+  Windows native binary asset"** — upstream `install.ps1`
+  uses HEAD requests to probe for assets and that probe
+  silently fails in non-TTY contexts. `VTCode--install.cmd`
+  bypasses the upstream installer and reads the GitHub API's
+  assets list directly. If you see this error, you ran the
+  upstream installer by hand — use `VTCode--install.cmd`
+  instead.
+- **`opensquilla --version` returns an error** — this is
+  expected; OpenSquilla doesn't have a `--version` flag. Use
+  `uv tool list | findstr opensquilla` to see the installed
+  version.
