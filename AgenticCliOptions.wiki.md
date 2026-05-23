@@ -305,12 +305,13 @@ hand-holding. Watch for them when upstreams change.
   hits the GitHub API on every run to discover the latest
   `.whl` asset, then installs via
   `uv tool install --python 3.12 --upgrade "opensquilla[recommended] @ <url>"`.
-  Re-run to upgrade. First launch goes through
-  `opensquilla onboard --provider openrouter --api-key-env
-  OPENROUTER_API_KEY`; the OpenRouter launcher does that for
-  you (idempotent), then runs `opensquilla chat --provider
-  openrouter --model <slug>`. If you see `DLL load failed`,
-  install the VC++ Redistributable.
+  Re-run to upgrade. The OpenRouter launcher persists the
+  provider via `opensquilla configure --section provider
+  --provider openrouter --api-key-env OPENROUTER_API_KEY
+  --model <slug>` and then `opensquilla chat --model <slug>`.
+  `opensquilla` has no `--version` flag, so the install
+  script reads the version from `uv tool list`. If you see
+  `DLL load failed`, install the VC++ Redistributable.
 - **Crush** — Charmbracelet's terminal coding agent. The
   smoothest Windows install of any agent in this repo: a
   single Go binary delivered via `winget install

@@ -44,13 +44,15 @@ call uv tool update-shell >nul 2>nul
 call :refresh_path
 
 echo.
+REM  'opensquilla --version' is not a recognised flag; the
+REM  binary returns its help banner on bare invocation. Use
+REM  'uv tool list' as the canonical version probe instead.
 echo OpenSquilla installed. Reported version:
-call opensquilla --version
+for /f "tokens=1,2" %%a in ('uv tool list 2^>nul ^| findstr /I /B /C:"opensquilla"') do echo     %%a %%b
 echo.
 echo Done. Launch it with OpenSquilla--openrouter.cmd or
-echo 'opensquilla chat' for the interactive TUI.
-echo First run: 'opensquilla onboard' walks you through provider
-echo + workspace setup.
+echo 'opensquilla chat' for the interactive TUI. First run:
+echo 'opensquilla init' walks you through workspace setup.
 goto :end
 
 

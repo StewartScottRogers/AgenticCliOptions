@@ -28,10 +28,15 @@ if "%OPENROUTER_API_KEY%"=="" goto :nokey
 set "ORIG_DIR=%CD%"
 pushd "%~dp0"
 echo Configuring OpenSquilla for OpenRouter (idempotent)...
-call opensquilla onboard --provider openrouter --api-key-env OPENROUTER_API_KEY >nul 2>nul
+REM  Persist the provider+model into the OpenSquilla config so
+REM  every subsequent 'opensquilla chat' run uses OpenRouter.
+REM  Errors are suppressed because 'configure' will fail noisily
+REM  if the workspace has not yet been initialised - in which
+REM  case opensquilla chat will prompt for init below.
+call opensquilla configure --section provider --provider openrouter --api-key-env OPENROUTER_API_KEY --model "%OPENROUTER_MODEL%" >nul 2>nul
 
-echo Launching OpenSquilla chat via OpenRouter model: %OPENROUTER_MODEL%
-call opensquilla chat --provider openrouter --model "%OPENROUTER_MODEL%"
+echo Launching OpenSquilla chat with model: %OPENROUTER_MODEL%
+call opensquilla chat --model "%OPENROUTER_MODEL%"
 popd
 goto :end
 
