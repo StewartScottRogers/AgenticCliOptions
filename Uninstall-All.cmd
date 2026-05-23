@@ -29,6 +29,7 @@ echo ============================================================
 echo.
 
 call :uninstall_agent AmazonQ
+call :uninstall_agent Nanocoder
 call :uninstall_agent Autohand
 call :uninstall_agent Junie
 call :uninstall_agent Aider

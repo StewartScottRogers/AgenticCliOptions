@@ -89,6 +89,7 @@ call :install_agent Crush
 call :install_agent Aider
 call :install_agent Junie
 call :install_agent Autohand
+call :install_agent Nanocoder
 
 echo.
 echo [3/3] Amazon Q  -  installed last; WSL setup may need a reboot.
