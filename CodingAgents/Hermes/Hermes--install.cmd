@@ -20,15 +20,23 @@ REM  Re-running this script reinstalls / updates Hermes via the
 REM  same installer (idempotent).
 REM ============================================================
 
-set "INSTALL_URL=https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.ps1"
+REM  We delegate to a sibling .ps1 helper that downloads the upstream
+REM  install.ps1, patches the single `npx playwright install chromium`
+REM  call to first cd into a stub dir whose package.json declares
+REM  `playwright`, then iex's it. That suppresses Playwright's
+REM  misleading "without first installing your project's dependencies"
+REM  warning box, which otherwise hides the real progress output. The
+REM  patch is anchored on the exact upstream line -- if upstream
+REM  reformats it, the helper warns and falls back to the unpatched
+REM  install (still succeeds, warning reappears).
+set "PATCH_SCRIPT=%~dp0_hermes-install-patched.ps1"
 
 echo.
 echo Installing / updating Hermes Agent via the official PowerShell
-echo installer...
-echo     iex (irm %INSTALL_URL%)
+echo installer (with Playwright cwd patch)...
 echo.
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$ProgressPreference='SilentlyContinue'; iex (irm '%INSTALL_URL%')"
+powershell -NoProfile -ExecutionPolicy Bypass -File "%PATCH_SCRIPT%"
 if errorlevel 1 goto :failed
 
 REM  The installer adds %LOCALAPPDATA%\hermes\bin to the User PATH,
