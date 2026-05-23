@@ -95,7 +95,7 @@ echo  - Run SetOpenRouterKey.cmd once to enable every
 echo    *--openrouter.cmd launcher.
 echo ============================================================
 echo.
-pause
+if not defined AGENTS_INSTALL_ALL pause
 endlocal
 goto :eof
 

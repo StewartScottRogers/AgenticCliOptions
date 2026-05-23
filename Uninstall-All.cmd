@@ -46,7 +46,7 @@ echo  config directories were LEFT IN PLACE. See the header of
 echo  this script for how to remove them manually.
 echo ============================================================
 echo.
-pause
+if not defined AGENTS_UNINSTALL_ALL pause
 endlocal
 goto :eof
 
