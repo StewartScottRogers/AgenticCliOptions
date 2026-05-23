@@ -1,6 +1,6 @@
 # AgenticCliOptions
 
-A turn-key Windows toolkit that installs, configures, runs and removes **seventeen
+A turn-key Windows toolkit that installs, configures, runs and removes **eighteen
 terminal-based coding-agent CLIs** side by side, plus an optional local
 **LM Studio** OpenAI-compatible server. Everything is driven by plain
 `.cmd` scripts so the workflow is "double-click, walk away".
@@ -14,7 +14,7 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ## Table of contents
 
-- [The seventeen agents at a glance](#the-seventeen-agents-at-a-glance)
+- [The eighteen agents at a glance](#the-eighteen-agents-at-a-glance)
 - [Solution layout](#solution-layout)
 - [Top-level scripts](#top-level-scripts)
 - [Per-agent script conventions](#per-agent-script-conventions)
@@ -32,7 +32,7 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ---
 
-## The seventeen agents at a glance
+## The eighteen agents at a glance
 
 | Agent          | Vendor       | Install channel                | Native creds                              | OpenRouter launcher | LM Studio launcher |
 |----------------|--------------|--------------------------------|-------------------------------------------|---------------------|--------------------|
@@ -52,6 +52,7 @@ inside Visual Studio / Rider's Solution Explorer.
 | **Crush**      | Charmbracelet | `winget install charmbracelet.crush` | `OPENROUTER_API_KEY` (built-in provider) | yes (TUI model picker) | no |
 | **Aider**      | Aider community | `uv tool install aider-chat` | `OPENROUTER_API_KEY` (and many others) | yes | no |
 | **Junie**      | JetBrains    | official PowerShell installer (`install.ps1`) → `~/.local/bin\junie.bat` | Junie subscription or `--openrouter-api-key` BYOK | yes | no |
+| **Autohand**   | Autohand AI  | official PowerShell installer (`install.ps1`) → `%LOCALAPPDATA%\autohand` | `OPENROUTER_API_KEY` (OpenRouter is the default) | yes | no |
 | **AmazonQ / Kiro** | Amazon   | WSL + official Linux `install.sh` | AWS Builder ID / IAM Identity Center | no (AWS Nova only) | no (AWS Nova only) |
 
 > Agents that don't have an OpenRouter / LM Studio launcher are tied to
@@ -94,7 +95,8 @@ AgenticCliOptions/
     ├── OpenSquilla/ OpenSquilla--{install,uninstall,openrouter,run}.cmd
     ├── Crush/     Crush--{install,uninstall,openrouter,run}.cmd
     ├── Aider/     Aider--{install,uninstall,openrouter,run}.cmd
-    └── Junie/     Junie--{install,uninstall,openrouter,run}.cmd
+    ├── Junie/     Junie--{install,uninstall,openrouter,run}.cmd
+    └── Autohand/  Autohand--{install,uninstall,openrouter,run}.cmd
 ```
 
 ---
@@ -190,6 +192,7 @@ clean slate.
 | Crush     | `%LOCALAPPDATA%\crush`                              |
 | Aider     | `%USERPROFILE%\.aider.conf.yml`, `%USERPROFILE%\.aider.tags.cache.v3` |
 | Junie     | `%USERPROFILE%\.local\share\junie`, `%USERPROFILE%\.junie` |
+| Autohand  | `%USERPROFILE%\.autohand`, `%LOCALAPPDATA%\autohand` |
 | Amazon Q  | `~/.local/share/amazon-q` *inside WSL*              |
 | LM Studio | `%USERPROFILE%\.lmstudio`, `%APPDATA%\LMStudio`     |
 
@@ -330,6 +333,15 @@ hand-holding. Watch for them when upstreams change.
   <slug>`; the launcher does that for you. No uninstall
   command upstream, so `Junie--uninstall.cmd` removes the shim
   and data dir manually.
+- **Autohand** — fast self-evolving terminal coding agent.
+  OpenRouter is the **default** provider, so the install is
+  the lightest of any agent here once a key is set. Installed
+  via the upstream PowerShell installer that drops
+  `autohand.exe` under `%LOCALAPPDATA%\autohand` and adds that
+  to the User PATH. No upstream uninstaller, so
+  `Autohand--uninstall.cmd` removes the install dir and prunes
+  the PATH entry by hand. OpenRouter launcher passes
+  `--provider openrouter --model <slug>`.
 - **Amazon Q / Kiro** — runs *inside WSL*. The installer is staged:
   Stage 1 installs WSL (requires a reboot), Stage 2 installs Ubuntu,
   Stage 3 installs the CLI inside WSL via the official
@@ -358,8 +370,8 @@ To keep the project coherent, follow this checklist:
 5. **Wire the agent into `Install-All.cmd` and `Uninstall-All.cmd`**.
    Install order is: Claude, Codex, Gemini, Pi, Qwen, Grok, Mistral,
    Trae, Hermes, OpenClaw, Codebuff, Oh-My-Pi, OpenSquilla, Crush,
-   Aider, Junie, then Amazon Q **last** (reboot). Uninstall is
-   the reverse.
+   Aider, Junie, Autohand, then Amazon Q **last** (reboot).
+   Uninstall is the reverse.
 6. **Add the agent's config dir to the "leaves alone" list** in both
    `Uninstall-All.cmd` and the agent's own uninstaller.
 7. **Add a row** to the [agent matrix above](#the-nine-agents-at-a-glance)

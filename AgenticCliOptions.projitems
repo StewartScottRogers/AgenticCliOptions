@@ -80,6 +80,10 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Autohand\Autohand--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Autohand\Autohand--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Autohand\Autohand--openrouter.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Autohand\Autohand--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-lmstudio.cmd" />
   </ItemGroup>
