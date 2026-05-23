@@ -27,7 +27,7 @@ if "%OPENROUTER_API_KEY%"=="" goto :nokey
 
 REM  Make 'hermes' resolvable even if this shell predates the
 REM  install (PATH-refresh hint).
-call :prepend_path "%LOCALAPPDATA%\hermes\bin"
+call :prepend_path "%LOCALAPPDATA%\hermes\hermes-agent\venv\Scripts"
 
 set "ORIG_DIR=%CD%"
 pushd "%~dp0"

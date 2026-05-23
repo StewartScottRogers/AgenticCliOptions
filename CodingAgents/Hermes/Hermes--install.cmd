@@ -34,7 +34,7 @@ if errorlevel 1 goto :failed
 REM  The installer adds %LOCALAPPDATA%\hermes\bin to the User PATH,
 REM  but this already-running shell still has the old PATH. Prepend
 REM  it now so 'hermes' resolves immediately.
-call :prepend_path "%LOCALAPPDATA%\hermes\bin"
+call :prepend_path "%LOCALAPPDATA%\hermes\hermes-agent\venv\Scripts"
 
 echo.
 where hermes >nul 2>nul

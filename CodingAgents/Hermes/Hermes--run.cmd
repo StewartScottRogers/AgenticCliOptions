@@ -11,7 +11,7 @@ REM
 REM  For OpenRouter, use Hermes--openrouter.cmd instead.
 REM ============================================================
 
-call :prepend_path "%LOCALAPPDATA%\hermes\bin"
+call :prepend_path "%LOCALAPPDATA%\hermes\hermes-agent\venv\Scripts"
 
 where hermes >nul 2>nul
 if errorlevel 1 goto :notinstalled
