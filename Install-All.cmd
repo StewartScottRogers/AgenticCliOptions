@@ -80,6 +80,7 @@ call :install_agent Qwen
 call :install_agent Grok
 call :install_agent Mistral
 call :install_agent Trae
+call :install_agent Hermes
 
 echo.
 echo [3/3] Amazon Q  -  installed last; WSL setup may need a reboot.

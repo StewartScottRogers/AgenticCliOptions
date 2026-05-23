@@ -1,6 +1,6 @@
 # AgenticCliOptions
 
-A turn-key Windows toolkit that installs, configures, runs and removes **nine
+A turn-key Windows toolkit that installs, configures, runs and removes **ten
 terminal-based coding-agent CLIs** side by side, plus an optional local
 **LM Studio** OpenAI-compatible server. Everything is driven by plain
 `.cmd` scripts so the workflow is "double-click, walk away".
@@ -14,7 +14,7 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ## Table of contents
 
-- [The nine agents at a glance](#the-nine-agents-at-a-glance)
+- [The ten agents at a glance](#the-ten-agents-at-a-glance)
 - [Solution layout](#solution-layout)
 - [Top-level scripts](#top-level-scripts)
 - [Per-agent script conventions](#per-agent-script-conventions)
@@ -32,7 +32,7 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ---
 
-## The nine agents at a glance
+## The ten agents at a glance
 
 | Agent          | Vendor       | Install channel                | Native creds                              | OpenRouter launcher | LM Studio launcher |
 |----------------|--------------|--------------------------------|-------------------------------------------|---------------------|--------------------|
@@ -44,6 +44,7 @@ inside Visual Studio / Rider's Solution Explorer.
 | **Grok**       | xAI          | official bash installer + npm fallback `grok-build` | SuperGrok account or `GROK_CODE_XAI_API_KEY` | no (xAI-only API) | no (xAI-only API) |
 | **Mistral**    | Mistral AI   | `uv tool install mistral-vibe` | `MISTRAL_API_KEY`                         | yes (caveat — uses `MISTRAL_BASE_URL`) | no |
 | **Trae**       | ByteDance    | `uv tool install` from GitHub (Python 3.12, `[evaluation]` extra) | provider-agnostic via env vars | yes                 | yes                  |
+| **Hermes**     | Nous Research | official PowerShell installer (`install.ps1`) → `%LOCALAPPDATA%\hermes` | Nous Portal OAuth or `OPENROUTER_API_KEY` | yes                 | no (early-beta on Windows) |
 | **AmazonQ / Kiro** | Amazon   | WSL + official Linux `install.sh` | AWS Builder ID / IAM Identity Center | no (AWS Nova only) | no (AWS Nova only) |
 
 > Agents that don't have an OpenRouter / LM Studio launcher are tied to
@@ -78,7 +79,8 @@ AgenticCliOptions/
     ├── Mistral/   Mistral--{install,run,uninstall,openrouter}.cmd
     ├── Pi/        Pi--{install,run,uninstall,openrouter}.cmd
     ├── Qwen/      Qwen--{install,uninstall,openrouter,settings-lmstudio}.cmd
-    └── Trae/      Trae--{install,uninstall,openrouter,settings-lmstudio}.cmd
+    ├── Trae/      Trae--{install,uninstall,openrouter,settings-lmstudio}.cmd
+    └── Hermes/    Hermes--{install,uninstall,openrouter,run}.cmd
 ```
 
 ---
@@ -166,6 +168,7 @@ clean slate.
 | Grok      | `%USERPROFILE%\.grok` (and possibly `~/.x.ai`)      |
 | Mistral   | `%USERPROFILE%\.mistral`, `%USERPROFILE%\.vibe`     |
 | Trae      | `%USERPROFILE%\.trae`                               |
+| Hermes    | `%USERPROFILE%\.hermes`, `%LOCALAPPDATA%\hermes`    |
 | Amazon Q  | `~/.local/share/amazon-q` *inside WSL*              |
 | LM Studio | `%USERPROFILE%\.lmstudio`, `%APPDATA%\LMStudio`     |
 
@@ -229,6 +232,15 @@ hand-holding. Watch for them when upstreams change.
   no wheels for 3.13+. The `[evaluation]` extra is required even for
   normal use because `base_agent.py` unconditionally imports
   `docker_manager`, which pulls in `docker` and `pexpect`.
+- **Hermes** — Nous Research's agent. Native Windows is **early
+  beta**. The installer is the upstream PowerShell one-liner
+  (`iex (irm .../install.ps1)`); no admin rights needed. It
+  provisions Python (via uv), Node, PortableGit, ripgrep and
+  ffmpeg under `%LOCALAPPDATA%\hermes` and adds `hermes` to the
+  User PATH. The uninstaller calls Hermes' own `hermes uninstall`
+  subcommand. OpenRouter launcher passes
+  `--provider openrouter --model <slug>`; `OPENROUTER_API_KEY` is
+  recognised natively.
 - **Amazon Q / Kiro** — runs *inside WSL*. The installer is staged:
   Stage 1 installs WSL (requires a reboot), Stage 2 installs Ubuntu,
   Stage 3 installs the CLI inside WSL via the official
@@ -256,7 +268,8 @@ To keep the project coherent, follow this checklist:
    re-run.
 5. **Wire the agent into `Install-All.cmd` and `Uninstall-All.cmd`**.
    Install order is: Claude, Codex, Gemini, Pi, Qwen, Grok, Mistral,
-   Trae, then Amazon Q **last** (reboot). Uninstall is the reverse.
+   Trae, Hermes, then Amazon Q **last** (reboot). Uninstall is the
+   reverse.
 6. **Add the agent's config dir to the "leaves alone" list** in both
    `Uninstall-All.cmd` and the agent's own uninstaller.
 7. **Add a row** to the [agent matrix above](#the-nine-agents-at-a-glance)

@@ -49,6 +49,10 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--settings-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\AmazonQ\AmazonQ--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\AmazonQ\AmazonQ--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hermes--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hermes--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hermes--openrouter.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hermes--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-lmstudio.cmd" />
   </ItemGroup>

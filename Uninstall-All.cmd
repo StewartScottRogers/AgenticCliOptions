@@ -29,6 +29,7 @@ echo ============================================================
 echo.
 
 call :uninstall_agent AmazonQ
+call :uninstall_agent Hermes
 call :uninstall_agent Trae
 call :uninstall_agent Mistral
 call :uninstall_agent Grok
