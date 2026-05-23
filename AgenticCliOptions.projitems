@@ -88,6 +88,10 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Nanocoder\Nanocoder--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Nanocoder\Nanocoder--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Nanocoder\Nanocoder--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--openrouter.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-lmstudio.cmd" />
   </ItemGroup>

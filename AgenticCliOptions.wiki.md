@@ -1,6 +1,6 @@
 # AgenticCliOptions
 
-A turn-key Windows toolkit that installs, configures, runs and removes **nineteen
+A turn-key Windows toolkit that installs, configures, runs and removes **twenty
 terminal-based coding-agent CLIs** side by side, plus an optional local
 **LM Studio** OpenAI-compatible server. Everything is driven by plain
 `.cmd` scripts so the workflow is "double-click, walk away".
@@ -14,7 +14,7 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ## Table of contents
 
-- [The nineteen agents at a glance](#the-nineteen-agents-at-a-glance)
+- [The twenty agents at a glance](#the-twenty-agents-at-a-glance)
 - [Solution layout](#solution-layout)
 - [Top-level scripts](#top-level-scripts)
 - [Per-agent script conventions](#per-agent-script-conventions)
@@ -32,7 +32,7 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ---
 
-## The nineteen agents at a glance
+## The twenty agents at a glance
 
 | Agent          | Vendor       | Install channel                | Native creds                              | OpenRouter launcher | LM Studio launcher |
 |----------------|--------------|--------------------------------|-------------------------------------------|---------------------|--------------------|
@@ -54,6 +54,7 @@ inside Visual Studio / Rider's Solution Explorer.
 | **Junie**      | JetBrains    | official PowerShell installer (`install.ps1`) → `~/.local/bin\junie.bat` | Junie subscription or `--openrouter-api-key` BYOK | yes | no |
 | **Autohand**   | Autohand AI  | official PowerShell installer (`install.ps1`) → `%LOCALAPPDATA%\autohand` | `OPENROUTER_API_KEY` (OpenRouter is the default) | yes | no |
 | **Nanocoder**  | Nano Collective | npm `@nanocollective/nanocoder` | `OPENROUTER_API_KEY` (and many others) | yes | no |
+| **VT Code**    | vinhnx       | official PowerShell installer (`install.ps1`) → `~/.local/bin\vtcode.exe` | `OPENROUTER_API_KEY` (and many others) | yes (Windows builds **best-effort**) | no |
 | **AmazonQ / Kiro** | Amazon   | WSL + official Linux `install.sh` | AWS Builder ID / IAM Identity Center | no (AWS Nova only) | no (AWS Nova only) |
 
 > Agents that don't have an OpenRouter / LM Studio launcher are tied to
@@ -98,7 +99,8 @@ AgenticCliOptions/
     ├── Aider/     Aider--{install,uninstall,openrouter,run}.cmd
     ├── Junie/     Junie--{install,uninstall,openrouter,run}.cmd
     ├── Autohand/  Autohand--{install,uninstall,openrouter,run}.cmd
-    └── Nanocoder/ Nanocoder--{install,uninstall,openrouter,run}.cmd
+    ├── Nanocoder/ Nanocoder--{install,uninstall,openrouter,run}.cmd
+    └── VTCode/    VTCode--{install,uninstall,openrouter,run}.cmd
 ```
 
 ---
@@ -196,6 +198,7 @@ clean slate.
 | Junie     | `%USERPROFILE%\.local\share\junie`, `%USERPROFILE%\.junie` |
 | Autohand  | `%USERPROFILE%\.autohand`, `%LOCALAPPDATA%\autohand` |
 | Nanocoder | `%USERPROFILE%\.nanocoder`                          |
+| VT Code   | `%USERPROFILE%\.vtcode`, per-project `vtcode.toml`  |
 | Amazon Q  | `~/.local/share/amazon-q` *inside WSL*              |
 | LM Studio | `%USERPROFILE%\.lmstudio`, `%APPDATA%\LMStudio`     |
 
@@ -353,6 +356,17 @@ hand-holding. Watch for them when upstreams change.
   path works in practice. OpenRouter via `--provider
   openrouter --model <slug>` with `OPENROUTER_API_KEY` in the
   environment.
+- **VT Code** — Rust-based coding agent with code-understanding
+  tooling and shell safety. **Windows builds are flagged
+  "best-effort, may lag behind macOS/Linux"** by upstream. The
+  PowerShell installer is clever about it: it walks recent
+  releases (up to 10) and picks the most recent one that
+  actually ships a Windows artifact, so install will usually
+  succeed even when the head release lacks a Windows binary.
+  Binary lands at `~/.local/bin\vtcode.exe`. OpenRouter via
+  `vtcode --provider openrouter --model <slug> chat`. If no
+  recent release has a Windows asset, fall back to
+  `cargo install vtcode` (needs Rust toolchain).
 - **Amazon Q / Kiro** — runs *inside WSL*. The installer is staged:
   Stage 1 installs WSL (requires a reboot), Stage 2 installs Ubuntu,
   Stage 3 installs the CLI inside WSL via the official
@@ -381,8 +395,8 @@ To keep the project coherent, follow this checklist:
 5. **Wire the agent into `Install-All.cmd` and `Uninstall-All.cmd`**.
    Install order is: Claude, Codex, Gemini, Pi, Qwen, Grok, Mistral,
    Trae, Hermes, OpenClaw, Codebuff, Oh-My-Pi, OpenSquilla, Crush,
-   Aider, Junie, Autohand, Nanocoder, then Amazon Q **last**
-   (reboot). Uninstall is the reverse.
+   Aider, Junie, Autohand, Nanocoder, VT Code, then Amazon Q
+   **last** (reboot). Uninstall is the reverse.
 6. **Add the agent's config dir to the "leaves alone" list** in both
    `Uninstall-All.cmd` and the agent's own uninstaller.
 7. **Add a row** to the [agent matrix above](#the-nine-agents-at-a-glance)

@@ -90,6 +90,7 @@ call :install_agent Aider
 call :install_agent Junie
 call :install_agent Autohand
 call :install_agent Nanocoder
+call :install_agent VTCode
 
 echo.
 echo [3/3] Amazon Q  -  installed last; WSL setup may need a reboot.
