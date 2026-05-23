@@ -9,7 +9,7 @@ REM  each coding agent's own turn-key install script. Double-click
 REM  this file and walk away.
 REM
 REM  Shared dependencies installed here:
-REM    - Node.js LTS  - for Claude, Codex, Gemini, Qwen
+REM    - Node.js LTS  - for Claude, Codex, Gemini, Pi, Qwen
 REM    - uv           - for Mistral, Trae
 REM    - Git          - for Grok (provides bash + curl)
 REM
@@ -37,7 +37,7 @@ if errorlevel 1 goto :nowinget
 
 where npm >nul 2>nul
 if errorlevel 1 (
-    echo Installing Node.js LTS for Claude, Codex, Gemini and Qwen...
+    echo Installing Node.js LTS for Claude, Codex, Gemini, Pi and Qwen...
     winget install --id OpenJS.NodeJS.LTS --exact --silent --accept-package-agreements --accept-source-agreements
 ) else (
     call :ensure_node_22
@@ -75,6 +75,7 @@ echo.
 call :install_agent Claude
 call :install_agent Codex
 call :install_agent Gemini
+call :install_agent Pi
 call :install_agent Qwen
 call :install_agent Grok
 call :install_agent Mistral

@@ -14,8 +14,11 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codex\Codex--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Gemini\Gemini--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Grok\Grok--uninstall.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Mistral\Grok--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Mistral\Mistral--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Pi\Pi--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Pi\Pi--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Pi\Pi--openrouter.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Pi\Pi--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--settings-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--uninstall.cmd" />

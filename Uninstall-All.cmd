@@ -15,8 +15,8 @@ REM      These are general-purpose tools other software on your
 REM      machine may rely on. Remove via "Apps & features" or
 REM      'winget uninstall ...' / 'wsl --uninstall' if you want.
 REM    - Per-agent config directories (API keys, sessions):
-REM        %USERPROFILE%\.claude, .codex, .gemini, .qwen, .grok,
-REM        .mistral, .trae, plus the Amazon Q data inside WSL.
+REM        %USERPROFILE%\.claude, .codex, .gemini, .pi, .qwen,
+REM        .grok, .mistral, .trae, plus the Amazon Q data inside WSL.
 REM      Delete those by hand if you want a fully clean slate.
 REM ============================================================
 
@@ -33,6 +33,7 @@ call :uninstall_agent Trae
 call :uninstall_agent Mistral
 call :uninstall_agent Grok
 call :uninstall_agent Qwen
+call :uninstall_agent Pi
 call :uninstall_agent Gemini
 call :uninstall_agent Codex
 call :uninstall_agent Claude
