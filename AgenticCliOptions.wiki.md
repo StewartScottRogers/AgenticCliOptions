@@ -198,7 +198,7 @@ clean slate.
 | Junie     | `%USERPROFILE%\.local\share\junie`, `%USERPROFILE%\.junie` |
 | Autohand  | `%USERPROFILE%\.autohand`, `%LOCALAPPDATA%\autohand` |
 | Nanocoder | `%USERPROFILE%\.nanocoder`                          |
-| VT Code   | `%USERPROFILE%\.vtcode`, per-project `vtcode.toml`  |
+| VT Code   | `%LOCALAPPDATA%\vinhnx\vtcode\config`, `%LOCALAPPDATA%\vinhnx\vtcode\data` |
 | Amazon Q  | `~/.local/share/amazon-q` *inside WSL*              |
 | LM Studio | `%USERPROFILE%\.lmstudio`, `%APPDATA%\LMStudio`     |
 
@@ -359,15 +359,20 @@ hand-holding. Watch for them when upstreams change.
   environment.
 - **VT Code** — Rust-based coding agent with code-understanding
   tooling and shell safety. **Windows builds are flagged
-  "best-effort, may lag behind macOS/Linux"** by upstream. The
-  PowerShell installer is clever about it: it walks recent
-  releases (up to 10) and picks the most recent one that
-  actually ships a Windows artifact, so install will usually
-  succeed even when the head release lacks a Windows binary.
-  Binary lands at `~/.local/bin\vtcode.exe`. OpenRouter via
-  `vtcode --provider openrouter --model <slug> chat`. If no
-  recent release has a Windows asset, fall back to
-  `cargo install vtcode` (needs Rust toolchain).
+  "best-effort, may lag behind macOS/Linux"** by upstream — and
+  in practice the most recent few releases often ship no
+  Windows asset at all. The upstream PowerShell installer
+  *intends* to walk back to the latest Windows release, but
+  its HEAD-request probe silently fails in non-TTY contexts
+  (e.g. when launched from cmd via our install scripts), so
+  it falsely reports "no Windows asset". We bypass it
+  entirely: query the GitHub API for the last 20 releases,
+  pick the first whose **assets list** includes
+  `vtcode-<tag>-x86_64-pc-windows-msvc.zip`, then download and
+  extract to `~/.local/bin\vtcode.exe`. Re-run to upgrade.
+  OpenRouter via `vtcode --provider openrouter --model <slug>
+  chat`. If no recent release has a Windows asset at all,
+  fall back to `cargo install vtcode` (needs Rust toolchain).
 - **Amazon Q / Kiro** — runs *inside WSL*. The installer is staged:
   Stage 1 installs WSL (requires a reboot), Stage 2 installs Ubuntu,
   Stage 3 installs the CLI inside WSL via the official
