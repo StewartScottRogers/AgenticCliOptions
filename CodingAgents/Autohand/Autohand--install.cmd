@@ -27,7 +27,15 @@ echo.
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$ProgressPreference='SilentlyContinue'; iwr -useb '%INSTALL_URL%' | iex"
 if errorlevel 1 goto :failed
 
-call :prepend_path "%LOCALAPPDATA%\autohand"
+REM  The upstream installer drops autohand.exe but does NOT add
+REM  its directory to the User PATH (it just prints copy-paste
+REM  instructions). Add the entry to the persistent User PATH so
+REM  new terminals can find 'autohand' without manual setup.
+set "AH_DIR=%LOCALAPPDATA%\autohand"
+powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+  "$p=[Environment]::GetEnvironmentVariable('Path','User'); $needle='%AH_DIR%'; if (($p -split ';') -notcontains $needle) { [Environment]::SetEnvironmentVariable('Path', ($p.TrimEnd(';') + ';' + $needle), 'User'); Write-Host 'Added %AH_DIR% to User PATH.' } else { Write-Host 'User PATH already contains %AH_DIR%.' }"
+
+call :prepend_path "%AH_DIR%"
 
 echo.
 where autohand >nul 2>nul
