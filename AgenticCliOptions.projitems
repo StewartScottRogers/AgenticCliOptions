@@ -64,6 +64,10 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Oh-My-Pi\Oh-My-Pi--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Oh-My-Pi\Oh-My-Pi--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Oh-My-Pi\Oh-My-Pi--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenSquilla\OpenSquilla--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenSquilla\OpenSquilla--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenSquilla\OpenSquilla--openrouter.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenSquilla\OpenSquilla--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-lmstudio.cmd" />
   </ItemGroup>

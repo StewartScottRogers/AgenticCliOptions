@@ -1,6 +1,6 @@
 # AgenticCliOptions
 
-A turn-key Windows toolkit that installs, configures, runs and removes **thirteen
+A turn-key Windows toolkit that installs, configures, runs and removes **fourteen
 terminal-based coding-agent CLIs** side by side, plus an optional local
 **LM Studio** OpenAI-compatible server. Everything is driven by plain
 `.cmd` scripts so the workflow is "double-click, walk away".
@@ -14,7 +14,7 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ## Table of contents
 
-- [The thirteen agents at a glance](#the-thirteen-agents-at-a-glance)
+- [The fourteen agents at a glance](#the-fourteen-agents-at-a-glance)
 - [Solution layout](#solution-layout)
 - [Top-level scripts](#top-level-scripts)
 - [Per-agent script conventions](#per-agent-script-conventions)
@@ -32,7 +32,7 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ---
 
-## The thirteen agents at a glance
+## The fourteen agents at a glance
 
 | Agent          | Vendor       | Install channel                | Native creds                              | OpenRouter launcher | LM Studio launcher |
 |----------------|--------------|--------------------------------|-------------------------------------------|---------------------|--------------------|
@@ -48,6 +48,7 @@ inside Visual Studio / Rider's Solution Explorer.
 | **OpenClaw**   | OpenClaw     | npm `openclaw` (requires Node 22.19+) | onboarding wizard or `OPENROUTER_API_KEY` | yes                 | no                  |
 | **Codebuff**   | Codebuff AI  | npm `codebuff` (needs Git/bash on Windows) | codebuff.com login | no (platform-managed routing) | no |
 | **Oh-My-Pi**   | can1357      | PowerShell installer (`omp.sh/install.ps1 -Binary`) | `OPENROUTER_API_KEY` (and many others) | yes | no |
+| **OpenSquilla** | OpenSquilla | `uv tool install` from latest GitHub release wheel | `OPENROUTER_API_KEY` (via `onboard --api-key-env`) | yes | no |
 | **AmazonQ / Kiro** | Amazon   | WSL + official Linux `install.sh` | AWS Builder ID / IAM Identity Center | no (AWS Nova only) | no (AWS Nova only) |
 
 > Agents that don't have an OpenRouter / LM Studio launcher are tied to
@@ -86,7 +87,8 @@ AgenticCliOptions/
     ├── Hermes/    Hermes--{install,uninstall,openrouter,run}.cmd
     ├── OpenClaw/  OpenClaw--{install,uninstall,openrouter,run}.cmd
     ├── Codebuff/  Codebuff--{install,uninstall,run}.cmd
-    └── Oh-My-Pi/  Oh-My-Pi--{install,uninstall,openrouter,run}.cmd
+    ├── Oh-My-Pi/  Oh-My-Pi--{install,uninstall,openrouter,run}.cmd
+    └── OpenSquilla/ OpenSquilla--{install,uninstall,openrouter,run}.cmd
 ```
 
 ---
@@ -178,6 +180,7 @@ clean slate.
 | OpenClaw  | `%USERPROFILE%\.openclaw`                           |
 | Codebuff  | `%USERPROFILE%\.codebuff`                           |
 | Oh-My-Pi  | `%USERPROFILE%\.omp`, `%LOCALAPPDATA%\omp`          |
+| OpenSquilla | `%USERPROFILE%\.opensquilla`                      |
 | Amazon Q  | `~/.local/share/amazon-q` *inside WSL*              |
 | LM Studio | `%USERPROFILE%\.lmstudio`, `%APPDATA%\LMStudio`     |
 
@@ -278,6 +281,18 @@ hand-holding. Watch for them when upstreams change.
   has no uninstaller, so `Oh-My-Pi--uninstall.cmd` removes the
   install dir manually and prunes the PATH entry from the
   registry. OpenRouter via `--model openrouter/<provider>/<model>`.
+- **OpenSquilla** — token-efficient microkernel agent. **Not
+  on PyPI**: the upstream installer only accepts a published
+  wheel URL from GitHub Releases. `OpenSquilla--install.cmd`
+  hits the GitHub API on every run to discover the latest
+  `.whl` asset, then installs via
+  `uv tool install --python 3.12 --upgrade "opensquilla[recommended] @ <url>"`.
+  Re-run to upgrade. First launch goes through
+  `opensquilla onboard --provider openrouter --api-key-env
+  OPENROUTER_API_KEY`; the OpenRouter launcher does that for
+  you (idempotent), then runs `opensquilla chat --provider
+  openrouter --model <slug>`. If you see `DLL load failed`,
+  install the VC++ Redistributable.
 - **Amazon Q / Kiro** — runs *inside WSL*. The installer is staged:
   Stage 1 installs WSL (requires a reboot), Stage 2 installs Ubuntu,
   Stage 3 installs the CLI inside WSL via the official
@@ -305,8 +320,8 @@ To keep the project coherent, follow this checklist:
    re-run.
 5. **Wire the agent into `Install-All.cmd` and `Uninstall-All.cmd`**.
    Install order is: Claude, Codex, Gemini, Pi, Qwen, Grok, Mistral,
-   Trae, Hermes, OpenClaw, Codebuff, Oh-My-Pi, then Amazon Q
-   **last** (reboot). Uninstall is the reverse.
+   Trae, Hermes, OpenClaw, Codebuff, Oh-My-Pi, OpenSquilla, then
+   Amazon Q **last** (reboot). Uninstall is the reverse.
 6. **Add the agent's config dir to the "leaves alone" list** in both
    `Uninstall-All.cmd` and the agent's own uninstaller.
 7. **Add a row** to the [agent matrix above](#the-nine-agents-at-a-glance)
