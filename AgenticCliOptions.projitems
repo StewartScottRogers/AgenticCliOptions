@@ -20,6 +20,7 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Install-All.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Install-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)RunClaude.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--settings-lmstudio.cmd" />
@@ -45,6 +46,7 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\AmazonQ\AmazonQ--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\AmazonQ\AmazonQ--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Uninstall-All.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Uninstall-lmstudio.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\LMStudio.Claude.Settings.json" />
