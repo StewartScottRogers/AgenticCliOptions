@@ -9,6 +9,7 @@
     <Import_RootNamespace>AgenticCliOptions</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)AgenticCliOptions.wiki.md" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\AmazonQ\AmazonQ--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codex\Codex--uninstall.cmd" />
