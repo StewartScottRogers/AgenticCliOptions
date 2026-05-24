@@ -102,10 +102,11 @@ if !TOTAL! EQU 0 (
     echo    Every agent in the catalogue is already installed:
     echo     !SKIPPED!
     echo.
-    echo      U^) uninstall everything       Q^) quit
+    echo      S^) show install status       U^) uninstall everything       Q^) quit
     echo.
     set "INPUT="
     set /p "INPUT=   Your choice: "
+    if /I "!INPUT!"=="S" goto :show_status
     if /I "!INPUT!"=="U" goto :uninstall_all
     if /I "!INPUT!"=="Q" (endlocal & exit /b 0)
     goto :menu
@@ -139,7 +140,7 @@ for /l %%R in (1,1,!HALF!) do (
 )
 echo    +----+----------------+----+----------------+
 echo.
-echo      A^) install all of the above        U^) uninstall everything        Q^) quit
+echo      A^) install all of the above   S^) show install status   U^) uninstall everything   Q^) quit
 echo.
 echo    Enter numbers and/or names, separated by spaces or commas.
 echo    Examples:   1 3 5      Claude Codex      1, Gemini, 7
@@ -153,6 +154,7 @@ if /I "!INPUT!"=="Q" (
     exit /b 0
 )
 if /I "!INPUT!"=="U" goto :uninstall_all
+if /I "!INPUT!"=="S" goto :show_status
 if /I "!INPUT!"=="A" (
     set "SELECTED=%ALL_AGENTS%"
     goto :reorder
@@ -188,6 +190,41 @@ if not defined SELECTED (
     pause >nul
     goto :menu
 )
+
+REM ---- Show install status of every agent in the catalogue ----
+:show_status
+cls
+echo ============================================================
+echo  Install status  --  every agent in the catalogue
+echo ============================================================
+echo.
+echo    +----+----------------+--------------+
+echo    ^| #  ^| Agent          ^| Status       ^|
+echo    +----+----------------+--------------+
+set "N=0"
+set "OK_COUNT=0"
+set "MISS_COUNT=0"
+for %%A in (%ALL_AGENTS%) do (
+    set /a N+=1
+    set "NP=  !N!"
+    set "NP=!NP:~-2!"
+    set "AP=%%A              "
+    set "AP=!AP:~0,14!"
+    call :is_installed %%A
+    if errorlevel 1 (
+        set /a MISS_COUNT+=1
+        echo    ^| !NP! ^| !AP! ^| missing      ^|
+    ) else (
+        set /a OK_COUNT+=1
+        echo    ^| !NP! ^| !AP! ^| installed    ^|
+    )
+)
+echo    +----+----------------+--------------+
+echo.
+echo    Installed: !OK_COUNT!   Missing: !MISS_COUNT!   Total: !N!
+echo.
+pause
+goto :menu
 
 REM ---- Hand off to Uninstall-All.cmd ----------------------------
 :uninstall_all

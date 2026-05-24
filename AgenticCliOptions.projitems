@@ -10,21 +10,37 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)AgenticCliOptions.wiki.md" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Aider\Aider--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\AmazonQ\AmazonQ--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\AmazonQ\AmazonQ--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codebuff\Codebuff--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codex\Codex--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codex\Codex--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Gemini\Gemini--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Gemini\Gemini--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Grok\Grok--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Grok\Grok--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hermes--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Mistral\Mistral--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Mistral\Mistral--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Oh-My-Pi\Oh-My-Pi--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenSquilla\OpenSquilla--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Pi\Pi--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Pi\Pi--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Pi\Pi--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Pi\Pi--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Pi\Pi--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--settings-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Install-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Install-lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)OpenRouter.url" />
     <None Include="$(MSBuildThisFileDirectory)RunClaude.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--openrouter.cmd" />
