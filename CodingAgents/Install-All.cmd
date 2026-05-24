@@ -108,10 +108,13 @@ if !TOTAL! EQU 0 (
     echo     !SKIPPED!
     echo.
     echo      S^) show install status       U^) uninstall everything       Q^) quit
+    echo      L^) install LM Studio         X^) uninstall LM Studio
     echo.
     set "INPUT="
     set /p "INPUT=   Your choice: "
     if /I "!INPUT!"=="S" goto :show_status
+    if /I "!INPUT!"=="L" goto :install_lmstudio
+    if /I "!INPUT!"=="X" goto :uninstall_lmstudio
     if /I "!INPUT!"=="U" goto :uninstall_all
     if /I "!INPUT!"=="Q" (endlocal & exit /b 0)
     goto :menu
@@ -146,6 +149,7 @@ for /l %%R in (1,1,!HALF!) do (
 echo    +----+----------------+----+----------------+
 echo.
 echo      A^) install all of the above   S^) show install status   U^) uninstall everything   Q^) quit
+echo      L^) install LM Studio          X^) uninstall LM Studio
 echo.
 echo    Enter numbers and/or names, separated by spaces or commas.
 echo    Examples:   1 3 5      Claude Codex      1, Gemini, 7
@@ -160,6 +164,8 @@ if /I "!INPUT!"=="Q" (
 )
 if /I "!INPUT!"=="U" goto :uninstall_all
 if /I "!INPUT!"=="S" goto :show_status
+if /I "!INPUT!"=="L" goto :install_lmstudio
+if /I "!INPUT!"=="X" goto :uninstall_lmstudio
 if /I "!INPUT!"=="A" (
     set "SELECTED=%ALL_AGENTS%"
     goto :reorder
@@ -282,6 +288,50 @@ echo.
 endlocal
 call "%~dp0Uninstall-All.cmd"
 exit /b %ERRORLEVEL%
+
+REM ---- Hand off to Install-lmstudio.cmd -------------------------
+REM  LM Studio is a local OpenAI-compatible model server, not an
+REM  agent CLI, so it lives outside the per-agent ALL_AGENTS list
+REM  and uses the script-style sibling Install-lmstudio.cmd. The
+REM  AGENTS_INSTALL_ALL flag (set above) suppresses the child's
+REM  own pause; we pause once on return so the user can read the
+REM  result before the menu is redrawn.
+:install_lmstudio
+echo.
+echo ============================================================
+echo  Install LM Studio  (local OpenAI-compatible model server)
+echo ============================================================
+echo.
+if not exist "%ROOT%Install-lmstudio.cmd" (
+    echo    ERROR: Install-lmstudio.cmd not found next to this script.
+    echo    Looked in: %ROOT%
+    echo.
+    pause
+    goto :menu
+)
+call "%ROOT%Install-lmstudio.cmd"
+echo.
+pause
+goto :menu
+
+REM ---- Hand off to Uninstall-lmstudio.cmd -----------------------
+REM  Uninstall-lmstudio.cmd pauses on its own (AGENTS_UNINSTALL_ALL
+REM  is not set in this script), so we do not add a second pause.
+:uninstall_lmstudio
+echo.
+echo ============================================================
+echo  Uninstall LM Studio  (app removed, config preserved)
+echo ============================================================
+echo.
+if not exist "%ROOT%Uninstall-lmstudio.cmd" (
+    echo    ERROR: Uninstall-lmstudio.cmd not found next to this script.
+    echo    Looked in: %ROOT%
+    echo.
+    pause
+    goto :menu
+)
+call "%ROOT%Uninstall-lmstudio.cmd"
+goto :menu
 
 REM ---- Re-order so AmazonQ runs last ----------------------------
 :reorder
