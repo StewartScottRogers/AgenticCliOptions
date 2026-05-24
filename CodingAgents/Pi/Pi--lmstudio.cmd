@@ -2,10 +2,11 @@
 setlocal
 
 REM ============================================================
-REM  OpenAI Codex CLI via LM Studio
+REM  Pi coding agent via LM Studio
 REM  ------------------------------------------------------------
-REM  Runs Codex against a local LM Studio server through its
-REM  OpenAI-compatible API. Install Codex with Codex--install.cmd.
+REM  Pi accepts '--provider openai' alongside OPENAI_BASE_URL and
+REM  OPENAI_API_KEY for any OpenAI-compatible endpoint. This
+REM  launcher points it at the local LM Studio server.
 REM
 REM  Default model for this agent: qwen3-coder-30b
 REM  Override with:
@@ -25,10 +26,6 @@ pushd "%~dp0"
 if exist "%USERPROFILE%\.lmstudio\bin\lms.exe" set "PATH=%USERPROFILE%\.lmstudio\bin;%PATH%"
 where lms >nul 2>nul && call lms load "%LMSTUDIO_MODEL%" --gpu max --ttl 3600 >nul 2>nul
 
-REM  LM Studio does not check the key, but Codex still needs the
-REM  env var named by env_key to exist - give it a placeholder.
-set "LMSTUDIO_API_KEY=lmstudio"
-
 set "LMSTUDIO_ACTUAL="
 for /f "delims=" %%i in ('powershell -NoProfile -Command "try { (Invoke-RestMethod '%LMSTUDIO_URL%/v1/models' -TimeoutSec 3).data[0].id } catch { '' }"') do set "LMSTUDIO_ACTUAL=%%i"
 if not defined LMSTUDIO_ACTUAL goto :nomodel
@@ -41,13 +38,11 @@ if /I not "%LMSTUDIO_ACTUAL%"=="%LMSTUDIO_MODEL%" (
     set "LMSTUDIO_MODEL=%LMSTUDIO_ACTUAL%"
 )
 
-echo Connecting Codex to LM Studio model: %LMSTUDIO_MODEL%
-call codex ^
-  -c model_provider=lmstudio ^
-  -c model_providers.lmstudio.base_url=%LMSTUDIO_URL%/v1 ^
-  -c model_providers.lmstudio.env_key=LMSTUDIO_API_KEY ^
-  -c model_providers.lmstudio.wire_api=chat ^
-  --yolo --model "%LMSTUDIO_MODEL%"
+set "OPENAI_API_KEY=lmstudio"
+set "OPENAI_BASE_URL=%LMSTUDIO_URL%/v1"
+
+echo Connecting Pi to LM Studio model: %LMSTUDIO_MODEL%
+call pi --provider openai --model "%LMSTUDIO_MODEL%"
 popd
 goto :end
 

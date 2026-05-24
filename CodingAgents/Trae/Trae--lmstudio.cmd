@@ -4,34 +4,42 @@ setlocal
 REM ============================================================
 REM  Trae Agent (ByteDance) via LM Studio
 REM  ------------------------------------------------------------
-REM  Runs Trae Agent against a local LM Studio server through its
-REM  OpenAI-compatible API. Install Trae with Trae--install.cmd.
+REM  Trae's 'openai' provider accepts OPENAI_BASE_URL and
+REM  OPENAI_API_KEY for any OpenAI-compatible endpoint. This
+REM  launcher points it at the local LM Studio server.
 REM
-REM  Before running: start LM Studio, load a model, and start its
-REM  local server from the Developer tab.
+REM  Default model for this agent: qwen3-coder-30b
+REM  Override with:
+REM      set LMSTUDIO_MODEL=<other-id>
+REM  Override the URL:
+REM      set LMSTUDIO_URL=http://127.0.0.1:1234
 REM ============================================================
 
-REM  Optional: override the LM Studio server address. Honours the
-REM  environment if LMSTUDIO_URL is already set; otherwise the
-REM  default below is used.
-if not defined LMSTUDIO_URL  set "LMSTUDIO_URL=http://192.168.12.174:1234"
+if not defined LMSTUDIO_URL    set "LMSTUDIO_URL=http://192.168.12.174:1234"
+if not defined LMSTUDIO_MODEL  set "LMSTUDIO_MODEL=qwen3-coder-30b"
 
 REM ---- no edits needed below this line -----------------------
 
 set "ORIG_DIR=%CD%"
 pushd "%~dp0"
 
-REM  Point Trae's OpenAI-compatible provider at LM Studio. The
-REM  key is a placeholder - LM Studio does not check it.
+if exist "%USERPROFILE%\.lmstudio\bin\lms.exe" set "PATH=%USERPROFILE%\.lmstudio\bin;%PATH%"
+where lms >nul 2>nul && call lms load "%LMSTUDIO_MODEL%" --gpu max --ttl 3600 >nul 2>nul
+
+set "LMSTUDIO_ACTUAL="
+for /f "delims=" %%i in ('powershell -NoProfile -Command "try { (Invoke-RestMethod '%LMSTUDIO_URL%/v1/models' -TimeoutSec 3).data[0].id } catch { '' }"') do set "LMSTUDIO_ACTUAL=%%i"
+if not defined LMSTUDIO_ACTUAL goto :nomodel
+
+if /I not "%LMSTUDIO_ACTUAL%"=="%LMSTUDIO_MODEL%" (
+    echo NOTE: hard-pin requested "%LMSTUDIO_MODEL%" but LM Studio
+    echo       at %LMSTUDIO_URL% has "%LMSTUDIO_ACTUAL%" loaded.
+    echo       Falling back to the loaded model. To switch on this
+    echo       host, run:  lms load %LMSTUDIO_MODEL%
+    set "LMSTUDIO_MODEL=%LMSTUDIO_ACTUAL%"
+)
+
 set "OPENAI_API_KEY=lmstudio"
 set "OPENAI_BASE_URL=%LMSTUDIO_URL%/v1"
-
-REM  Ask LM Studio which model is currently loaded, then launch
-REM  Trae Agent pinned to that exact model id.
-set "LMSTUDIO_MODEL="
-for /f "delims=" %%i in ('powershell -command "try { (Invoke-RestMethod '%LMSTUDIO_URL%/v1/models').data[0].id } catch { '' }"') do set "LMSTUDIO_MODEL=%%i"
-
-if not defined LMSTUDIO_MODEL goto :nomodel
 
 echo Launching Trae Agent via LM Studio model: %LMSTUDIO_MODEL%
 call trae-cli interactive --provider openai --model "%LMSTUDIO_MODEL%"
@@ -40,9 +48,9 @@ goto :end
 
 :nomodel
 popd
-echo ERROR: Could not detect an LM Studio model at %LMSTUDIO_URL%
-echo Make sure LM Studio is running, a model is loaded, and its
-echo local server is started from the Developer tab.
+echo ERROR: No model is loaded at %LMSTUDIO_URL%.
+echo Run ..\Install-lmstudio.cmd first, then make sure a model is loaded:
+echo     lms load %LMSTUDIO_MODEL%
 pause
 
 :end

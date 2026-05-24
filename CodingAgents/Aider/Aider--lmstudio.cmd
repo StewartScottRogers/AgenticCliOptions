@@ -2,16 +2,23 @@
 setlocal
 
 REM ============================================================
-REM  OpenAI Codex CLI via LM Studio
+REM  Aider via LM Studio  (local OpenAI-compatible inference)
 REM  ------------------------------------------------------------
-REM  Runs Codex against a local LM Studio server through its
-REM  OpenAI-compatible API. Install Codex with Codex--install.cmd.
+REM  Aider runs on top of LiteLLM, which honours OPENAI_BASE_URL
+REM  when the model name is prefixed with "openai/". This launcher
+REM  pins the model, sets the base URL, and lets Aider talk to
+REM  LM Studio without any further configuration.
 REM
 REM  Default model for this agent: qwen3-coder-30b
 REM  Override with:
 REM      set LMSTUDIO_MODEL=<other-id>
-REM  Override the URL:
+REM  Override the URL (defaults to the LAN host used by the
+REM  Install-lmstudio.cmd script):
 REM      set LMSTUDIO_URL=http://127.0.0.1:1234
+REM
+REM  If LMSTUDIO_URL points at a REMOTE LM Studio host, the local
+REM  'lms load' call is a no-op; the launcher then falls back to
+REM  whatever model that remote host already has loaded.
 REM ============================================================
 
 if not defined LMSTUDIO_URL    set "LMSTUDIO_URL=http://192.168.12.174:1234"
@@ -25,10 +32,6 @@ pushd "%~dp0"
 if exist "%USERPROFILE%\.lmstudio\bin\lms.exe" set "PATH=%USERPROFILE%\.lmstudio\bin;%PATH%"
 where lms >nul 2>nul && call lms load "%LMSTUDIO_MODEL%" --gpu max --ttl 3600 >nul 2>nul
 
-REM  LM Studio does not check the key, but Codex still needs the
-REM  env var named by env_key to exist - give it a placeholder.
-set "LMSTUDIO_API_KEY=lmstudio"
-
 set "LMSTUDIO_ACTUAL="
 for /f "delims=" %%i in ('powershell -NoProfile -Command "try { (Invoke-RestMethod '%LMSTUDIO_URL%/v1/models' -TimeoutSec 3).data[0].id } catch { '' }"') do set "LMSTUDIO_ACTUAL=%%i"
 if not defined LMSTUDIO_ACTUAL goto :nomodel
@@ -41,13 +44,11 @@ if /I not "%LMSTUDIO_ACTUAL%"=="%LMSTUDIO_MODEL%" (
     set "LMSTUDIO_MODEL=%LMSTUDIO_ACTUAL%"
 )
 
-echo Connecting Codex to LM Studio model: %LMSTUDIO_MODEL%
-call codex ^
-  -c model_provider=lmstudio ^
-  -c model_providers.lmstudio.base_url=%LMSTUDIO_URL%/v1 ^
-  -c model_providers.lmstudio.env_key=LMSTUDIO_API_KEY ^
-  -c model_providers.lmstudio.wire_api=chat ^
-  --yolo --model "%LMSTUDIO_MODEL%"
+set "OPENAI_API_KEY=lmstudio"
+set "OPENAI_BASE_URL=%LMSTUDIO_URL%/v1"
+
+echo Launching Aider via LM Studio model: %LMSTUDIO_MODEL%
+call aider --model "openai/%LMSTUDIO_MODEL%"
 popd
 goto :end
 

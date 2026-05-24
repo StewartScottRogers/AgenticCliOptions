@@ -2,32 +2,36 @@
 setlocal
 
 REM ============================================================
-REM  OpenAI Codex CLI via LM Studio
+REM  Hermes Agent (Nous Research) via LM Studio
 REM  ------------------------------------------------------------
-REM  Runs Codex against a local LM Studio server through its
-REM  OpenAI-compatible API. Install Codex with Codex--install.cmd.
+REM  Hermes recognises 'openai' as a provider. This launcher sets
+REM  OPENAI_BASE_URL / OPENAI_API_KEY so Hermes talks to the local
+REM  LM Studio server, and pins LMSTUDIO_MODEL to a Nous Research
+REM  Hermes model so the agent's voice matches its vendor.
 REM
-REM  Default model for this agent: qwen3-coder-30b
+REM  Default model for this agent: nousresearch/hermes-3-llama-3.1-8b
 REM  Override with:
 REM      set LMSTUDIO_MODEL=<other-id>
 REM  Override the URL:
 REM      set LMSTUDIO_URL=http://127.0.0.1:1234
+REM
+REM  If your hermes-cli version rejects '--provider openai', drop
+REM  the flag - OPENAI_BASE_URL alone is enough for most builds.
 REM ============================================================
 
 if not defined LMSTUDIO_URL    set "LMSTUDIO_URL=http://192.168.12.174:1234"
-if not defined LMSTUDIO_MODEL  set "LMSTUDIO_MODEL=qwen3-coder-30b"
+if not defined LMSTUDIO_MODEL  set "LMSTUDIO_MODEL=nousresearch/hermes-3-llama-3.1-8b"
 
 REM ---- no edits needed below this line -----------------------
 
 set "ORIG_DIR=%CD%"
 pushd "%~dp0"
 
+REM  Make 'hermes' resolvable even if this shell predates the install.
+call :prepend_path "%LOCALAPPDATA%\hermes\hermes-agent\venv\Scripts"
+
 if exist "%USERPROFILE%\.lmstudio\bin\lms.exe" set "PATH=%USERPROFILE%\.lmstudio\bin;%PATH%"
 where lms >nul 2>nul && call lms load "%LMSTUDIO_MODEL%" --gpu max --ttl 3600 >nul 2>nul
-
-REM  LM Studio does not check the key, but Codex still needs the
-REM  env var named by env_key to exist - give it a placeholder.
-set "LMSTUDIO_API_KEY=lmstudio"
 
 set "LMSTUDIO_ACTUAL="
 for /f "delims=" %%i in ('powershell -NoProfile -Command "try { (Invoke-RestMethod '%LMSTUDIO_URL%/v1/models' -TimeoutSec 3).data[0].id } catch { '' }"') do set "LMSTUDIO_ACTUAL=%%i"
@@ -41,13 +45,11 @@ if /I not "%LMSTUDIO_ACTUAL%"=="%LMSTUDIO_MODEL%" (
     set "LMSTUDIO_MODEL=%LMSTUDIO_ACTUAL%"
 )
 
-echo Connecting Codex to LM Studio model: %LMSTUDIO_MODEL%
-call codex ^
-  -c model_provider=lmstudio ^
-  -c model_providers.lmstudio.base_url=%LMSTUDIO_URL%/v1 ^
-  -c model_providers.lmstudio.env_key=LMSTUDIO_API_KEY ^
-  -c model_providers.lmstudio.wire_api=chat ^
-  --yolo --model "%LMSTUDIO_MODEL%"
+set "OPENAI_API_KEY=lmstudio"
+set "OPENAI_BASE_URL=%LMSTUDIO_URL%/v1"
+
+echo Launching Hermes Agent via LM Studio model: %LMSTUDIO_MODEL%
+call hermes chat --provider openai --model "%LMSTUDIO_MODEL%"
 popd
 goto :end
 
@@ -57,6 +59,11 @@ echo ERROR: No model is loaded at %LMSTUDIO_URL%.
 echo Run ..\Install-lmstudio.cmd first, then make sure a model is loaded:
 echo     lms load %LMSTUDIO_MODEL%
 pause
+goto :end
+
+:prepend_path
+if exist "%~1\" set "PATH=%~1;%PATH%"
+exit /b 0
 
 :end
 endlocal

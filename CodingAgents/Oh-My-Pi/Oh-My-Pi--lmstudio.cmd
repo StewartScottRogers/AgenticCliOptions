@@ -2,10 +2,11 @@
 setlocal
 
 REM ============================================================
-REM  OpenAI Codex CLI via LM Studio
+REM  Oh-My-Pi (omp) via LM Studio
 REM  ------------------------------------------------------------
-REM  Runs Codex against a local LM Studio server through its
-REM  OpenAI-compatible API. Install Codex with Codex--install.cmd.
+REM  omp respects OPENAI_BASE_URL and OPENAI_API_KEY when no
+REM  provider is specified, so pointing those at LM Studio is
+REM  enough to switch routing.
 REM
 REM  Default model for this agent: qwen3-coder-30b
 REM  Override with:
@@ -22,12 +23,10 @@ REM ---- no edits needed below this line -----------------------
 set "ORIG_DIR=%CD%"
 pushd "%~dp0"
 
+call :prepend_path "%LOCALAPPDATA%\omp"
+
 if exist "%USERPROFILE%\.lmstudio\bin\lms.exe" set "PATH=%USERPROFILE%\.lmstudio\bin;%PATH%"
 where lms >nul 2>nul && call lms load "%LMSTUDIO_MODEL%" --gpu max --ttl 3600 >nul 2>nul
-
-REM  LM Studio does not check the key, but Codex still needs the
-REM  env var named by env_key to exist - give it a placeholder.
-set "LMSTUDIO_API_KEY=lmstudio"
 
 set "LMSTUDIO_ACTUAL="
 for /f "delims=" %%i in ('powershell -NoProfile -Command "try { (Invoke-RestMethod '%LMSTUDIO_URL%/v1/models' -TimeoutSec 3).data[0].id } catch { '' }"') do set "LMSTUDIO_ACTUAL=%%i"
@@ -41,13 +40,11 @@ if /I not "%LMSTUDIO_ACTUAL%"=="%LMSTUDIO_MODEL%" (
     set "LMSTUDIO_MODEL=%LMSTUDIO_ACTUAL%"
 )
 
-echo Connecting Codex to LM Studio model: %LMSTUDIO_MODEL%
-call codex ^
-  -c model_provider=lmstudio ^
-  -c model_providers.lmstudio.base_url=%LMSTUDIO_URL%/v1 ^
-  -c model_providers.lmstudio.env_key=LMSTUDIO_API_KEY ^
-  -c model_providers.lmstudio.wire_api=chat ^
-  --yolo --model "%LMSTUDIO_MODEL%"
+set "OPENAI_API_KEY=lmstudio"
+set "OPENAI_BASE_URL=%LMSTUDIO_URL%/v1"
+
+echo Launching Oh-My-Pi (omp) via LM Studio model: %LMSTUDIO_MODEL%
+call omp --model "%LMSTUDIO_MODEL%"
 popd
 goto :end
 
@@ -57,6 +54,11 @@ echo ERROR: No model is loaded at %LMSTUDIO_URL%.
 echo Run ..\Install-lmstudio.cmd first, then make sure a model is loaded:
 echo     lms load %LMSTUDIO_MODEL%
 pause
+goto :end
+
+:prepend_path
+if exist "%~1\" set "PATH=%~1;%PATH%"
+exit /b 0
 
 :end
 endlocal
