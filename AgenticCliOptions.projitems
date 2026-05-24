@@ -34,7 +34,7 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Pi\Pi--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Pi\Pi--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--is-installed.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--local-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--uninstall.cmd" />
@@ -44,7 +44,7 @@
     <None Include="$(MSBuildThisFileDirectory)OpenRouter.url" />
     <None Include="$(MSBuildThisFileDirectory)RunClaude.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--openrouter.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--local-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\Qwen--install.cmd" />
@@ -52,7 +52,7 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codex\Codex--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codex\Codex--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codex\Codex--openrouter.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codex\Codex--lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codex\Codex--local-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Gemini\Gemini--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Gemini\Gemini--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Mistral\Mistral--install.cmd" />
@@ -63,7 +63,7 @@
     <None Include="$(MSBuildThisFileDirectory)SetOpenRouterKey.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--openrouter.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--local-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\AmazonQ\AmazonQ--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\AmazonQ\AmazonQ--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hermes--install.cmd" />

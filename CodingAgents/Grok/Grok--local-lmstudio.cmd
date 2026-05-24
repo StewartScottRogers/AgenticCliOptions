@@ -12,7 +12,7 @@ REM  Grok-family models are also available on OpenRouter; to use
 REM  them locally, drive them with an OpenAI-compatible CLI (e.g.
 REM  the Qwen Code CLI in the Qwen folder).
 REM
-REM  This stub exists so every agent folder has a *--lmstudio.cmd
+REM  This stub exists so every agent folder has a *--local-lmstudio.cmd
 REM  for symmetry.
 REM ============================================================
 
@@ -25,9 +25,9 @@ echo  Grok Build is tied to xAI's own API. The CLI has no
 echo  OpenAI-compatible / LM Studio endpoint flag.
 echo.
 echo  To run a local model, try one of these instead:
-echo      CodingAgents\Qwen\Qwen--lmstudio.cmd
-echo      CodingAgents\Codex\Codex--lmstudio.cmd
-echo      CodingAgents\Claude\Claude--lmstudio.cmd
+echo      CodingAgents\Qwen\Qwen--local-lmstudio.cmd
+echo      CodingAgents\Codex\Codex--local-lmstudio.cmd
+echo      CodingAgents\Claude\Claude--local-lmstudio.cmd
 echo.
 pause
 endlocal

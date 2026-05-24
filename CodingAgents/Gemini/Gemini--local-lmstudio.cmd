@@ -13,7 +13,7 @@ REM  endpoints, use an OpenAI-compatible CLI instead. The Qwen
 REM  Code CLI in the Qwen folder is itself a Gemini-CLI fork and
 REM  accepts an OpenAI-compatible base URL out of the box.
 REM
-REM  This stub exists so every agent folder has a *--lmstudio.cmd
+REM  This stub exists so every agent folder has a *--local-lmstudio.cmd
 REM  for symmetry.
 REM ============================================================
 
@@ -25,11 +25,11 @@ echo.
 echo  Google's Gemini CLI has no OpenAI-compatible / LM Studio
 echo  endpoint flag. Use the Qwen Code CLI (a Gemini-CLI fork) for
 echo  local models instead:
-echo      CodingAgents\Qwen\Qwen--lmstudio.cmd
+echo      CodingAgents\Qwen\Qwen--local-lmstudio.cmd
 echo.
 echo  Other local-model launchers:
-echo      CodingAgents\Codex\Codex--lmstudio.cmd
-echo      CodingAgents\Claude\Claude--lmstudio.cmd
+echo      CodingAgents\Codex\Codex--local-lmstudio.cmd
+echo      CodingAgents\Claude\Claude--local-lmstudio.cmd
 echo.
 pause
 endlocal
