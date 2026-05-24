@@ -14,11 +14,18 @@ REM
 REM  --yolo auto-approves every command and file edit (it is the
 REM  short form of --dangerously-bypass-approvals-and-sandbox).
 REM  Only run this in a repo you trust.
+REM
+REM  Default model is always passed via --model. Override by setting
+REM  CODEX_MODEL once (persists for new terminals):
+REM
+REM      setx CODEX_MODEL "gpt-5.5"
 REM ============================================================
+
+if not defined CODEX_MODEL set "CODEX_MODEL=gpt-5.5"
 
 set "ORIG_DIR=%CD%"
 pushd "%~dp0"
-echo Launching OpenAI Codex CLI...
-call codex --yolo
+echo Launching OpenAI Codex CLI with model: %CODEX_MODEL%
+call codex --yolo --model "%CODEX_MODEL%"
 popd
 endlocal

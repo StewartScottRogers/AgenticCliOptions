@@ -33,6 +33,7 @@ set "ALL_AGENTS=Claude Codex Gemini Pi Qwen Grok Mistral Trae Hermes Codebuff Oh
 REM ---- Parse command line ---------------------------------------
 set "INTERACTIVE="
 set "DRYRUN="
+set "STATUS_ONLY="
 set "SELECTED="
 
 :parse_args
@@ -42,6 +43,8 @@ if /I "%~1"=="-h"        goto :usage
 if /I "%~1"=="--help"    goto :usage
 if /I "%~1"=="-n"        (set "DRYRUN=1" & shift & goto :parse_args)
 if /I "%~1"=="--dry-run" (set "DRYRUN=1" & shift & goto :parse_args)
+if /I "%~1"=="-s"        (set "STATUS_ONLY=1" & shift & goto :parse_args)
+if /I "%~1"=="--status"  (set "STATUS_ONLY=1" & shift & goto :parse_args)
 if /I "%~1"=="all" (
     set "SELECTED=%ALL_AGENTS%"
     shift
@@ -57,6 +60,7 @@ shift
 goto :parse_args
 
 :after_args
+if defined STATUS_ONLY goto :show_status
 if not defined SELECTED (
     set "INTERACTIVE=1"
     goto :menu
@@ -65,13 +69,14 @@ goto :reorder
 
 REM ---- Usage screen ---------------------------------------------
 :usage
-echo Usage: %~nx0 [--dry-run] [agent ...] ^| all ^| /?
+echo Usage: %~nx0 [--status ^| --dry-run] [agent ...] ^| all ^| /?
 echo.
 echo Available agents (case-insensitive):
 for %%A in (%ALL_AGENTS%) do echo   %%A
 echo.
 echo Examples:
 echo   %~nx0                              interactive menu
+echo   %~nx0 --status                     print install-status table and exit
 echo   %~nx0 all                          install every agent
 echo   %~nx0 Claude Codex Gemini          install just those three
 echo   %~nx0 --dry-run Claude Codex       show the plan, install nothing
@@ -198,9 +203,9 @@ echo ============================================================
 echo  Install status  --  every agent in the catalogue
 echo ============================================================
 echo.
-echo    +----+----------------+--------------+
-echo    ^| #  ^| Agent          ^| Status       ^|
-echo    +----+----------------+--------------+
+echo    +----+----------------+------------+--------------------------------+
+echo    ^| #  ^| Agent          ^| Status     ^| Default model                  ^|
+echo    +----+----------------+------------+--------------------------------+
 set "N=0"
 set "OK_COUNT=0"
 set "MISS_COUNT=0"
@@ -210,19 +215,41 @@ for %%A in (%ALL_AGENTS%) do (
     set "NP=!NP:~-2!"
     set "AP=%%A              "
     set "AP=!AP:~0,14!"
+    set "MODEL="
+    call :agent_model_var %%A
+    if defined MV call set "MODEL=%%!MV!%%"
+    if "!MODEL!"=="" (
+        call :agent_default_model %%A
+        set "MODEL=!DM!"
+    )
+    REM Clip long slugs (e.g. openrouter/anthropic/claude-sonnet-4.5)
+    REM with an ellipsis so the table stays aligned at 30 chars.
+    if not "!MODEL:~30,1!"=="" set "MODEL=!MODEL:~0,27!..."
+    set "MP=!MODEL!                                "
+    set "MP=!MP:~0,30!"
     call :is_installed %%A
     if errorlevel 1 (
         set /a MISS_COUNT+=1
-        echo    ^| !NP! ^| !AP! ^| missing      ^|
+        echo    ^| !NP! ^| !AP! ^| missing    ^| !MP! ^|
     ) else (
         set /a OK_COUNT+=1
-        echo    ^| !NP! ^| !AP! ^| installed    ^|
+        echo    ^| !NP! ^| !AP! ^| installed  ^| !MP! ^|
     )
 )
-echo    +----+----------------+--------------+
+echo    +----+----------------+------------+--------------------------------+
 echo.
 echo    Installed: !OK_COUNT!   Missing: !MISS_COUNT!   Total: !N!
 echo.
+echo    Default model = env var (if set) else the launcher's built-in
+echo    default. For agents whose CLI has no --model flag (Mistral,
+echo    Grok, AmazonQ, Codebuff) the "managed" labels mean the CLI
+echo    picks the model internally.
+echo    Override example:  setx AIDER_MODEL "openai/gpt-5"
+echo.
+if defined STATUS_ONLY (
+    endlocal
+    exit /b 0
+)
 pause
 goto :menu
 
@@ -474,6 +501,60 @@ if exist "%ROOT%%~1\%~1--is-installed.cmd" (
     exit /b
 )
 exit /b 1
+
+REM ============================================================
+REM  Helper: map agent name -> name of the env var that holds
+REM  its default model. Returns the var name in MV (or unset MV
+REM  if the agent has no native --model flag). Used by
+REM  :show_status to display each agent's configured default.
+REM ============================================================
+:agent_model_var
+set "MV="
+if /I "%~1"=="Aider"        set "MV=AIDER_MODEL"       & exit /b 0
+if /I "%~1"=="Claude"       set "MV=CLAUDE_MODEL"      & exit /b 0
+if /I "%~1"=="Codex"        set "MV=CODEX_MODEL"       & exit /b 0
+if /I "%~1"=="Gemini"       set "MV=GEMINI_MODEL"      & exit /b 0
+if /I "%~1"=="Hermes"       set "MV=HERMES_MODEL"      & exit /b 0
+if /I "%~1"=="Junie"        set "MV=JUNIE_MODEL"       & exit /b 0
+if /I "%~1"=="Oh-My-Pi"     set "MV=OMP_MODEL"         & exit /b 0
+if /I "%~1"=="OpenSquilla"  set "MV=OPENSQUILLA_MODEL" & exit /b 0
+if /I "%~1"=="Pi"           set "MV=PI_MODEL"          & exit /b 0
+if /I "%~1"=="VTCode"       set "MV=VTCODE_MODEL"      & exit /b 0
+REM Qwen has no native run.cmd but its OpenRouter launcher reads
+REM QWEN_MODEL (not the shared OPENROUTER_MODEL).
+if /I "%~1"=="Qwen"         set "MV=QWEN_MODEL"        & exit /b 0
+REM Trae and Mistral only have OpenRouter launchers, both keyed
+REM on the shared OPENROUTER_MODEL.
+if /I "%~1"=="Trae"         set "MV=OPENROUTER_MODEL"  & exit /b 0
+if /I "%~1"=="Mistral"      set "MV=OPENROUTER_MODEL"  & exit /b 0
+REM Grok, AmazonQ, Codebuff: CLI has no --model flag; leave MV unset.
+exit /b 0
+
+REM ============================================================
+REM  Helper: per-agent built-in default model. Used by show_status
+REM  when the env var (from :agent_model_var) is not set. Keep in
+REM  sync with the fallbacks baked into each <Agent>--run.cmd and
+REM  <Agent>--is-installed.cmd.
+REM ============================================================
+:agent_default_model
+set "DM="
+if /I "%~1"=="Aider"        set "DM=openrouter/anthropic/claude-sonnet-4.5" & exit /b 0
+if /I "%~1"=="Claude"       set "DM=claude-sonnet-4-5"                      & exit /b 0
+if /I "%~1"=="Codex"        set "DM=gpt-5.5"                                & exit /b 0
+if /I "%~1"=="Gemini"       set "DM=gemini-2.5-pro"                         & exit /b 0
+if /I "%~1"=="Hermes"       set "DM=Hermes-4-405B"                          & exit /b 0
+if /I "%~1"=="Junie"        set "DM=sonnet"                                 & exit /b 0
+if /I "%~1"=="Oh-My-Pi"     set "DM=openrouter/anthropic/claude-sonnet-4.5" & exit /b 0
+if /I "%~1"=="OpenSquilla"  set "DM=anthropic/claude-sonnet-4.5"            & exit /b 0
+if /I "%~1"=="Pi"           set "DM=anthropic/claude-sonnet-4.5"            & exit /b 0
+if /I "%~1"=="VTCode"       set "DM=qwen/qwen3-coder"                       & exit /b 0
+if /I "%~1"=="Qwen"         set "DM=qwen/qwen3-coder"                       & exit /b 0
+if /I "%~1"=="Trae"         set "DM=anthropic/claude-sonnet-4.5"            & exit /b 0
+if /I "%~1"=="Mistral"      set "DM=mistral-managed"                        & exit /b 0
+if /I "%~1"=="Grok"         set "DM=xai-managed"                            & exit /b 0
+if /I "%~1"=="AmazonQ"      set "DM=aws-managed"                            & exit /b 0
+if /I "%~1"=="Codebuff"     set "DM=codebuff-managed"                       & exit /b 0
+exit /b 0
 
 REM ============================================================
 REM  Helper: ensure Node.js is at least v22 (Qwen's requirement).

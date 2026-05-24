@@ -1,6 +1,19 @@
 @echo off
 setlocal
+
+REM ============================================================
+REM  Run Claude Code  --  native launcher
+REM  ------------------------------------------------------------
+REM  Default model is always passed via --model. Override by setting
+REM  CLAUDE_MODEL once (persists for new terminals):
+REM
+REM      setx CLAUDE_MODEL "claude-opus-4-7"
+REM ============================================================
+
+if not defined CLAUDE_MODEL set "CLAUDE_MODEL=claude-sonnet-4-5"
+
 pushd "%~dp0"
-call claude --dangerously-skip-permissions --verbose
+echo Launching Claude Code with model: %CLAUDE_MODEL%
+call claude --dangerously-skip-permissions --verbose --model "%CLAUDE_MODEL%"
 popd
 endlocal

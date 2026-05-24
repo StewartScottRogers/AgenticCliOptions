@@ -23,11 +23,18 @@ REM  Studio via its models.json config rather than CLI flags, so
 REM  LM Studio integration belongs in a Pi extension. Use
 REM  Codex--settings-lmstudio.cmd or Claude--settings-lmstudio.cmd
 REM  to drive an LM Studio model meanwhile.
+REM
+REM  Default model is always passed via --model. Override by setting
+REM  PI_MODEL once (persists for new terminals):
+REM
+REM      setx PI_MODEL "openai/gpt-5"
 REM ============================================================
+
+if not defined PI_MODEL set "PI_MODEL=anthropic/claude-sonnet-4.5"
 
 set "ORIG_DIR=%CD%"
 pushd "%~dp0"
-echo Launching Pi coding agent...
-call pi
+echo Launching Pi coding agent with model: %PI_MODEL%
+call pi --model "%PI_MODEL%"
 popd
 endlocal

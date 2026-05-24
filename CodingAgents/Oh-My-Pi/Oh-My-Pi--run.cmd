@@ -6,14 +6,22 @@ REM  Run Oh-My-Pi (omp)  --  native launcher
 REM  ------------------------------------------------------------
 REM  Uses whatever provider you've configured in ~/.omp/agent.
 REM  For OpenRouter, use Oh-My-Pi--openrouter.cmd instead.
+REM
+REM  Default model is always passed via --model. Override by setting
+REM  OMP_MODEL once (persists for new terminals):
+REM
+REM      setx OMP_MODEL "openrouter/openai/gpt-5"
 REM ============================================================
+
+if not defined OMP_MODEL set "OMP_MODEL=openrouter/anthropic/claude-sonnet-4.5"
 
 call :prepend_path "%LOCALAPPDATA%\omp"
 
 where omp >nul 2>nul
 if errorlevel 1 goto :notinstalled
 
-call omp
+echo Launching Oh-My-Pi (omp) with model: %OMP_MODEL%
+call omp --model "%OMP_MODEL%"
 goto :end
 
 :notinstalled
