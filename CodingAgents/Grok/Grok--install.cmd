@@ -39,6 +39,7 @@ if errorlevel 1 goto :failed
 
 :done
 call :refresh_path
+call :ensure_grok_on_path
 echo.
 echo Grok CLI install step finished. Launch it with Grok--run.cmd,
 echo or run 'grok' directly. If 'grok' is not found, open a new
@@ -98,6 +99,21 @@ call :prepend_path "%ProgramW6432%\nodejs"
 call :prepend_path "%ProgramFiles%\Git\cmd"
 call :prepend_path "%ProgramFiles%\Git\bin"
 call :prepend_path "%LOCALAPPDATA%\Microsoft\WinGet\Links"
+call :prepend_path "%USERPROFILE%\.grok\bin"
+exit /b 0
+
+:ensure_grok_on_path
+REM  The official x.ai installer adds ~/.grok/bin to .bashrc only, so
+REM  cmd.exe / PowerShell never see 'grok' until we register it on
+REM  the User PATH ourselves. Idempotent: only appends if absent.
+if not exist "%USERPROFILE%\.grok\bin\grok.exe" exit /b 0
+powershell -NoProfile -Command ^
+  "$add = [IO.Path]::Combine($env:USERPROFILE, '.grok', 'bin');" ^
+  "$p   = [Environment]::GetEnvironmentVariable('PATH','User');" ^
+  "if (-not ($p -split ';' | Where-Object { $_ -ieq $add })) {" ^
+  "  [Environment]::SetEnvironmentVariable('PATH', ($p.TrimEnd(';') + ';' + $add), 'User');" ^
+  "  Write-Host \"Added $add to your User PATH (effective in new terminals).\"" ^
+  "}"
 exit /b 0
 
 :prepend_path

@@ -70,8 +70,8 @@ REM ============================================================
 echo ------------------------------------------------------------
 echo  %~1
 echo ------------------------------------------------------------
-if exist "%ROOT%CodingAgents\%~1\%~1--uninstall.cmd" (
-    call "%ROOT%CodingAgents\%~1\%~1--uninstall.cmd"
+if exist "%ROOT%%~1\%~1--uninstall.cmd" (
+    call "%ROOT%%~1\%~1--uninstall.cmd"
 ) else (
     echo ERROR: uninstall script for %~1 was not found.
 )
