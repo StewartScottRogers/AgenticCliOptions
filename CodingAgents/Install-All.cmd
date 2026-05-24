@@ -28,7 +28,7 @@ REM  final 'pause', so the whole run is unattended.
 set "AGENTS_INSTALL_ALL=1"
 
 REM  Master agent list. Order matters: AmazonQ kept last on purpose.
-set "ALL_AGENTS=Claude Codex Gemini Pi Qwen Grok Mistral Trae Hermes OpenClaw Codebuff Oh-My-Pi OpenSquilla Crush Aider Junie Autohand Nanocoder VTCode AmazonQ"
+set "ALL_AGENTS=Claude Codex Gemini Pi Qwen Grok Mistral Trae Hermes Codebuff Oh-My-Pi OpenSquilla Aider Junie VTCode AmazonQ"
 
 REM ---- Parse command line ---------------------------------------
 set "INTERACTIVE="

@@ -30,15 +30,11 @@ echo.
 
 call :uninstall_agent AmazonQ
 call :uninstall_agent VTCode
-call :uninstall_agent Nanocoder
-call :uninstall_agent Autohand
 call :uninstall_agent Junie
 call :uninstall_agent Aider
-call :uninstall_agent Crush
 call :uninstall_agent OpenSquilla
 call :uninstall_agent Oh-My-Pi
 call :uninstall_agent Codebuff
-call :uninstall_agent OpenClaw
 call :uninstall_agent Hermes
 call :uninstall_agent Trae
 call :uninstall_agent Mistral

@@ -45,15 +45,11 @@ inside Visual Studio / Rider's Solution Explorer.
 | **Mistral**    | Mistral AI   | `uv tool install mistral-vibe` | `MISTRAL_API_KEY`                         | yes (caveat — uses `MISTRAL_BASE_URL`) | no |
 | **Trae**       | ByteDance    | `uv tool install` from GitHub (Python 3.12, `[evaluation]` extra) | provider-agnostic via env vars | yes                 | yes                  |
 | **Hermes**     | Nous Research | official PowerShell installer (`install.ps1`) → `%LOCALAPPDATA%\hermes\hermes-agent\venv\Scripts` | Nous Portal OAuth or `OPENROUTER_API_KEY` | yes                 | no                  |
-| **OpenClaw**   | OpenClaw     | npm `openclaw` (requires Node 22.19+) | onboarding wizard or `OPENROUTER_API_KEY` | yes                 | no                  |
 | **Codebuff**   | Codebuff AI  | npm `codebuff` (needs Git/bash on Windows) | codebuff.com login | no (platform-managed routing) | no |
 | **Oh-My-Pi**   | can1357      | PowerShell installer (`omp.sh/install.ps1 -Binary`) | `OPENROUTER_API_KEY` (and many others) | yes | no |
 | **OpenSquilla** | OpenSquilla | `uv tool install` from latest GitHub release wheel | `OPENROUTER_API_KEY` (via `onboard --api-key-env`) | yes | no |
-| **Crush**      | Charmbracelet | `winget install charmbracelet.crush` | `OPENROUTER_API_KEY` (built-in provider) | yes (TUI model picker) | no |
 | **Aider**      | Aider community | `uv tool install aider-chat` | `OPENROUTER_API_KEY` (and many others) | yes | no |
 | **Junie**      | JetBrains    | official PowerShell installer (`install.ps1`) → `~/.local/bin\junie.bat` | Junie subscription or `--openrouter-api-key` BYOK | yes | no |
-| **Autohand**   | Autohand AI  | official PowerShell installer (`install.ps1`) → `%LOCALAPPDATA%\autohand` | `OPENROUTER_API_KEY` (OpenRouter is the default) | yes | no |
-| **Nanocoder**  | Nano Collective | npm `@nanocollective/nanocoder` | `OPENROUTER_API_KEY` (and many others) | yes | no |
 | **VT Code**    | vinhnx       | official PowerShell installer (`install.ps1`) → `~/.local/bin\vtcode.exe` | `OPENROUTER_API_KEY` (and many others) | yes (Windows builds **best-effort**) | no |
 | **AmazonQ / Kiro** | Amazon   | WSL + official Linux `install.sh` | AWS Builder ID / IAM Identity Center | no (AWS Nova only) | no (AWS Nova only) |
 
@@ -91,15 +87,11 @@ AgenticCliOptions/
     ├── Qwen/      Qwen--{install,uninstall,openrouter,settings-lmstudio}.cmd
     ├── Trae/      Trae--{install,uninstall,openrouter,settings-lmstudio}.cmd
     ├── Hermes/    Hermes--{install,uninstall,openrouter,run}.cmd
-    ├── OpenClaw/  OpenClaw--{install,uninstall,openrouter,run}.cmd
     ├── Codebuff/  Codebuff--{install,uninstall,run}.cmd
     ├── Oh-My-Pi/  Oh-My-Pi--{install,uninstall,openrouter,run}.cmd
     ├── OpenSquilla/ OpenSquilla--{install,uninstall,openrouter,run}.cmd
-    ├── Crush/     Crush--{install,uninstall,openrouter,run}.cmd
     ├── Aider/     Aider--{install,uninstall,openrouter,run}.cmd
     ├── Junie/     Junie--{install,uninstall,openrouter,run}.cmd
-    ├── Autohand/  Autohand--{install,uninstall,openrouter,run}.cmd
-    ├── Nanocoder/ Nanocoder--{install,uninstall,openrouter,run}.cmd
     └── VTCode/    VTCode--{install,uninstall,openrouter,run}.cmd
 ```
 
@@ -159,12 +151,12 @@ Conventions baked into every script:
 
 | Dependency              | Used by                                                                                          | Installed by                           |
 |-------------------------|--------------------------------------------------------------------------------------------------|----------------------------------------|
-| Node.js LTS (>= 22)     | Claude, Codex, Gemini, Pi, Qwen, OpenClaw, Codebuff, Nanocoder (and Grok npm fallback)           | `winget install OpenJS.NodeJS.LTS`     |
+| Node.js LTS (>= 22)     | Claude, Codex, Gemini, Pi, Qwen, Codebuff (and Grok npm fallback)                                | `winget install OpenJS.NodeJS.LTS`     |
 | uv (Astral)             | Mistral, Trae, Hermes (used internally by its installer), OpenSquilla, Aider                     | `winget install astral-sh.uv`          |
 | Git for Windows         | Grok, Codebuff, Oh-My-Pi, Aider (provides `bash.exe` + `git.exe` at runtime)                     | `winget install Git.Git`               |
 | WSL + Ubuntu            | Amazon Q (no native Windows build)                                                               | `wsl --install` + `wsl --install -d Ubuntu` |
 | Python 3.11 / 3.12      | Trae (`tree-sitter-languages` pin → 3.12); Hermes installer pins 3.11; OpenSquilla pins 3.12     | uv downloads them automatically        |
-| winget                  | Crush (`charmbracelet.crush`) is winget-native; every other agent uses winget for shared deps    | ships with Windows 11 (App Installer)  |
+| winget                  | every agent uses winget for shared deps                                                          | ships with Windows 11 (App Installer)  |
 | LM Studio (optional)    | every `*--settings-lmstudio.cmd`                                                                 | `winget install ElementLabs.LMStudio`  |
 
 > **Node 22 enforcement.** `Install-All.cmd :ensure_node_22` detects an
@@ -190,15 +182,11 @@ clean slate.
 | Mistral   | `%USERPROFILE%\.mistral`, `%USERPROFILE%\.vibe`     |
 | Trae      | `%USERPROFILE%\.trae`                               |
 | Hermes    | `%USERPROFILE%\.hermes`, `%LOCALAPPDATA%\hermes`    |
-| OpenClaw  | `%USERPROFILE%\.openclaw`                           |
 | Codebuff  | `%USERPROFILE%\.codebuff`                           |
 | Oh-My-Pi  | `%USERPROFILE%\.omp`, `%LOCALAPPDATA%\omp`          |
 | OpenSquilla | `%USERPROFILE%\.opensquilla`                      |
-| Crush     | `%LOCALAPPDATA%\crush`                              |
 | Aider     | `%USERPROFILE%\.aider.conf.yml`, `%USERPROFILE%\.aider.tags.cache.v3` |
 | Junie     | `%USERPROFILE%\.local\share\junie`, `%USERPROFILE%\.junie` |
-| Autohand  | `%USERPROFILE%\.autohand`, `%LOCALAPPDATA%\autohand` |
-| Nanocoder | `%USERPROFILE%\.nanocoder`                          |
 | VT Code   | `%LOCALAPPDATA%\vinhnx\vtcode\config`, `%LOCALAPPDATA%\vinhnx\vtcode\data` |
 | Amazon Q  | `~/.local/share/amazon-q` *inside WSL*              |
 | LM Studio | `%USERPROFILE%\.lmstudio`, `%APPDATA%\LMStudio`     |
@@ -278,16 +266,6 @@ hand-holding. Watch for them when upstreams change.
   not always clean it on Windows). OpenRouter launcher passes
   `--provider openrouter --model <slug>`; `OPENROUTER_API_KEY`
   is recognised natively.
-- **OpenClaw** — open-source personal AI assistant. Installed
-  globally via `npm install -g openclaw@latest`. **Needs Node
-  22.19+** — the existing `:ensure_node_22` helper in
-  `Install-All.cmd` covers this. First run requires
-  `openclaw onboard` to set up the gateway/workspace. The
-  OpenRouter launcher uses model refs of the form
-  `openrouter/<provider>/<model>` and lets the chat command
-  `/model openrouter/...` switch on the fly. Note: upstream
-  recommends WSL2 for the **best** experience, but the npm
-  install works natively on Windows.
 - **Codebuff** — terminal coding agent backed by the
   codebuff.com platform. Installed via `npm install -g
   codebuff@latest`. On Windows it needs `bash.exe` to run its
@@ -333,16 +311,6 @@ hand-holding. Watch for them when upstreams change.
   `opensquilla` has no `--version` flag, so the install
   script reads the version from `uv tool list`. If you see
   `DLL load failed`, install the VC++ Redistributable.
-- **Crush** — Charmbracelet's terminal coding agent. The
-  smoothest Windows install of any agent in this repo: a
-  single Go binary delivered via `winget install
-  charmbracelet.crush`. OpenRouter is a first-class built-in
-  provider — setting `OPENROUTER_API_KEY` is enough. Crush
-  does not yet accept a `--model` CLI flag (see upstream issue
-  #1034), so the OpenRouter launcher just starts the TUI and
-  expects you to pick the OpenRouter model from its model
-  picker. Uninstaller is `winget uninstall
-  charmbracelet.crush`.
 - **Aider** — the classic AI pair-programmer for the terminal.
   Installed via `uv tool install --force --python 3.12
   --upgrade aider-chat`. Needs Git installed at runtime to
@@ -361,27 +329,6 @@ hand-holding. Watch for them when upstreams change.
   <slug>`; the launcher does that for you. No uninstall
   command upstream, so `Junie--uninstall.cmd` removes the shim
   and data dir manually.
-- **Autohand** — fast self-evolving terminal coding agent.
-  OpenRouter is the **default** provider, so the install is
-  the lightest of any agent here once a key is set. Installed
-  via the upstream PowerShell installer that drops
-  `autohand.exe` under `%LOCALAPPDATA%\autohand`. **Upstream
-  caveat:** the installer does NOT add that dir to the User
-  PATH — it only prints copy-paste instructions for the user
-  to do it themselves. `Autohand--install.cmd` patches that
-  by appending the directory to the User PATH itself (matching
-  the convention every other agent here follows). No upstream
-  uninstaller either, so `Autohand--uninstall.cmd` removes the
-  install dir and prunes the PATH entry by hand. OpenRouter
-  launcher passes `--provider openrouter --model <slug>`.
-- **Nanocoder** — local-first community-built coding agent.
-  Installed globally via `npm install -g
-  @nanocollective/nanocoder`. **Windows support is not
-  explicitly documented** by upstream (the README mentions
-  Homebrew for macOS/Linux but no Windows guidance); the npm
-  path works in practice. OpenRouter via `--provider
-  openrouter --model <slug>` with `OPENROUTER_API_KEY` in the
-  environment.
 - **VT Code** — Rust-based coding agent with code-understanding
   tooling and shell safety. **Windows builds are flagged
   "best-effort, may lag behind macOS/Linux"** by upstream — and
@@ -425,9 +372,8 @@ To keep the project coherent, follow this checklist:
    re-run.
 5. **Wire the agent into `Install-All.cmd` and `Uninstall-All.cmd`**.
    Install order is: Claude, Codex, Gemini, Pi, Qwen, Grok, Mistral,
-   Trae, Hermes, OpenClaw, Codebuff, Oh-My-Pi, OpenSquilla, Crush,
-   Aider, Junie, Autohand, Nanocoder, VT Code, then Amazon Q
-   **last** (reboot). Uninstall is the reverse.
+   Trae, Hermes, Codebuff, Oh-My-Pi, OpenSquilla, Aider, Junie,
+   VT Code, then Amazon Q **last** (reboot). Uninstall is the reverse.
 6. **Add the agent's config dir to the "leaves alone" list** in both
    `Uninstall-All.cmd` and the agent's own uninstaller.
 7. **Add a row** to the [agent matrix above](#the-twenty-agents-at-a-glance)
@@ -450,10 +396,6 @@ To keep the project coherent, follow this checklist:
     OpenSquilla have no `--version`; fall back to
     `uv tool list` or `where <bin>`). Common surprises to
     look out for:
-    - **Upstream installer prints PATH instructions instead
-      of setting them** (Autohand). Patch your install script
-      to append the dir to the User PATH itself via
-      `[Environment]::SetEnvironmentVariable('Path', ..., 'User')`.
     - **Binary lives in a non-obvious subdir** (Hermes →
       `\hermes-agent\venv\Scripts`). Don't trust the docs;
       run the installer once and run `where <bin>` to find
@@ -586,11 +528,6 @@ prompt) before declaring it working.
   this by re-saving the script with a UTF-8 BOM. If you see
   this error from another agent's installer, apply the same
   pattern to its install script.
-- **`autohand` is installed but not on PATH for new
-  terminals** — the upstream installer only *prints*
-  instructions to add itself to PATH. `Autohand--install.cmd`
-  patches that, but if you ran the upstream one-liner by hand
-  instead, re-run `Autohand--install.cmd` to fix the PATH.
 - **VT Code installer reports "No recent releases include a
   Windows native binary asset"** — upstream `install.ps1`
   uses HEAD requests to probe for assets and that probe

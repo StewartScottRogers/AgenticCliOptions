@@ -25,6 +25,7 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\Trae--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Install-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Install-lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)OpenRouter.url" />
     <None Include="$(MSBuildThisFileDirectory)RunClaude.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--settings-lmstudio.cmd" />
@@ -53,10 +54,6 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hermes--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hermes--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hermes--run.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenClaw\OpenClaw--install.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenClaw\OpenClaw--uninstall.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenClaw\OpenClaw--openrouter.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenClaw\OpenClaw--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codebuff\Codebuff--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codebuff\Codebuff--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Codebuff\Codebuff--run.cmd" />
@@ -68,10 +65,6 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenSquilla\OpenSquilla--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenSquilla\OpenSquilla--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\OpenSquilla\OpenSquilla--run.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Crush\Crush--install.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Crush\Crush--uninstall.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Crush\Crush--openrouter.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Crush\Crush--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Aider\Aider--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Aider\Aider--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Aider\Aider--openrouter.cmd" />
@@ -80,14 +73,6 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--run.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Autohand\Autohand--install.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Autohand\Autohand--uninstall.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Autohand\Autohand--openrouter.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Autohand\Autohand--run.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Nanocoder\Nanocoder--install.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Nanocoder\Nanocoder--uninstall.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Nanocoder\Nanocoder--openrouter.cmd" />
-    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Nanocoder\Nanocoder--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--install.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--openrouter.cmd" />

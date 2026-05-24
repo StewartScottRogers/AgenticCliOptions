@@ -31,14 +31,20 @@ echo Connecting Codex to OpenRouter model: %OPENROUTER_MODEL%
 REM  Codex reads the OpenRouter key from the OPENROUTER_API_KEY env
 REM  var (env_key). The -c overrides define an OpenRouter model
 REM  provider on the fly, so nothing is written to the global
-REM  ~/.codex/config.toml. wire_api=chat selects the OpenAI-style
-REM  chat-completions protocol that OpenRouter exposes.
+REM  ~/.codex/config.toml. wire_api=responses selects the OpenAI
+REM  Responses API protocol (the chat-completions wire shape was
+REM  removed from codex - see github.com/openai/codex/discussions/7782);
+REM  OpenRouter mirrors /v1/responses for openai/* models.
+REM  --dangerously-bypass-approvals-and-sandbox is the modern
+REM  replacement for the retired --yolo flag (skips all approval
+REM  prompts; rely on git for safety).
 call codex ^
   -c model_provider=openrouter ^
+  -c model_providers.openrouter.name="OpenRouter" ^
   -c model_providers.openrouter.base_url=https://openrouter.ai/api/v1 ^
   -c model_providers.openrouter.env_key=OPENROUTER_API_KEY ^
-  -c model_providers.openrouter.wire_api=chat ^
-  --yolo --model "%OPENROUTER_MODEL%"
+  -c model_providers.openrouter.wire_api=responses ^
+  --dangerously-bypass-approvals-and-sandbox --model "%OPENROUTER_MODEL%"
 popd
 goto :end
 

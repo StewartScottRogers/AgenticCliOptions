@@ -361,3 +361,13 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+.aider*
+
+# Per-launcher generated files written by *--openrouter.cmd /
+# left behind by tool first-runs
+.vibe-home/
+CodingAgents/Trae/trae_config.yaml
+CodingAgents/VTCode/.vtcode/
+
+# Claude Code session lock / per-project state
+.claude/

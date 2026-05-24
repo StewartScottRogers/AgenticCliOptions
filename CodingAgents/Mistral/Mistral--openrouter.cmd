@@ -12,30 +12,48 @@ REM
 REM  ...then open a new terminal. Get a key at
 REM  https://openrouter.ai/keys
 REM
-REM  CAVEAT: this points Vibe at OpenRouter by overriding the
-REM  Mistral API base URL. It works only if your Vibe version
-REM  honours MISTRAL_BASE_URL. If Vibe ignores it, run Vibe
-REM  natively with Mistral--run.cmd instead. Verify with a short
-REM  test prompt before relying on this launcher.
+REM  Vibe has no --model CLI flag and no MISTRAL_BASE_URL env
+REM  override. The supported way to point Vibe at OpenRouter is
+REM  via a config.toml that declares an OpenRouter provider and
+REM  one model. This launcher writes that config into a private
+REM  VIBE_HOME ('.vibe-home' next to this script) and points
+REM  vibe at it, so the launcher is fully self-contained and
+REM  never touches the user's ~/.vibe/config.toml.
 REM ============================================================
 
 REM  Optional: choose which model OpenRouter routes to. Browse
 REM  slugs at https://openrouter.ai/models
-if not defined OPENROUTER_MODEL  set "OPENROUTER_MODEL=mistralai/devstral-2"
+if not defined OPENROUTER_MODEL  set "OPENROUTER_MODEL=mistralai/devstral-medium"
 
 REM ---- no edits needed below this line -----------------------
 
 if not defined OPENROUTER_API_KEY goto :nokey
 if "%OPENROUTER_API_KEY%"=="" goto :nokey
 
-REM  Reuse the Mistral SDK env vars, redirected to OpenRouter.
-set "MISTRAL_API_KEY=%OPENROUTER_API_KEY%"
-set "MISTRAL_BASE_URL=https://openrouter.ai/api/v1"
-
 set "ORIG_DIR=%CD%"
 pushd "%~dp0"
+
+REM  Use a launcher-local VIBE_HOME so the user's ~/.vibe is
+REM  preserved. The config is rewritten every run, so changing
+REM  OPENROUTER_MODEL just takes effect on next launch.
+set "VIBE_HOME=%~dp0.vibe-home"
+if not exist "%VIBE_HOME%\" mkdir "%VIBE_HOME%"
+>  "%VIBE_HOME%\config.toml" echo active_model = "openrouter"
+>> "%VIBE_HOME%\config.toml" echo.
+>> "%VIBE_HOME%\config.toml" echo [[providers]]
+>> "%VIBE_HOME%\config.toml" echo name = "openrouter"
+>> "%VIBE_HOME%\config.toml" echo api_base = "https://openrouter.ai/api/v1"
+>> "%VIBE_HOME%\config.toml" echo api_key_env_var = "OPENROUTER_API_KEY"
+>> "%VIBE_HOME%\config.toml" echo api_style = "openai"
+>> "%VIBE_HOME%\config.toml" echo backend = "generic"
+>> "%VIBE_HOME%\config.toml" echo.
+>> "%VIBE_HOME%\config.toml" echo [[models]]
+>> "%VIBE_HOME%\config.toml" echo name = "%OPENROUTER_MODEL%"
+>> "%VIBE_HOME%\config.toml" echo provider = "openrouter"
+>> "%VIBE_HOME%\config.toml" echo alias = "openrouter"
+
 echo Connecting Mistral Vibe to OpenRouter model: %OPENROUTER_MODEL%
-call vibe --model "%OPENROUTER_MODEL%"
+call vibe
 popd
 goto :end
 

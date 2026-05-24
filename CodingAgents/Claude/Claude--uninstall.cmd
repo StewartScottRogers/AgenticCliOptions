@@ -18,6 +18,26 @@ REM ============================================================
 
 set "REMOVED_SOMETHING=0"
 
+REM ---- Pre-flight: refuse if a Claude Code session is hosting us ----
+REM  Claude Code sets CLAUDECODE=1 in every shell it spawns. If we are
+REM  inside one of those shells, OS file locks on claude.exe / cli.js
+REM  will silently turn the npm + file deletes into partial no-ops -
+REM  leaving Claude in a half-uninstalled, broken state. Bail loudly
+REM  instead.
+if defined CLAUDECODE (
+    echo.
+    echo ERROR: a Claude Code session is currently running ^(CLAUDECODE
+    echo is set in this shell^). The OS holds an exclusive lock on the
+    echo running 'claude.exe' / package files, so npm uninstall and the
+    echo native-binary delete will only partially succeed and leave
+    echo Claude in a broken state.
+    echo.
+    echo Close every running 'claude' process / Claude Code session,
+    echo then open a fresh terminal and re-run this uninstaller.
+    if not defined AGENTS_UNINSTALL_ALL pause
+    exit /b 1
+)
+
 REM ---- Path 1: npm global package -----------------------------
 where npm >nul 2>nul
 if errorlevel 1 (
@@ -68,9 +88,15 @@ if errorlevel 1 (
         echo Claude Code CLI was not installed - nothing to do.
     )
 ) else (
-    echo NOTE: 'claude' is still resolvable on PATH. It may be a
-    echo stale shim or a third copy installed elsewhere. Run
-    echo 'where claude' to investigate.
+    echo ERROR: 'claude' is still resolvable on PATH after uninstall.
+    echo Likely a stale npm shim, a third copy installed elsewhere,
+    echo or files were locked at delete time. Run 'where claude' to
+    echo investigate, close any running Claude sessions, and re-run.
+    echo.
+    echo Done. Your ~/.claude config directory was NOT touched -
+    echo delete it manually if you want a fully clean slate.
+    if not defined AGENTS_UNINSTALL_ALL pause
+    exit /b 1
 )
 echo.
 echo Done. Your ~/.claude config directory was NOT touched -
