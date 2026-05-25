@@ -13,6 +13,10 @@ REM  settings, remove this folder by hand AFTER running this:
 REM      %USERPROFILE%\.gemini
 REM ============================================================
 
+REM  Tear down plugin entries BEFORE removing the CLI so hooks
+REM  that edit ~/.gemini/settings.json see the live config.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Gemini uninstall
+
 where npm >nul 2>nul
 if errorlevel 1 (
     echo npm was not found - nothing to uninstall via npm.

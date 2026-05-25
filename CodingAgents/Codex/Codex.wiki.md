@@ -37,3 +37,11 @@ OpenAI's terminal coding agent.
 OpenRouter launcher uses on-the-fly `-c model_provider=...` overrides instead of editing `~/.codex/config.toml`, so nothing is persisted.
 
 `wire_api=responses` selects the OpenAI Responses API protocol — the chat-completions wire shape was removed from codex (see github.com/openai/codex/discussions/7782); OpenRouter mirrors `/v1/responses` for `openai/*` models. `--dangerously-bypass-approvals-and-sandbox` is the modern replacement for the retired `--yolo` flag (skips all approval prompts; rely on git for safety).
+
+## Plugins
+
+Both `Codex--install.cmd` and `Codex--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Codex {install,uninstall}` so any plugin whose manifest lists Codex in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+Plugins shipping a hook for Codex:
+
+- [`context7-mcp`](../Plugins/context7-mcp/plugin.json) — Context7 MCP server (up-to-date library docs). Added as a sentinel-fenced `[mcp_servers.context7]` block in `~/.codex/config.toml` so re-install / uninstall finds exactly that block without touching the user's other MCP entries.

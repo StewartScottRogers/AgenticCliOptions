@@ -14,6 +14,9 @@ REM      %USERPROFILE%\.mistral
 REM      %USERPROFILE%\.vibe
 REM ============================================================
 
+REM  Tear down plugin entries BEFORE removing the CLI.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Mistral uninstall
+
 where uv >nul 2>nul
 if errorlevel 1 (
     echo uv was not found - nothing to uninstall via uv.

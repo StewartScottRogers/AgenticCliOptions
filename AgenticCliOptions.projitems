@@ -147,6 +147,22 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Uninstall-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Uninstall-lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\_apply-plugins.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\_apply-plugins.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\_install-plugin.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\Install-Plugin.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\Uninstall-Plugin.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\plugin.json" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\_mcp-json-edit.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\_mcp-toml-edit.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\install\antigravity.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\install\claude.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\install\codex.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\install\gemini.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\uninstall\antigravity.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\uninstall\claude.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\uninstall\codex.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\uninstall\gemini.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\LMStudio.Claude.Settings.json" />

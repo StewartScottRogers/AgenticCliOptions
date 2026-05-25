@@ -74,6 +74,9 @@ if errorlevel 1 (
 echo.
 echo Done. Launch it with VTCode--openrouter.cmd, or run
 echo 'vtcode chat' directly.
+
+REM  Fan plugin install hooks out to VTCode.
+call "%~dp0..\Plugins\_apply-plugins.cmd" VTCode install
 goto :end
 
 

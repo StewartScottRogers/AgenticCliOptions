@@ -36,3 +36,9 @@ Terminal coding agent backed by the codebuff.com platform.
 Installed via `npm install -g codebuff@latest`. On Windows it needs `bash.exe` to run its shell-execution tool; the installer pulls Git for Windows if missing (you already have it for Grok).
 
 **No OpenRouter launcher**: Codebuff handles model routing internally via its own backend and does not document a way to BYO an OpenRouter key at the CLI. Sign in with `codebuff` on first run.
+
+## Plugins
+
+Both `Codebuff--install.cmd` and `Codebuff--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Codebuff {install,uninstall}` so any plugin whose manifest lists Codebuff in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+No plugin in the repo currently ships a hook for Codebuff.

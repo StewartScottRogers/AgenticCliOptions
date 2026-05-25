@@ -20,6 +20,10 @@ REM      %USERPROFILE%\.antigravity
 REM      %LOCALAPPDATA%\antigravity
 REM ============================================================
 
+REM  Tear down plugin entries BEFORE removing the CLI so hooks
+REM  that edit ~/.antigravity/settings.json see the live config.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Antigravity uninstall
+
 set "AGY_DIR=%LOCALAPPDATA%\agy"
 set "AGY_BIN=%AGY_DIR%\bin\agy.exe"
 set "AGY_STAGING=%LOCALAPPDATA%\antigravity\staging"

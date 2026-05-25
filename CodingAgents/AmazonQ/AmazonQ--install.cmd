@@ -184,6 +184,11 @@ echo  That launches an Amazon Q chat session. The FIRST time it
 echo  runs it will prompt you to sign in with  q login  using
 echo  your AWS Builder ID / IAM Identity Center account.
 echo ============================================================
+
+REM  Fan plugin install hooks out to AmazonQ. Plugin hooks for
+REM  AmazonQ must shell into WSL themselves if they target the
+REM  CLI; the dispatcher just runs the hook .cmd as-is.
+call "%~dp0..\Plugins\_apply-plugins.cmd" AmazonQ install
 goto :end
 
 :stage3_failed

@@ -39,3 +39,9 @@ Token-efficient microkernel coding agent.
 The OpenRouter launcher persists the provider via `opensquilla configure --section provider --provider openrouter --api-key-env OPENROUTER_API_KEY --model <slug>` and then `opensquilla chat --model <slug>`.
 
 `opensquilla` has no `--version` flag, so the install script reads the version from `uv tool list`. If you see `DLL load failed`, install the VC++ Redistributable.
+
+## Plugins
+
+Both `OpenSquilla--install.cmd` and `OpenSquilla--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd OpenSquilla {install,uninstall}` so any plugin whose manifest lists OpenSquilla in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+No plugin in the repo currently ships a hook for OpenSquilla.

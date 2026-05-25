@@ -42,3 +42,11 @@ On **2026-06-18**, Gemini CLI stops serving requests for Google AI Pro, Ultra, a
 No OpenRouter / LM Studio launcher; the Gemini CLI only speaks Google's own API. To route Gemini *models* via OpenRouter today, use the [Qwen Code CLI](../Qwen/Qwen.wiki.md) (it's a Gemini CLI fork and accepts an OpenAI base URL).
 
 After 2026-06-18, prefer Antigravity for non-Enterprise users.
+
+## Plugins
+
+Both `Gemini--install.cmd` and `Gemini--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Gemini {install,uninstall}` so any plugin whose manifest lists Gemini in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+Plugins shipping a hook for Gemini:
+
+- [`context7-mcp`](../Plugins/context7-mcp/plugin.json) — Context7 MCP server (up-to-date library docs). Merged into `mcpServers.context7` in `~/.gemini/settings.json`; other keys / other MCP servers in the file are preserved.

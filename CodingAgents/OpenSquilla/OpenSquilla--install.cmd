@@ -53,6 +53,9 @@ echo.
 echo Done. Launch it with OpenSquilla--openrouter.cmd or
 echo 'opensquilla chat' for the interactive TUI. First run:
 echo 'opensquilla init' walks you through workspace setup.
+
+REM  Fan plugin install hooks out to OpenSquilla.
+call "%~dp0..\Plugins\_apply-plugins.cmd" OpenSquilla install
 goto :end
 
 

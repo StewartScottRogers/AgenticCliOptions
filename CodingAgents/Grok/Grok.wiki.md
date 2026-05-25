@@ -35,3 +35,9 @@ xAI's terminal coding agent. Beta software.
 ## Maintenance notes
 
 Beta software; primary install path is the official bash installer (`curl -fsSL https://x.ai/cli/install.sh | bash`, run through Git Bash), npm fallback is the community `grok-build` package. If both paths fail, check <https://x.ai/cli> for the current install method. The uninstaller cleans up `%USERPROFILE%\.local\bin\grok`, `~/.x.ai\bin\grok`, `~/.grok\bin\grok` and the npm package.
+
+## Plugins
+
+Both `Grok--install.cmd` and `Grok--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Grok {install,uninstall}` so any plugin whose manifest lists Grok in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+No plugin in the repo currently ships a hook for Grok.

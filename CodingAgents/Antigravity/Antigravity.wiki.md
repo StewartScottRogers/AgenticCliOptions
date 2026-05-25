@@ -45,3 +45,11 @@ Multi-backend out of the box: Gemini 3 Pro, Claude Sonnet 4.5, and GPT-OSS are a
 The OpenRouter and LM Studio launchers are **honest stubs**. The upstream config schema for adding a custom OpenAI-compatible provider (the equivalent of `~/.codex/config.toml`'s `model_providers` block) is not yet documented in a form trustworthy enough to script. Update those launchers once Google publishes the schema. In the meantime, route via `Qwen--openrouter.cmd`, `Codex--openrouter.cmd`, or `Claude--openrouter.cmd`.
 
 **Gemini CLI deprecation context:** On 2026-06-18, Gemini CLI stops serving Pro/Ultra/free Code Assist users (Enterprise keeps it). Antigravity is the supported successor for those users — see the [Gemini](../Gemini/Gemini.wiki.md) per-agent wiki for the deprecation note.
+
+## Plugins
+
+Both `Antigravity--install.cmd` and `Antigravity--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Antigravity {install,uninstall}` so any plugin whose manifest lists Antigravity in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+Plugins shipping a hook for Antigravity:
+
+- [`context7-mcp`](../Plugins/context7-mcp/plugin.json) — Context7 MCP server (up-to-date library docs). Merged into `mcpServers.context7` in `~/.antigravity/settings.json`. The shape mirrors Gemini's `settings.json` convention; if upstream ships an `agy mcp add` subcommand later, switch the hook to call that instead.

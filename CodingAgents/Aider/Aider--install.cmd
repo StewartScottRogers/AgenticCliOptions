@@ -40,6 +40,9 @@ call aider --version
 echo.
 echo Done. Launch it with Aider--openrouter.cmd, or run 'aider'
 echo directly inside a project.
+
+REM  Fan plugin install hooks out to Aider.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Aider install
 goto :end
 
 

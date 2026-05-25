@@ -16,6 +16,9 @@ REM    - Any workspace-local vtcode.toml files
 REM  Delete by hand if you want a fully clean slate.
 REM ============================================================
 
+REM  Tear down plugin entries BEFORE removing the CLI.
+call "%~dp0..\Plugins\_apply-plugins.cmd" VTCode uninstall
+
 set "VT_BIN=%USERPROFILE%\.local\bin\vtcode.exe"
 
 if exist "%VT_BIN%" (

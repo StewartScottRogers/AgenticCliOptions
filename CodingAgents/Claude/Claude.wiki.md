@@ -38,3 +38,11 @@ Anthropic's terminal coding agent.
 Install has *two* paths: the npm package `@anthropic-ai/claude-code` and Anthropic's native installer that drops a binary at `~/.local/bin/claude.exe`. The uninstaller cleans up both. If `del` fails with "Access is denied", a `claude` process is still running — close it and re-run the uninstaller.
 
 There's also a `RunClaude.cmd` shortcut at the repo root that's identical to `Claude--run.cmd`.
+
+## Plugins
+
+Both `Claude--install.cmd` and `Claude--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Claude {install,uninstall}` so any plugin whose manifest lists Claude in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+Plugins shipping a hook for Claude:
+
+- [`context7-mcp`](../Plugins/context7-mcp/plugin.json) — Context7 MCP server (up-to-date library docs). Registered via `claude mcp add context7 --scope user -- npx -y @upstash/context7-mcp`.

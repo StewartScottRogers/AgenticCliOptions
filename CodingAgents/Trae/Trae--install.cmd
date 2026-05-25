@@ -45,6 +45,9 @@ call trae-cli --version
 echo.
 echo Done. Launch it with Trae--openrouter.cmd or
 echo Trae--settings-lmstudio.cmd.
+
+REM  Fan plugin install hooks out to Trae.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Trae install
 goto :end
 
 

@@ -13,6 +13,9 @@ REM    - %USERPROFILE%\.omp  (config, sessions, API keys)
 REM  Delete it by hand if you want a fully clean slate.
 REM ============================================================
 
+REM  Tear down plugin entries BEFORE removing the CLI.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Oh-My-Pi uninstall
+
 set "OMP_DIR=%LOCALAPPDATA%\omp"
 
 if exist "%OMP_DIR%\" (

@@ -38,6 +38,10 @@ if defined CLAUDECODE (
     exit /b 1
 )
 
+REM  Tear down plugin entries BEFORE removing the CLI - some hooks
+REM  use `claude mcp remove` etc., which needs the binary on PATH.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Claude uninstall
+
 REM ---- Path 1: npm global package -----------------------------
 where npm >nul 2>nul
 if errorlevel 1 (

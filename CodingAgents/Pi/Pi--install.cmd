@@ -42,6 +42,9 @@ echo Pi coding agent CLI installed. Reported version:
 call pi --version
 echo.
 echo Done. Launch it with Pi--run.cmd, or run 'pi' directly.
+
+REM  Fan plugin install hooks out to Pi.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Pi install
 goto :end
 
 

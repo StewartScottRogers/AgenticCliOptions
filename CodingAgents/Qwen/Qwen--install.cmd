@@ -30,6 +30,9 @@ echo Qwen Code CLI installed. Reported version:
 call qwen --version
 echo.
 echo Done. Launch it with Qwen--openrouter.cmd, or run 'qwen' directly.
+
+REM  Fan plugin install hooks out to Qwen.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Qwen install
 goto :end
 
 

@@ -38,3 +38,9 @@ Alibaba's Qwen Code CLI — a fork of the Gemini CLI that speaks OpenAI-compatib
 **Requires Node 22+.** If you upgrade Node manually, make sure the major version is `>=22` or `Install-All.cmd :ensure_node_22` will (correctly) force an upgrade.
 
 Because Qwen Code is a Gemini-CLI fork that accepts an OpenAI-compatible base URL, it's the recommended way to route Gemini-family *models* through OpenRouter — see the [Gemini](../Gemini/Gemini.wiki.md) per-agent wiki.
+
+## Plugins
+
+Both `Qwen--install.cmd` and `Qwen--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Qwen {install,uninstall}` so any plugin whose manifest lists Qwen in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+No plugin in the repo currently ships a hook for Qwen.

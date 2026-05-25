@@ -36,3 +36,9 @@ The classic AI pair-programmer for the terminal, from the Aider community.
 ## Maintenance notes
 
 Installed via `uv tool install --force --python 3.12 --upgrade aider-chat`. Needs Git installed at runtime to track edits; the installer pulls Git for Windows if missing. OpenRouter via `--model openrouter/<provider>/<model>` with `OPENROUTER_API_KEY` in the environment. `aider --list-models openrouter/` enumerates every routable model Aider knows about.
+
+## Plugins
+
+Both `Aider--install.cmd` and `Aider--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Aider {install,uninstall}` so any plugin whose manifest lists Aider in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+No plugin in the repo currently ships a hook for Aider.

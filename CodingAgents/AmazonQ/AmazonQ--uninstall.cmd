@@ -20,6 +20,11 @@ REM      cached inside the distro at ~/.local/share/amazon-q
 REM      (delete that folder by hand for a fully clean slate).
 REM ============================================================
 
+REM  Tear down plugin entries BEFORE removing the CLI. Plugin
+REM  hooks for AmazonQ must shell into WSL themselves if they
+REM  target the CLI.
+call "%~dp0..\Plugins\_apply-plugins.cmd" AmazonQ uninstall
+
 echo ============================================================
 echo  Amazon Q / Kiro CLI uninstaller
 echo ============================================================

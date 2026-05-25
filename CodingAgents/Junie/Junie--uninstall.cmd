@@ -15,6 +15,9 @@ REM      if Junie writes there)
 REM  Delete by hand if you want a fully clean slate.
 REM ============================================================
 
+REM  Tear down plugin entries BEFORE removing the CLI.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Junie uninstall
+
 set "JUNIE_SHIM=%USERPROFILE%\.local\bin\junie.bat"
 set "JUNIE_DATA=%USERPROFILE%\.local\share\junie"
 

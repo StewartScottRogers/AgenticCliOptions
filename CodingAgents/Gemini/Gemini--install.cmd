@@ -30,6 +30,9 @@ echo Google Gemini CLI installed. Reported version:
 call gemini --version
 echo.
 echo Done. Launch it with Gemini--run.cmd, or run 'gemini' directly.
+
+REM  Fan plugin install hooks out to Gemini (MCP servers, etc.).
+call "%~dp0..\Plugins\_apply-plugins.cmd" Gemini install
 goto :end
 
 

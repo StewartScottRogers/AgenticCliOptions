@@ -38,3 +38,11 @@ Amazon's terminal coding agent. Runs *inside WSL* — no native Windows build.
 Runs inside WSL. The installer is staged: Stage 1 installs WSL (requires a reboot), Stage 2 installs Ubuntu, Stage 3 installs the CLI inside WSL via the official `kirocli-x86_64-linux.zip`. Each run detects where it left off and continues. AWS sign-in via `q login` runs on first `q chat`.
 
 If Amazon Q install loops on "please reboot", the previous reboot didn't finish provisioning Ubuntu. Open the Ubuntu app from the Start menu, complete its first-run username/password setup, then re-run `AmazonQ--install.cmd`.
+
+## Plugins
+
+Both `AmazonQ--install.cmd` and `AmazonQ--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd AmazonQ {install,uninstall}` so any plugin whose manifest lists AmazonQ in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+Hooks targeting AmazonQ must shell into WSL themselves (`wsl -e bash -lc "..."`) if they want to invoke the CLI — there is no native Windows binary.
+
+No plugin in the repo currently ships a hook for AmazonQ.

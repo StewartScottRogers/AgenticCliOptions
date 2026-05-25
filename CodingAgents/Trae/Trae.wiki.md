@@ -38,3 +38,9 @@ ByteDance's terminal coding agent (Trae Agent).
 **Not on PyPI.** Installed from GitHub as `trae-agent[evaluation] @ git+https://github.com/bytedance/trae-agent.git`. Pinned to Python 3.12 because the `tree-sitter-languages` pin has no wheels for 3.13+. The `[evaluation]` extra is required even for normal use because `base_agent.py` unconditionally imports `docker_manager`, which pulls in `docker` and `pexpect`.
 
 If Trae fails to import `docker_manager`, the `[evaluation]` extra was not installed. Re-run `Trae--install.cmd`; the script always passes the right spec.
+
+## Plugins
+
+Both `Trae--install.cmd` and `Trae--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Trae {install,uninstall}` so any plugin whose manifest lists Trae in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+No plugin in the repo currently ships a hook for Trae.

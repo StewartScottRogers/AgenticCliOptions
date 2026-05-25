@@ -47,6 +47,9 @@ echo.
 echo Done. Launch it with Junie--openrouter.cmd or 'junie' in a
 echo project directory. Use /account inside the TUI to switch
 echo providers.
+
+REM  Fan plugin install hooks out to Junie.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Junie install
 goto :end
 
 

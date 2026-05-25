@@ -109,12 +109,15 @@ if !TOTAL! EQU 0 (
     echo.
     echo      S^) show install status       U^) uninstall everything       Q^) quit
     echo      L^) install LM Studio         X^) uninstall LM Studio
+    echo      P^) install a plugin          Y^) uninstall a plugin
     echo.
     set "INPUT="
     set /p "INPUT=   Your choice: "
     if /I "!INPUT!"=="S" goto :show_status
     if /I "!INPUT!"=="L" goto :install_lmstudio
     if /I "!INPUT!"=="X" goto :uninstall_lmstudio
+    if /I "!INPUT!"=="P" goto :install_plugin
+    if /I "!INPUT!"=="Y" goto :uninstall_plugin
     if /I "!INPUT!"=="U" goto :uninstall_all
     if /I "!INPUT!"=="Q" (endlocal & exit /b 0)
     goto :menu
@@ -150,6 +153,7 @@ echo    +----+----------------+----+----------------+
 echo.
 echo      A^) install all of the above   S^) show install status   U^) uninstall everything   Q^) quit
 echo      L^) install LM Studio          X^) uninstall LM Studio
+echo      P^) install a plugin           Y^) uninstall a plugin
 echo.
 echo    Enter numbers and/or names, separated by spaces or commas.
 echo    Examples:   1 3 5      Claude Codex      1, Gemini, 7
@@ -166,6 +170,8 @@ if /I "!INPUT!"=="U" goto :uninstall_all
 if /I "!INPUT!"=="S" goto :show_status
 if /I "!INPUT!"=="L" goto :install_lmstudio
 if /I "!INPUT!"=="X" goto :uninstall_lmstudio
+if /I "!INPUT!"=="P" goto :install_plugin
+if /I "!INPUT!"=="Y" goto :uninstall_plugin
 if /I "!INPUT!"=="A" (
     set "SELECTED=%ALL_AGENTS%"
     goto :reorder
@@ -331,6 +337,45 @@ if not exist "%ROOT%Uninstall-lmstudio.cmd" (
     goto :menu
 )
 call "%ROOT%Uninstall-lmstudio.cmd"
+goto :menu
+
+REM ---- Hand off to Plugins\Install-Plugin.cmd -------------------
+REM  Plugins live under CodingAgents\Plugins\ and ride alongside
+REM  the per-agent installers. Install-Plugin.cmd picks ONE plugin
+REM  and fans its install hook out to every supporting agent that
+REM  is currently installed. Its picker is interactive; we just
+REM  forward into it and return to this menu on exit.
+:install_plugin
+echo.
+echo ============================================================
+echo  Install a plugin into every supporting agent
+echo ============================================================
+echo.
+if not exist "%ROOT%Plugins\Install-Plugin.cmd" (
+    echo    ERROR: Plugins\Install-Plugin.cmd not found.
+    echo    Looked in: %ROOT%Plugins\
+    echo.
+    pause
+    goto :menu
+)
+call "%ROOT%Plugins\Install-Plugin.cmd"
+goto :menu
+
+REM ---- Hand off to Plugins\Uninstall-Plugin.cmd -----------------
+:uninstall_plugin
+echo.
+echo ============================================================
+echo  Uninstall a plugin from every supporting agent
+echo ============================================================
+echo.
+if not exist "%ROOT%Plugins\Uninstall-Plugin.cmd" (
+    echo    ERROR: Plugins\Uninstall-Plugin.cmd not found.
+    echo    Looked in: %ROOT%Plugins\
+    echo.
+    pause
+    goto :menu
+)
+call "%ROOT%Plugins\Uninstall-Plugin.cmd"
 goto :menu
 
 REM ---- Re-order so AmazonQ runs last ----------------------------

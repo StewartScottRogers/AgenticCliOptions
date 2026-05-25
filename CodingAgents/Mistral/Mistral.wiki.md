@@ -38,3 +38,9 @@ Mistral AI's terminal coding agent (the `mistral-vibe` CLI).
 Installs as `uv tool install mistral-vibe`. The OpenRouter launcher works by overriding `MISTRAL_BASE_URL`, which only works if the current Vibe build honours that env var. **Verify with a short test prompt after a Vibe update.**
 
 If Mistral via OpenRouter ignores `MISTRAL_BASE_URL`, your Vibe build doesn't honour that env var. Use `Mistral--run.cmd` against the native Mistral API, or drive Mistral models through OpenRouter with a different OpenAI-compatible CLI (Codex, Qwen, Trae).
+
+## Plugins
+
+Both `Mistral--install.cmd` and `Mistral--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Mistral {install,uninstall}` so any plugin whose manifest lists Mistral in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+No plugin in the repo currently ships a hook for Mistral.

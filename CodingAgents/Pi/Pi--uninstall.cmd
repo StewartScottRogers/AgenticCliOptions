@@ -13,6 +13,9 @@ REM  settings, remove this folder by hand AFTER running this:
 REM      %USERPROFILE%\.pi
 REM ============================================================
 
+REM  Tear down plugin entries BEFORE removing the CLI.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Pi uninstall
+
 where npm >nul 2>nul
 if errorlevel 1 (
     echo npm was not found - nothing to uninstall via npm.

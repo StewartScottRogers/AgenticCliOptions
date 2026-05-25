@@ -67,6 +67,9 @@ if errorlevel 1 (
 echo.
 echo Done. Launch it with Oh-My-Pi--openrouter.cmd, or run
 echo 'omp' directly.
+
+REM  Fan plugin install hooks out to Oh-My-Pi.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Oh-My-Pi install
 goto :end
 
 

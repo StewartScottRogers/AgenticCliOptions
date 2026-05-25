@@ -40,3 +40,9 @@ vinhnx's Rust-based coding agent with code-understanding tooling and shell safet
 We bypass it entirely: query the GitHub API for the last 20 releases, pick the first whose **assets list** includes `vtcode-<tag>-x86_64-pc-windows-msvc.zip`, then download and extract to `~/.local/bin\vtcode.exe`. Re-run to upgrade.
 
 If no recent release has a Windows asset at all, fall back to `cargo install vtcode` (needs Rust toolchain).
+
+## Plugins
+
+Both `VTCode--install.cmd` and `VTCode--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd VTCode {install,uninstall}` so any plugin whose manifest lists VTCode in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+No plugin in the repo currently ships a hook for VTCode.

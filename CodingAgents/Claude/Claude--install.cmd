@@ -31,6 +31,11 @@ call claude --version
 echo.
 echo Done. Launch it with Claude--dangerously-skip-permissions.cmd,
 echo or run 'claude' directly.
+
+REM  Fan plugin install hooks out to Claude (MCP servers, slash
+REM  commands, etc.). _apply-plugins is a no-op if no plugin
+REM  manifest declares support for this agent.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Claude install
 goto :end
 
 

@@ -25,6 +25,9 @@ REM      reinstall finds your settings intact.
 REM  Delete those by hand if you want a fully clean slate.
 REM ============================================================
 
+REM  Tear down plugin entries BEFORE removing the CLI.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Hermes uninstall
+
 set "HERMES_ROOT=%LOCALAPPDATA%\hermes"
 
 REM ------------------------------------------------------------

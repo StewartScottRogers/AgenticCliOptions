@@ -13,6 +13,9 @@ REM  settings, remove this folder by hand AFTER running this:
 REM      %USERPROFILE%\.opensquilla
 REM ============================================================
 
+REM  Tear down plugin entries BEFORE removing the CLI.
+call "%~dp0..\Plugins\_apply-plugins.cmd" OpenSquilla uninstall
+
 where uv >nul 2>nul
 if errorlevel 1 (
     echo uv was not found - nothing to uninstall via uv.

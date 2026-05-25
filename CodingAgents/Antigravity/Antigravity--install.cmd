@@ -70,6 +70,9 @@ if errorlevel 1 (
 echo.
 echo Done. Launch it with Antigravity--run.cmd, or run 'agy' directly.
 echo First run will open a browser to sign in with a Google account.
+
+REM  Fan plugin install hooks out to Antigravity (MCP servers, etc.).
+call "%~dp0..\Plugins\_apply-plugins.cmd" Antigravity install
 goto :end
 
 

@@ -14,12 +14,18 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ## Table of contents
 
+- [Purpose](#purpose)
 - [The seventeen agents at a glance](#the-seventeen-agents-at-a-glance)
 - [Solution layout](#solution-layout)
 - [Top-level scripts](#top-level-scripts)
 - [Per-agent script conventions](#per-agent-script-conventions)
 - [Shared dependencies](#shared-dependencies)
 - [Per-agent config directories](#per-agent-config-directories)
+- [Plugin layer](#plugin-layer)
+  - [How plugins integrate](#how-plugins-integrate)
+  - [Plugin manifest](#plugin-manifest)
+  - [Reference plugin: context7-mcp](#reference-plugin-context7-mcp)
+  - [Adding a new plugin](#adding-a-new-plugin)
 - [Ongoing maintenance](#ongoing-maintenance)
   - [Routine: keep every agent current](#routine-keep-every-agent-current)
   - [Per-agent maintenance notes](#per-agent-maintenance-notes)
@@ -29,6 +35,82 @@ inside Visual Studio / Rider's Solution Explorer.
   - [Rotating API keys](#rotating-api-keys)
   - [Clean uninstall vs. clean slate](#clean-uninstall-vs-clean-slate)
 - [Troubleshooting](#troubleshooting)
+
+---
+
+## Purpose
+
+### The core problem
+
+Every AI coding-agent CLI worth using ships with its own setup quirks, its
+own model-selection knobs, and (often) its own opinion about which backend
+you can point it at. Picking one is easy; running ten of them on the same
+machine, switching their backends per-session, and keeping their extensions
+in sync is a logistics problem. This repo is the **logistics layer**: a
+uniform turn-key shell around 17 disparate agents so the per-agent friction
+disappears.
+
+### What it manages
+
+- **The agents themselves** — 17 CLIs behind a uniform 4-script contract
+  per agent:
+  - `*--install.cmd` / `*--uninstall.cmd` — idempotent lifecycle, dependency-aware
+    (winget for Node / uv / Git, WSL for AmazonQ, etc.)
+  - `*--is-installed.cmd` — exit-code probe used by the fleet menu and the
+    plugin dispatcher
+  - `*--run.cmd` — native invocation
+- **Four backends per agent**, addressed by parallel launchers:
+  - `*--run.cmd` — the agent's native provider (Anthropic, OpenAI, Google, etc.)
+  - `*--openrouter.cmd` — OpenRouter's unified gateway
+  - `*--local-lmstudio.cmd` — an OpenAI-compatible LM Studio server on `localhost`
+  - `*--remote-lmstudio.cmd` — same protocol pointed at a LAN host (auto-discovered
+    by `_resolve-lmstudio-url.ps1`)
+
+  The chosen model per agent is overridable via env var (`CLAUDE_MODEL`,
+  `QWEN_MODEL`, `OPENROUTER_MODEL`, …).
+- **Fleet orchestration** — `Install-All.cmd` / `Uninstall-All.cmd` give a
+  single interactive picker over the catalogue, install shared deps once,
+  respect ordering constraints (AmazonQ runs last because it can demand a
+  reboot), and report a status table.
+- **Plugins / extensions** — manifest-driven plugins under
+  `CodingAgents/Plugins/` with `scope: shared` (fanned out to every supporting
+  agent) or `scope: per-agent` (locked to one). Every agent's install /
+  uninstall calls the plugin dispatcher, so plugins arrive and depart with
+  their host. See the [Plugin layer](#plugin-layer) section.
+
+### Design principles the code follows
+
+- **Idempotent everything.** Re-running an installer updates; re-running an
+  uninstaller is a no-op when there's nothing to remove. Marker files and
+  CLI-level idempotency guards (`claude mcp add`, sentinel-fenced TOML,
+  JSON object replacement) carry this into the plugin layer.
+- **Config is sacred.** Uninstallers remove the CLI but never
+  `%USERPROFILE%\.<agent>` — so a reinstall restores API keys, sessions
+  and preferences intact. The plugin layer mirrors this: hooks edit
+  settings files surgically, never overwrite.
+- **Comments explain WHY, not what.** Every script's header documents the
+  rationale and the gotchas (CLAUDECODE locks, WSL reboots, BOM-less
+  Unicode in Oh-My-Pi's installer, Antigravity's PATH pruning).
+- **Fleet orchestrators are thin; per-agent scripts own the mess.**
+  `Install-All.cmd` is a menu + dependency bootstrapper + dispatcher; the
+  agent-specific batch sits inside each agent's folder. The plugin layer
+  follows the same shape — orchestrators in `Plugins/`, knowledge about
+  each agent's MCP plumbing inside the plugin's per-agent hook.
+- **Graceful degradation.** Missing deps warn rather than hard-fail;
+  "not installed" is treated as success in uninstallers; the plugin
+  dispatcher always returns 0 so a broken plugin can't break the host
+  install.
+- **Sentinel envs to make scripts composable.** `AGENTS_INSTALL_ALL` /
+  `AGENTS_UNINSTALL_ALL` suppress per-script pauses during fleet runs.
+  The plugin orchestrators honor the same convention.
+
+### One-sentence summary
+
+A **uniform install / run / teardown harness** that turns an unruly zoo of
+AI coding CLIs into a single matrix of
+`{agent} × {native | OpenRouter | local-LMStudio | remote-LMStudio} × {plugins it supports}`,
+with the agent-specific ugliness contained behind a consistent 4-script-per-agent
+contract.
 
 ---
 
@@ -209,6 +291,123 @@ clean slate.
 
 ---
 
+## Plugin layer
+
+`CodingAgents/Plugins/` is a manifest-driven extension layer that rides
+alongside the per-agent folders. A plugin's job is to install (and later
+remove) something **inside** an agent — most commonly an MCP server
+registration, but the layer is generic enough for slash commands, rule
+files, config snippets, or anything else with a per-agent install
+procedure.
+
+```
+CodingAgents/Plugins/
+├── _apply-plugins.cmd          # per-agent dispatcher (called by every <Agent>--install.cmd / --uninstall.cmd)
+├── _apply-plugins.ps1
+├── Install-Plugin.cmd          # top-level: pick one plugin -> install into every supporting agent
+├── Uninstall-Plugin.cmd        # top-level: pick one plugin -> uninstall from same
+├── _install-plugin.ps1         # shared fan-out engine for both orchestrators
+└── <plugin-name>/
+    ├── plugin.json             # manifest
+    ├── install/<agent>.cmd     # per-agent install hook (lowercase agent name)
+    └── uninstall/<agent>.cmd   # per-agent uninstall hook
+```
+
+### How plugins integrate
+
+Two install/uninstall paths feed into the same dispatcher:
+
+1. **Per-agent lifecycle.** Every `<Agent>--install.cmd` ends with
+   `call "%~dp0..\Plugins\_apply-plugins.cmd" <Agent> install` on the
+   success path; every `<Agent>--uninstall.cmd` calls the matching
+   `uninstall` action *before* removing the CLI (so hooks that use the
+   agent's own subcommands — e.g. `claude mcp remove` — still resolve).
+   Plugins therefore arrive and depart with their host agent.
+2. **Top-level orchestrators.** `Plugins\Install-Plugin.cmd` and
+   `Plugins\Uninstall-Plugin.cmd` invert the loop: pick one plugin and
+   fan its install / uninstall hook out to every supporting, currently-installed
+   agent. `Install-All.cmd` exposes these via `P)` and `Y)` on the main menu.
+
+The dispatcher (`_apply-plugins.ps1`) walks every `Plugins\*\plugin.json`,
+filters by manifest `scope` + `supports` / `agent`, and runs the matching
+hook for the named agent. **It always exits 0** — a missing or failing
+plugin must never break the host agent's install. Per-plugin failures are
+surfaced as `[warn]` lines in the output.
+
+Idempotency is plugin-side: each hook either checks a marker file
+(`%USERPROFILE%\.agentic-cli-plugins\<plugin>.<Agent>.installed` by
+convention) or relies on the target CLI's own idempotency
+(`claude mcp add`, JSON object replacement, sentinel-fenced TOML blocks).
+
+### Plugin manifest
+
+```jsonc
+{
+  "name": "context7-mcp",
+  "kind": "mcp-server",            // mcp-server | slash-command | rule-file | config-snippet | extension-pack
+  "description": "...",
+  "scope": "shared",               // shared = manifest.supports list; per-agent = single manifest.agent
+  "agent": null,                   // required when scope = per-agent
+  "supports": ["Claude", "Codex", "Gemini", "Antigravity"],
+  "version": "1.0.0",
+  "marker": "%USERPROFILE%\\.agentic-cli-plugins\\context7-mcp.installed"
+}
+```
+
+Field meanings:
+
+| Field         | Meaning                                                                                 |
+|---------------|-----------------------------------------------------------------------------------------|
+| `name`        | Unique plugin id. Must match the folder name.                                            |
+| `kind`        | Informational. Used to organise hooks; the dispatcher does not switch on it.             |
+| `scope`       | `shared` — fan out to every agent in `supports`. `per-agent` — install only into `agent`.|
+| `agent`       | Required when `scope: per-agent`. Ignored when `scope: shared`.                          |
+| `supports`    | Required when `scope: shared`. List of agent names whose hooks ship with the plugin.     |
+| `marker`      | Convention only — used by the hooks for their own idempotency checks.                    |
+
+Hooks live at `install/<agent-lowercase>.cmd` and `uninstall/<agent-lowercase>.cmd`.
+A missing hook is a quiet skip — a plugin can legitimately declare support
+for an agent but not yet ship hooks for it.
+
+### Reference plugin: context7-mcp
+
+`Plugins/context7-mcp/` is a working reference that demonstrates a
+`scope: shared` MCP server fanned out to four agents with three different
+config plumbings:
+
+| Agent        | Hook implementation                                                                                  |
+|--------------|------------------------------------------------------------------------------------------------------|
+| Claude       | `claude mcp add context7 --scope user -- npx -y @upstash/context7-mcp` (first-class CLI subcommand)  |
+| Gemini       | Merges `mcpServers.context7` into `~/.gemini/settings.json` via `_mcp-json-edit.ps1`                 |
+| Antigravity  | Same JSON-merge approach against `~/.antigravity/settings.json` (assumed to follow Gemini's shape)   |
+| Codex        | Adds a sentinel-fenced `[mcp_servers.context7]` block to `~/.codex/config.toml` via `_mcp-toml-edit.ps1` |
+
+The two helpers `_mcp-json-edit.ps1` and `_mcp-toml-edit.ps1` are
+private to this plugin (they live in `Plugins/context7-mcp/`, not in
+`Plugins/`) — every plugin owns the helpers it needs.
+
+### Adding a new plugin
+
+1. Create `CodingAgents\Plugins\<plugin-name>\` and a `plugin.json`
+   declaring `scope`, `kind`, `supports` (or `agent`).
+2. Add `install\<agent>.cmd` + `uninstall\<agent>.cmd` for every agent
+   in `supports`. Lowercase filenames. Each hook must be idempotent —
+   check a marker file or use the target CLI's own idempotency.
+3. The hook's job is whatever the target agent needs: shell out to the
+   agent's CLI (`claude mcp add …`), or merge into the agent's
+   settings file (use PowerShell from inside the `.cmd` — see the
+   context7 hooks for the pattern), or copy payload into the agent's
+   config dir.
+4. Test: `Plugins\Install-Plugin.cmd <plugin-name>` will fan out to
+   every supporting agent that is currently installed. The output
+   reports `[install] <agent>`, `[skip] <agent>: not installed`, or
+   `[warn] <agent>: hook returned exit N` per agent.
+5. From then on, the plugin auto-applies whenever a supporting agent
+   is installed or uninstalled — no per-agent script edits needed.
+   The dispatcher discovers the new manifest automatically.
+
+---
+
 ## Ongoing maintenance
 
 ### Routine: keep every agent current
@@ -259,6 +458,11 @@ To keep the project coherent, follow this checklist:
    `<Name>--install.cmd`, `<Name>--run.cmd`, `<Name>--uninstall.cmd`.
    Copy from the closest existing agent (npm-based ⇒ Claude/Codex;
    `uv tool` ⇒ Mistral/Trae; bash installer ⇒ Grok; WSL-only ⇒ AmazonQ).
+   When copying, keep the plugin-dispatcher calls already present in
+   those scripts (`call "%~dp0..\Plugins\_apply-plugins.cmd" <Name> install`
+   on the install success path; matching `... uninstall` call near the
+   top of the uninstall script, after any preflight that early-exits).
+   See the [Plugin layer](#plugin-layer) for details.
 2. **Match the header style** — every existing script starts with a
    `REM ===...===` block explaining what is installed, where deps come
    from, what is *not* removed, and how to re-run safely.

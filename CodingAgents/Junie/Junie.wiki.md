@@ -38,3 +38,9 @@ JetBrains' AI coding agent for the terminal.
 Junie self-updates: re-running the installer reinstalls the current release; the running binary applies pending updates on next launch.
 
 No uninstall command upstream, so `Junie--uninstall.cmd` removes the shim and data dir manually.
+
+## Plugins
+
+Both `Junie--install.cmd` and `Junie--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Junie {install,uninstall}` so any plugin whose manifest lists Junie in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+No plugin in the repo currently ships a hook for Junie.

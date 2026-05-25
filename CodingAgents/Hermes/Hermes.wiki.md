@@ -41,3 +41,9 @@ Nous Research's terminal coding agent. Native Windows is an **early beta** but i
 The installer adds that dir to the User PATH; if `where hermes` returns nothing after install, open a new terminal (the PATH change doesn't reach already-open shells).
 
 The uninstaller calls Hermes's own `hermes uninstall` subcommand and then prunes that PATH entry from the User registry — Hermes's own uninstaller does not always clean it on Windows.
+
+## Plugins
+
+Both `Hermes--install.cmd` and `Hermes--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Hermes {install,uninstall}` so any plugin whose manifest lists Hermes in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+No plugin in the repo currently ships a hook for Hermes.

@@ -57,6 +57,9 @@ echo.
 echo Done. Launch it with Hermes--openrouter.cmd, or run
 echo 'hermes' directly. First run will prompt you to configure
 echo a provider - the OpenRouter launcher does that for you.
+
+REM  Fan plugin install hooks out to Hermes.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Hermes install
 goto :end
 
 

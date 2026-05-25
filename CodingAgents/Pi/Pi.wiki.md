@@ -37,3 +37,9 @@ Earendil's terminal coding agent.
 `Pi--install.cmd` first quietly uninstalls the legacy `@mariozechner/pi-coding-agent` package because both ship a `pi` bin and npm fails with `EEXIST` otherwise. Pi installs with `--ignore-scripts` per upstream guidance.
 
 Pi has no LM Studio launcher — LM Studio integration lives in Pi's `models.json`. The fork [Oh-My-Pi](../Oh-My-Pi/Oh-My-Pi.wiki.md) is shipped alongside Pi in this repo.
+
+## Plugins
+
+Both `Pi--install.cmd` and `Pi--uninstall.cmd` fan into `..\Plugins\_apply-plugins.cmd Pi {install,uninstall}` so any plugin whose manifest lists Pi in `supports` (or names it as `agent`) is installed / removed automatically. See [Plugin layer](../../AgenticCliOptions.wiki.md#plugin-layer) for the manifest format and dispatcher behavior.
+
+No plugin in the repo currently ships a hook for Pi.

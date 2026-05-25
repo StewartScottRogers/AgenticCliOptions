@@ -34,6 +34,9 @@ echo Mistral Vibe installed. Reported version:
 call vibe --version
 echo.
 echo Done. Launch it with Mistral--run.cmd, or run 'vibe' directly.
+
+REM  Fan plugin install hooks out to Mistral.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Mistral install
 goto :end
 
 

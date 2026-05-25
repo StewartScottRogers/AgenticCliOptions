@@ -44,6 +44,9 @@ echo.
 echo Grok CLI install step finished. Launch it with Grok--run.cmd,
 echo or run 'grok' directly. If 'grok' is not found, open a new
 echo terminal so PATH changes take effect.
+
+REM  Fan plugin install hooks out to Grok.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Grok install
 goto :end
 
 

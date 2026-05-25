@@ -30,6 +30,9 @@ echo OpenAI Codex CLI installed. Reported version:
 call codex --version
 echo.
 echo Done. Launch it with Codex--run.cmd, or run 'codex' directly.
+
+REM  Fan plugin install hooks out to Codex (MCP servers, etc.).
+call "%~dp0..\Plugins\_apply-plugins.cmd" Codex install
 goto :end
 
 

@@ -42,6 +42,9 @@ echo.
 echo Done. Launch it with Codebuff--run.cmd, or run 'codebuff'
 echo directly inside a project. First run will prompt you to sign
 echo in via codebuff.com.
+
+REM  Fan plugin install hooks out to Codebuff.
+call "%~dp0..\Plugins\_apply-plugins.cmd" Codebuff install
 goto :end
 
 
