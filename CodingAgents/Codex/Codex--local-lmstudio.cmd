@@ -14,7 +14,8 @@ REM  Override the URL:
 REM      set LMSTUDIO_URL=http://127.0.0.1:1234
 REM ============================================================
 
-if not defined LMSTUDIO_URL    set "LMSTUDIO_URL=http://192.168.12.174:1234"
+REM ---- auto-detect LMSTUDIO_URL (loopback + this machine's LAN IPv4s, ports 1234/1235) ----
+call "%~dp0..\_resolve-lmstudio-url.cmd"
 if not defined LMSTUDIO_MODEL  set "LMSTUDIO_MODEL=qwen3-coder-30b"
 
 REM ---- no edits needed below this line -----------------------

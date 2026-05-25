@@ -21,7 +21,8 @@ REM  'lms load' call is a no-op; the launcher then falls back to
 REM  whatever model that remote host already has loaded.
 REM ============================================================
 
-if not defined LMSTUDIO_URL    set "LMSTUDIO_URL=http://192.168.12.174:1234"
+REM ---- auto-detect LMSTUDIO_URL (loopback + this machine's LAN IPv4s, ports 1234/1235) ----
+call "%~dp0..\_resolve-lmstudio-url.cmd"
 if not defined LMSTUDIO_MODEL  set "LMSTUDIO_MODEL=qwen3-coder-30b"
 
 REM ---- no edits needed below this line -----------------------
