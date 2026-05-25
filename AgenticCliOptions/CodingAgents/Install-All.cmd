@@ -207,6 +207,7 @@ if not defined SELECTED (
     pause >nul
     goto :menu
 )
+goto :reorder
 
 REM ---- Show install status of every agent in the catalogue ----
 :show_status
@@ -266,6 +267,9 @@ pause
 goto :menu
 
 REM ---- Hand off to Uninstall-All.cmd ----------------------------
+REM  AGENTS_UNINSTALL_ALL is set so the child suppresses its own
+REM  pause; we pause once on return so the user can read the
+REM  result before the menu is redrawn.
 :uninstall_all
 echo.
 echo ============================================================
@@ -275,8 +279,9 @@ echo.
 if not exist "%ROOT%Uninstall-All.cmd" (
     echo    ERROR: Uninstall-All.cmd not found next to this script.
     echo    Looked in: %ROOT%
-    endlocal
-    exit /b 1
+    echo.
+    pause
+    goto :menu
 )
 echo    This will run each agent's uninstall script in reverse order.
 echo    Shared deps ^(Node.js, uv, Git, WSL^) and per-agent config dirs
@@ -287,13 +292,20 @@ set /p "GO=   Uninstall everything? [y/N]: "
 set "G1=!GO:~0,1!"
 if /I not "!G1!"=="Y" (
     echo    Cancelled - nothing uninstalled.
-    endlocal
-    exit /b 0
+    echo.
+    pause
+    goto :menu
 )
 echo.
-endlocal
-call "%~dp0Uninstall-All.cmd"
-exit /b %ERRORLEVEL%
+set "AGENTS_UNINSTALL_ALL=1"
+call "%ROOT%Uninstall-All.cmd"
+set "AGENTS_UNINSTALL_ALL="
+echo.
+pause
+REM Clear any cached per-agent install results so the menu and
+REM status table reflect the freshly-uninstalled state.
+for %%A in (%ALL_AGENTS%) do set "RESULT_%%A="
+goto :menu
 
 REM ---- Hand off to Install-lmstudio.cmd -------------------------
 REM  LM Studio is a local OpenAI-compatible model server, not an
@@ -359,6 +371,8 @@ if not exist "%ROOT%Plugins\Install-Plugin.cmd" (
     goto :menu
 )
 call "%ROOT%Plugins\Install-Plugin.cmd"
+echo.
+pause
 goto :menu
 
 REM ---- Hand off to Plugins\Uninstall-Plugin.cmd -----------------
@@ -429,9 +443,13 @@ if defined INTERACTIVE (
     set /p "GO=   Proceed? [Y/n]: "
     set "G1=!GO:~0,1!"
     if /I "!G1!"=="N" (
-        echo    Cancelled.
-        endlocal
-        exit /b 0
+        echo    Cancelled - returning to the main menu.
+        set "SELECTED="
+        set "MAIN="
+        set "HAS_AMAZONQ="
+        set "BAD="
+        set "INPUT="
+        goto :menu
     )
 )
 
@@ -546,17 +564,12 @@ if not defined INTERACTIVE (
     goto :eof
 )
 
-set "AGAIN="
-set /p "AGAIN=   Back to the menu to install more? [Y/n]: "
-set "A1=!AGAIN:~0,1!"
-if /I "!A1!"=="N" (
-    echo    Bye.
-    endlocal
-    exit /b 0
-)
+echo.
+pause
 
 REM Clear per-run state and re-render the menu (it will now hide
-REM whatever we just installed successfully).
+REM whatever we just installed successfully). Q on the main menu
+REM is the way to exit; every other selection loops back here.
 set "SELECTED="
 set "MAIN="
 set "HAS_AMAZONQ="
