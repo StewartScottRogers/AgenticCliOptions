@@ -1,0 +1,11 @@
+{
+  "name": "cipher-mcp",
+  "kind": "mcp-server",
+  "description": "Cipher (byterover) MCP server - memory layer purpose-built for coding agents. Dual-store: knowledge memory (code facts, APIs, business logic) + reflection memory (reasoning traces). Requires LLM provider credentials in %USERPROFILE%\\.cipher\\cipher.yml before first use.",
+  "scope": "shared",
+  "agent": null,
+  "supports": ["Claude", "Codex", "Gemini", "Antigravity", "Opencode"],
+  "version": "1.0.0",
+  "marker": "%USERPROFILE%\\.agentic-cli-plugins\\cipher-mcp.installed",
+  "homepage": "https://github.com/campfirein/cipher"
+}

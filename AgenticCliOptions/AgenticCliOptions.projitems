@@ -172,6 +172,20 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\_mcp-opencode-edit.ps1" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\install\opencode.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\uninstall\opencode.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\plugin.json" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\_mcp-json-edit.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\_mcp-toml-edit.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\_mcp-opencode-edit.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\install\antigravity.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\install\claude.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\install\codex.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\install\gemini.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\install\opencode.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\uninstall\antigravity.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\uninstall\claude.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\uninstall\codex.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\uninstall\gemini.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\uninstall\opencode.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\LMStudio.Claude.Settings.json" />
