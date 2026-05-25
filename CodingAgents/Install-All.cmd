@@ -28,7 +28,7 @@ REM  final 'pause', so the whole run is unattended.
 set "AGENTS_INSTALL_ALL=1"
 
 REM  Master agent list. Order matters: AmazonQ kept last on purpose.
-set "ALL_AGENTS=Claude Codex Gemini Antigravity Pi Qwen Grok Mistral Trae Hermes Codebuff Oh-My-Pi OpenSquilla Aider Junie VTCode AmazonQ"
+set "ALL_AGENTS=Claude Codex Gemini Antigravity Pi Qwen Grok Mistral Trae Hermes Codebuff Oh-My-Pi OpenSquilla Aider Junie VTCode Opencode AmazonQ"
 
 REM ---- Parse command line ---------------------------------------
 set "INTERACTIVE="
@@ -613,6 +613,7 @@ if /I "%~1"=="Gemini"       set "MV=GEMINI_MODEL"      & exit /b 0
 if /I "%~1"=="Hermes"       set "MV=HERMES_MODEL"      & exit /b 0
 if /I "%~1"=="Junie"        set "MV=JUNIE_MODEL"       & exit /b 0
 if /I "%~1"=="Oh-My-Pi"     set "MV=OMP_MODEL"         & exit /b 0
+if /I "%~1"=="Opencode"     set "MV=OPENCODE_MODEL"    & exit /b 0
 if /I "%~1"=="OpenSquilla"  set "MV=OPENSQUILLA_MODEL" & exit /b 0
 if /I "%~1"=="Pi"           set "MV=PI_MODEL"          & exit /b 0
 if /I "%~1"=="VTCode"       set "MV=VTCODE_MODEL"      & exit /b 0
@@ -642,6 +643,7 @@ if /I "%~1"=="Gemini"       set "DM=gemini-2.5-pro"                         & ex
 if /I "%~1"=="Hermes"       set "DM=Hermes-4-405B"                          & exit /b 0
 if /I "%~1"=="Junie"        set "DM=sonnet"                                 & exit /b 0
 if /I "%~1"=="Oh-My-Pi"     set "DM=openrouter/anthropic/claude-sonnet-4.5" & exit /b 0
+if /I "%~1"=="Opencode"     set "DM=anthropic/claude-sonnet-4-5"            & exit /b 0
 if /I "%~1"=="OpenSquilla"  set "DM=anthropic/claude-sonnet-4.5"            & exit /b 0
 if /I "%~1"=="Pi"           set "DM=anthropic/claude-sonnet-4.5"            & exit /b 0
 if /I "%~1"=="VTCode"       set "DM=qwen/qwen3-coder"                       & exit /b 0

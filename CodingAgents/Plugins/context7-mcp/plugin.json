@@ -4,7 +4,7 @@
   "description": "Context7 MCP server - up-to-date library docs lookup. Reference plugin demonstrating a shared MCP server fanned out to every supporting agent.",
   "scope": "shared",
   "agent": null,
-  "supports": ["Claude", "Codex", "Gemini", "Antigravity"],
+  "supports": ["Claude", "Codex", "Gemini", "Antigravity", "Opencode"],
   "version": "1.0.0",
   "marker": "%USERPROFILE%\\.agentic-cli-plugins\\context7-mcp.installed",
   "homepage": "https://github.com/upstash/context7"

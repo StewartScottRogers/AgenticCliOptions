@@ -30,6 +30,7 @@ echo ============================================================
 echo.
 
 call :uninstall_agent AmazonQ
+call :uninstall_agent Opencode
 call :uninstall_agent VTCode
 call :uninstall_agent Junie
 call :uninstall_agent Aider

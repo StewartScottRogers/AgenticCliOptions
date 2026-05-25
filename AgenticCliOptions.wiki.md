@@ -1,6 +1,6 @@
 # AgenticCliOptions
 
-A turn-key Windows toolkit that installs, configures, runs and removes **seventeen
+A turn-key Windows toolkit that installs, configures, runs and removes **eighteen
 terminal-based coding-agent CLIs** side by side, plus an optional local
 **LM Studio** OpenAI-compatible server. Everything is driven by plain
 `.cmd` scripts so the workflow is "double-click, walk away".
@@ -15,7 +15,7 @@ inside Visual Studio / Rider's Solution Explorer.
 ## Table of contents
 
 - [Purpose](#purpose)
-- [The seventeen agents at a glance](#the-seventeen-agents-at-a-glance)
+- [The eighteen agents at a glance](#the-eighteen-agents-at-a-glance)
 - [Solution layout](#solution-layout)
 - [Top-level scripts](#top-level-scripts)
 - [Per-agent script conventions](#per-agent-script-conventions)
@@ -114,7 +114,7 @@ contract.
 
 ---
 
-## The seventeen agents at a glance
+## The eighteen agents at a glance
 
 | Agent          | Vendor       | Install channel                | Native creds                              | OpenRouter launcher | LM Studio launcher |
 |----------------|--------------|--------------------------------|-------------------------------------------|---------------------|--------------------|
@@ -134,6 +134,7 @@ contract.
 | **Aider**      | Aider community | `uv tool install aider-chat` | `OPENROUTER_API_KEY` (and many others) | yes | no |
 | **Junie**      | JetBrains    | official PowerShell installer (`install.ps1`) → `~/.local/bin\junie.bat` | Junie subscription or `--openrouter-api-key` BYOK | yes | no |
 | **VT Code**    | vinhnx       | official PowerShell installer (`install.ps1`) → `~/.local/bin\vtcode.exe` | `OPENROUTER_API_KEY` (and many others) | yes (Windows builds **best-effort**) | no |
+| **opencode**   | SST          | npm `opencode-ai` | Per-provider via `opencode auth login <provider>` (writes to `~/.config/opencode/auth.json`) | yes (first-class built-in provider) | yes (per-run `OPENCODE_CONFIG` JSON declaring a custom provider — no `--base-url` CLI flag) |
 | **AmazonQ / Kiro** | Amazon   | WSL + official Linux `install.sh` | AWS Builder ID / IAM Identity Center | no (AWS Nova only) | no (AWS Nova only) |
 
 > Agents that don't have an OpenRouter / LM Studio launcher are tied to
@@ -176,7 +177,8 @@ AgenticCliOptions/
     ├── OpenSquilla/ OpenSquilla--{install,uninstall,openrouter,run}.cmd
     ├── Aider/     Aider--{install,uninstall,openrouter,run}.cmd
     ├── Junie/     Junie--{install,uninstall,openrouter,run}.cmd
-    └── VTCode/    VTCode--{install,uninstall,openrouter,run}.cmd
+    ├── VTCode/    VTCode--{install,uninstall,openrouter,run}.cmd
+    └── Opencode/  Opencode--{install,uninstall,run,openrouter,local-lmstudio,remote-lmstudio,is-installed}.cmd
 ```
 
 The script set above is illustrative — every agent folder also ships
@@ -286,6 +288,7 @@ clean slate.
 | Aider     | `%USERPROFILE%\.aider.conf.yml`, `%USERPROFILE%\.aider.tags.cache.v3` |
 | Junie     | `%USERPROFILE%\.local\share\junie`, `%USERPROFILE%\.junie` |
 | VT Code   | `%LOCALAPPDATA%\vinhnx\vtcode\config`, `%LOCALAPPDATA%\vinhnx\vtcode\data` |
+| opencode  | `%USERPROFILE%\.config\opencode` (XDG-style on Windows; contains `opencode.json`, `auth.json`, sessions) |
 | Amazon Q  | `~/.local/share/amazon-q` *inside WSL*              |
 | LM Studio | `%USERPROFILE%\.lmstudio`, `%APPDATA%\LMStudio`     |
 
@@ -372,7 +375,7 @@ for an agent but not yet ship hooks for it.
 ### Reference plugin: context7-mcp
 
 `Plugins/context7-mcp/` is a working reference that demonstrates a
-`scope: shared` MCP server fanned out to four agents with three different
+`scope: shared` MCP server fanned out to five agents with four different
 config plumbings:
 
 | Agent        | Hook implementation                                                                                  |
@@ -381,10 +384,12 @@ config plumbings:
 | Gemini       | Merges `mcpServers.context7` into `~/.gemini/settings.json` via `_mcp-json-edit.ps1`                 |
 | Antigravity  | Same JSON-merge approach against `~/.antigravity/settings.json` (assumed to follow Gemini's shape)   |
 | Codex        | Adds a sentinel-fenced `[mcp_servers.context7]` block to `~/.codex/config.toml` via `_mcp-toml-edit.ps1` |
+| opencode     | Merges `mcp.context7 = { type:"local", command:[…], enabled:true }` into `~/.config/opencode/opencode.json` via `_mcp-opencode-edit.ps1` (different shape: top-level key is `mcp` not `mcpServers`, and `command` is a single array combining bin + args) |
 
-The two helpers `_mcp-json-edit.ps1` and `_mcp-toml-edit.ps1` are
-private to this plugin (they live in `Plugins/context7-mcp/`, not in
-`Plugins/`) — every plugin owns the helpers it needs.
+The three helpers `_mcp-json-edit.ps1`, `_mcp-toml-edit.ps1`, and
+`_mcp-opencode-edit.ps1` are private to this plugin (they live in
+`Plugins/context7-mcp/`, not in `Plugins/`) — every plugin owns the
+helpers it needs.
 
 ### Adding a new plugin
 
@@ -448,6 +453,7 @@ the link for full context. Listed in install order.
 - **Aider** — `uv tool install aider-chat`; OpenRouter via `--model openrouter/<provider>/<model>`. → [Aider.wiki.md](CodingAgents/Aider/Aider.wiki.md)
 - **Junie** — JetBrains PowerShell installer → `~/.local/bin\junie.bat`; self-updates; OpenRouter BYOK via `--openrouter-api-key`. → [Junie.wiki.md](CodingAgents/Junie/Junie.wiki.md)
 - **VT Code** — direct GitHub-Releases zip → `~/.local/bin\vtcode.exe` (skips broken upstream `install.ps1`); Windows builds best-effort. → [VTCode.wiki.md](CodingAgents/VTCode/VTCode.wiki.md)
+- **opencode** — npm `opencode-ai`; provider-neutral (`--model provider/model`); LM Studio via per-run `OPENCODE_CONFIG` JSON (no `--base-url` flag); MCP key is `mcp`, not `mcpServers`. → [Opencode.wiki.md](CodingAgents/Opencode/Opencode.wiki.md)
 - **Amazon Q / Kiro** — runs *inside WSL*; staged installer survives a Windows reboot; AWS Nova only. → [AmazonQ.wiki.md](CodingAgents/AmazonQ/AmazonQ.wiki.md)
 
 ### Adding a brand-new coding agent
@@ -477,7 +483,7 @@ To keep the project coherent, follow this checklist:
 5. **Wire the agent into `Install-All.cmd` and `Uninstall-All.cmd`**.
    Install order is: Claude, Codex, Gemini, Antigravity, Pi, Qwen,
    Grok, Mistral, Trae, Hermes, Codebuff, Oh-My-Pi, OpenSquilla,
-   Aider, Junie, VT Code, then Amazon Q **last** (reboot).
+   Aider, Junie, VT Code, opencode, then Amazon Q **last** (reboot).
    Uninstall is the reverse.
 6. **Add the agent's config dir to the "leaves alone" list** in both
    `Uninstall-All.cmd` and the agent's own uninstaller.

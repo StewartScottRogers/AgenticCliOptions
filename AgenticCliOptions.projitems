@@ -163,6 +163,17 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\uninstall\claude.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\uninstall\codex.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\uninstall\gemini.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Opencode\Opencode--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Opencode\Opencode--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Opencode\Opencode--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Opencode\Opencode--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Opencode\Opencode--openrouter.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Opencode\Opencode--local-lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Opencode\Opencode--remote-lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Opencode\Opencode.wiki.md" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\_mcp-opencode-edit.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\install\opencode.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\uninstall\opencode.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\LMStudio.Claude.Settings.json" />
