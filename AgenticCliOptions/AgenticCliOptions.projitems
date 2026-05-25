@@ -96,8 +96,6 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--local-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--remote-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode.wiki.md" />
-    <None Include="$(MSBuildThisFileDirectory)OpenRouter.url" />
-    <None Include="$(MSBuildThisFileDirectory)RunClaude.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--run.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\Claude--install.cmd" />

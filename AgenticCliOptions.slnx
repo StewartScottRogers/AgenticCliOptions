@@ -1,3 +1,7 @@
 <Solution>
-  <Project Path="AgenticCliOptions.shproj" />
+  <Folder Name="/Solution Items/">
+    <File Path="OpenRouter.url" />
+    <File Path="RunClaude.cmd" />
+  </Folder>
+  <Project Path="AgenticCliOptions/AgenticCliOptions.shproj" Id="fdb96c13-5cbf-4e02-8523-6185b8618714" />
 </Solution>
