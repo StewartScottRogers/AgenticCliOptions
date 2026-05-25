@@ -147,38 +147,51 @@ contract.
 ## Solution layout
 
 ```
-AgenticCliOptions/
+<repo-root>/
 ├── AgenticCliOptions.slnx          # solution file (shared project only)
-├── AgenticCliOptions.shproj        # MSBuild shared project
-├── AgenticCliOptions.projitems     # files included in the shared project
+├── OpenRouter.url                  # shortcut to https://openrouter.ai
+├── RunClaude.cmd                   # shortcut launcher at the repo root
 │
-├── Install-All.cmd                 # turn-key install for every agent
-├── Uninstall-All.cmd               # remove every agent CLI
-├── Install-lmstudio.cmd            # install LM Studio + bring server up
-├── Uninstall-lmstudio.cmd          # remove LM Studio app (config kept)
-├── SetOpenRouterKey.cmd            # one-shot prompt + verify + persist
-├── RunClaude.cmd                   # shortcut launcher at the root
-│
-└── CodingAgents/
-    ├── AmazonQ/   AmazonQ--{install,run,uninstall}.cmd
-    ├── Claude/    Claude--{install,run,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
-    │              LMStudio.Claude.Settings.json
-    ├── Codex/     Codex--{install,run,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
-    ├── Gemini/    Gemini--{install,run,uninstall}.cmd
-    ├── Antigravity/ Antigravity--{install,run,uninstall,openrouter,local-lmstudio,remote-lmstudio,is-installed}.cmd
-    ├── Grok/      Grok--{install,run,uninstall}.cmd
-    ├── Mistral/   Mistral--{install,run,uninstall,openrouter}.cmd
-    ├── Pi/        Pi--{install,run,uninstall,openrouter}.cmd
-    ├── Qwen/      Qwen--{install,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
-    ├── Trae/      Trae--{install,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
-    ├── Hermes/    Hermes--{install,uninstall,openrouter,run}.cmd
-    ├── Codebuff/  Codebuff--{install,uninstall,run}.cmd
-    ├── Oh-My-Pi/  Oh-My-Pi--{install,uninstall,openrouter,run}.cmd
-    ├── OpenSquilla/ OpenSquilla--{install,uninstall,openrouter,run}.cmd
-    ├── Aider/     Aider--{install,uninstall,openrouter,run}.cmd
-    ├── Junie/     Junie--{install,uninstall,openrouter,run}.cmd
-    ├── VTCode/    VTCode--{install,uninstall,openrouter,run}.cmd
-    └── Opencode/  Opencode--{install,uninstall,run,openrouter,local-lmstudio,remote-lmstudio,is-installed}.cmd
+└── AgenticCliOptions/              # .NET shared project ("project root")
+    ├── AgenticCliOptions.shproj    # MSBuild shared project
+    ├── AgenticCliOptions.projitems # files included in the shared project
+    ├── AgenticCliOptions.wiki.md   # this document
+    ├── SetOpenRouterKey.cmd        # one-shot prompt + verify + persist
+    │
+    └── CodingAgents/               # everything per-agent + shared launchers
+        ├── Install-All.cmd                 # turn-key install for every agent
+        ├── Uninstall-All.cmd               # remove every agent CLI
+        ├── Install-lmstudio.cmd            # install LM Studio + bring server up
+        ├── Uninstall-lmstudio.cmd          # remove LM Studio app (config kept)
+        ├── _resolve-lmstudio-url.cmd       # shared LMSTUDIO_URL probe (CALL only)
+        ├── _resolve-lmstudio-url.ps1       # PowerShell sidecar for the probe
+        │
+        ├── Plugins/                        # cross-agent plugin layer
+        │   ├── Install-Plugin.cmd          # picker that fans one plugin out
+        │   ├── Uninstall-Plugin.cmd        # symmetric removal
+        │   ├── _apply-plugins.{cmd,ps1}    # dispatcher called from each agent
+        │   ├── _install-plugin.ps1         # picker -> per-agent hook runner
+        │   └── context7-mcp/  plugin.json + install/<agent>.cmd + uninstall/<agent>.cmd
+        │
+        ├── AmazonQ/      AmazonQ--{install,run,uninstall}.cmd
+        ├── Claude/       Claude--{install,run,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
+        │                 LMStudio.Claude.Settings.json
+        ├── Codex/        Codex--{install,run,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
+        ├── Gemini/       Gemini--{install,run,uninstall}.cmd
+        ├── Antigravity/  Antigravity--{install,run,uninstall,openrouter,local-lmstudio,remote-lmstudio,is-installed}.cmd
+        ├── Grok/         Grok--{install,run,uninstall}.cmd
+        ├── Mistral/      Mistral--{install,run,uninstall,openrouter}.cmd
+        ├── Pi/           Pi--{install,run,uninstall,openrouter}.cmd
+        ├── Qwen/         Qwen--{install,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
+        ├── Trae/         Trae--{install,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
+        ├── Hermes/       Hermes--{install,uninstall,openrouter,run}.cmd
+        ├── Codebuff/     Codebuff--{install,uninstall,run}.cmd
+        ├── Oh-My-Pi/     Oh-My-Pi--{install,uninstall,openrouter,run}.cmd
+        ├── OpenSquilla/  OpenSquilla--{install,uninstall,openrouter,run}.cmd
+        ├── Aider/        Aider--{install,uninstall,openrouter,run}.cmd
+        ├── Junie/        Junie--{install,uninstall,openrouter,run}.cmd
+        ├── VTCode/       VTCode--{install,uninstall,openrouter,run}.cmd
+        └── Opencode/     Opencode--{install,uninstall,run,openrouter,local-lmstudio,remote-lmstudio,is-installed}.cmd
 ```
 
 The script set above is illustrative — every agent folder also ships
