@@ -28,7 +28,7 @@ REM  final 'pause', so the whole run is unattended.
 set "AGENTS_INSTALL_ALL=1"
 
 REM  Master agent list. Order matters: AmazonQ kept last on purpose.
-set "ALL_AGENTS=Claude Codex Gemini Pi Qwen Grok Mistral Trae Hermes Codebuff Oh-My-Pi OpenSquilla Aider Junie VTCode AmazonQ"
+set "ALL_AGENTS=Claude Codex Gemini Antigravity Pi Qwen Grok Mistral Trae Hermes Codebuff Oh-My-Pi OpenSquilla Aider Junie VTCode AmazonQ"
 
 REM ---- Parse command line ---------------------------------------
 set "INTERACTIVE="
@@ -561,6 +561,7 @@ REM ============================================================
 :agent_model_var
 set "MV="
 if /I "%~1"=="Aider"        set "MV=AIDER_MODEL"       & exit /b 0
+if /I "%~1"=="Antigravity"  set "MV=ANTIGRAVITY_MODEL" & exit /b 0
 if /I "%~1"=="Claude"       set "MV=CLAUDE_MODEL"      & exit /b 0
 if /I "%~1"=="Codex"        set "MV=CODEX_MODEL"       & exit /b 0
 if /I "%~1"=="Gemini"       set "MV=GEMINI_MODEL"      & exit /b 0
@@ -589,6 +590,7 @@ REM ============================================================
 :agent_default_model
 set "DM="
 if /I "%~1"=="Aider"        set "DM=openrouter/anthropic/claude-sonnet-4.5" & exit /b 0
+if /I "%~1"=="Antigravity"  set "DM=antigravity-managed"                   & exit /b 0
 if /I "%~1"=="Claude"       set "DM=claude-sonnet-4-5"                      & exit /b 0
 if /I "%~1"=="Codex"        set "DM=gpt-5.5"                                & exit /b 0
 if /I "%~1"=="Gemini"       set "DM=gemini-2.5-pro"                         & exit /b 0

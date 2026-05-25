@@ -1,6 +1,6 @@
 # AgenticCliOptions
 
-A turn-key Windows toolkit that installs, configures, runs and removes **twenty
+A turn-key Windows toolkit that installs, configures, runs and removes **seventeen
 terminal-based coding-agent CLIs** side by side, plus an optional local
 **LM Studio** OpenAI-compatible server. Everything is driven by plain
 `.cmd` scripts so the workflow is "double-click, walk away".
@@ -14,7 +14,7 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ## Table of contents
 
-- [The twenty agents at a glance](#the-twenty-agents-at-a-glance)
+- [The seventeen agents at a glance](#the-seventeen-agents-at-a-glance)
 - [Solution layout](#solution-layout)
 - [Top-level scripts](#top-level-scripts)
 - [Per-agent script conventions](#per-agent-script-conventions)
@@ -32,13 +32,14 @@ inside Visual Studio / Rider's Solution Explorer.
 
 ---
 
-## The twenty agents at a glance
+## The seventeen agents at a glance
 
 | Agent          | Vendor       | Install channel                | Native creds                              | OpenRouter launcher | LM Studio launcher |
 |----------------|--------------|--------------------------------|-------------------------------------------|---------------------|--------------------|
 | **Claude**     | Anthropic    | npm `@anthropic-ai/claude-code` | Anthropic / Claude Code subscription      | yes                 | yes (settings file) |
 | **Codex**      | OpenAI       | npm `@openai/codex`            | OpenAI / ChatGPT account                  | yes                 | yes (`-c` overrides) |
 | **Gemini**     | Google       | npm `@google/gemini-cli`       | Google account (free tier) or `GEMINI_API_KEY` | no (Google-only API) | no (Google-only API) |
+| **Antigravity** | Google      | official PowerShell installer (`install.ps1`) → `%LOCALAPPDATA%\agy\bin\agy.exe` | Google account (system keyring) | no (provider-config schema not yet documented) | no (same reason) |
 | **Pi**         | Earendil     | npm `@earendil-works/pi-coding-agent` | `/login` or provider API keys      | yes                 | no (uses `models.json`) |
 | **Qwen**       | Alibaba      | npm `@qwen-code/qwen-code`     | OAuth or `OPENAI_*` env vars              | yes                 | yes                  |
 | **Grok**       | xAI          | official bash installer + npm fallback `grok-build` | SuperGrok account or `GROK_CODE_XAI_API_KEY` | no (xAI-only API) | no (xAI-only API) |
@@ -77,15 +78,16 @@ AgenticCliOptions/
 │
 └── CodingAgents/
     ├── AmazonQ/   AmazonQ--{install,run,uninstall}.cmd
-    ├── Claude/    Claude--{install,run,uninstall,openrouter,settings-lmstudio}.cmd
+    ├── Claude/    Claude--{install,run,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
     │              LMStudio.Claude.Settings.json
-    ├── Codex/     Codex--{install,run,uninstall,openrouter,settings-lmstudio}.cmd
+    ├── Codex/     Codex--{install,run,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
     ├── Gemini/    Gemini--{install,run,uninstall}.cmd
+    ├── Antigravity/ Antigravity--{install,run,uninstall,openrouter,local-lmstudio,remote-lmstudio,is-installed}.cmd
     ├── Grok/      Grok--{install,run,uninstall}.cmd
     ├── Mistral/   Mistral--{install,run,uninstall,openrouter}.cmd
     ├── Pi/        Pi--{install,run,uninstall,openrouter}.cmd
-    ├── Qwen/      Qwen--{install,uninstall,openrouter,settings-lmstudio}.cmd
-    ├── Trae/      Trae--{install,uninstall,openrouter,settings-lmstudio}.cmd
+    ├── Qwen/      Qwen--{install,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
+    ├── Trae/      Trae--{install,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
     ├── Hermes/    Hermes--{install,uninstall,openrouter,run}.cmd
     ├── Codebuff/  Codebuff--{install,uninstall,run}.cmd
     ├── Oh-My-Pi/  Oh-My-Pi--{install,uninstall,openrouter,run}.cmd
@@ -94,6 +96,16 @@ AgenticCliOptions/
     ├── Junie/     Junie--{install,uninstall,openrouter,run}.cmd
     └── VTCode/    VTCode--{install,uninstall,openrouter,run}.cmd
 ```
+
+The script set above is illustrative — every agent folder also ships
+`<Name>--is-installed.cmd` (the install probe used by `Install-All --status`),
+`<Name>--local-lmstudio.cmd` + `<Name>--remote-lmstudio.cmd`
+(launchers or honest stubs depending on the agent), and a
+`<Name>.wiki.md` per-agent reference doc. See
+[per-agent script conventions](#per-agent-script-conventions) below
+for the full naming pattern and
+[per-agent maintenance notes](#per-agent-maintenance-notes) for the
+index of per-agent wikis.
 
 ---
 
@@ -115,13 +127,16 @@ AgenticCliOptions/
 Each agent folder follows the same naming pattern, so a script's name
 tells you what it does without opening it:
 
-| Suffix                      | Purpose                                                                                  |
-|-----------------------------|------------------------------------------------------------------------------------------|
-| `<Agent>--install.cmd`      | Install or update the CLI. Re-runnable. Auto-installs its own deps via winget if missing. |
-| `<Agent>--uninstall.cmd`    | Remove the CLI only. Never touches shared deps or `%USERPROFILE%\.<agent>` config dir.    |
-| `<Agent>--run.cmd`          | Launch the CLI against its native vendor API (and native auth).                            |
-| `<Agent>--openrouter.cmd`   | Launch via OpenRouter, using `OPENROUTER_API_KEY` and an overridable `OPENROUTER_MODEL`.   |
-| `<Agent>--settings-lmstudio.cmd` | Launch against a local LM Studio server (auto-detects the loaded model).             |
+| Suffix                          | Purpose                                                                                  |
+|---------------------------------|------------------------------------------------------------------------------------------|
+| `<Agent>--install.cmd`          | Install or update the CLI. Re-runnable. Auto-installs its own deps via winget if missing. |
+| `<Agent>--uninstall.cmd`        | Remove the CLI only. Never touches shared deps or `%USERPROFILE%\.<agent>` config dir.    |
+| `<Agent>--run.cmd`              | Launch the CLI against its native vendor API (and native auth).                           |
+| `<Agent>--openrouter.cmd`       | Launch via OpenRouter, using `OPENROUTER_API_KEY` and an overridable `OPENROUTER_MODEL`.  |
+| `<Agent>--local-lmstudio.cmd`   | Launch against a local LM Studio server (auto-detects the loaded model from `${LMSTUDIO_URL}/v1/models`). |
+| `<Agent>--remote-lmstudio.cmd`  | Placeholder for a future remote-LM-Studio launcher. Today, set `LMSTUDIO_URL` to the remote host and call the local launcher. |
+| `<Agent>--is-installed.cmd`     | Probe used by `Install-All.cmd --status` (and the interactive menu) to render the install-status table. Exits 0 if installed, 1 otherwise. |
+| `<Agent>.wiki.md`               | Per-agent reference doc: at-a-glance table, scripts in the folder, config dirs, and historical quirks. |
 
 Conventions baked into every script:
 
@@ -157,7 +172,7 @@ Conventions baked into every script:
 | WSL + Ubuntu            | Amazon Q (no native Windows build)                                                               | `wsl --install` + `wsl --install -d Ubuntu` |
 | Python 3.11 / 3.12      | Trae (`tree-sitter-languages` pin → 3.12); Hermes installer pins 3.11; OpenSquilla pins 3.12     | uv downloads them automatically        |
 | winget                  | every agent uses winget for shared deps                                                          | ships with Windows 11 (App Installer)  |
-| LM Studio (optional)    | every `*--settings-lmstudio.cmd`                                                                 | `winget install ElementLabs.LMStudio`  |
+| LM Studio (optional)    | every `*--local-lmstudio.cmd` (and the placeholder `*--remote-lmstudio.cmd`)                     | `winget install ElementLabs.LMStudio`  |
 
 > **Node 22 enforcement.** `Install-All.cmd :ensure_node_22` detects an
 > older Node (e.g. legacy `OpenJS.NodeJS.20`), uninstalls it via winget,
@@ -176,6 +191,7 @@ clean slate.
 | Claude    | `%USERPROFILE%\.claude`                             |
 | Codex     | `%USERPROFILE%\.codex`                              |
 | Gemini    | `%USERPROFILE%\.gemini`                             |
+| Antigravity | `%USERPROFILE%\.antigravity`, `%LOCALAPPDATA%\antigravity` (the `%LOCALAPPDATA%\agy` install dir IS removed by the uninstaller) |
 | Pi        | `%USERPROFILE%\.pi`                                 |
 | Qwen      | `%USERPROFILE%\.qwen`                               |
 | Grok      | `%USERPROFILE%\.grok` (and possibly `~/.x.ai`)      |
@@ -211,145 +227,29 @@ agent on `@latest` makes drift between them visible quickly.
 
 ### Per-agent maintenance notes
 
-These are the points where each agent has historically needed
-hand-holding. Watch for them when upstreams change.
+Each agent has its own wiki at `CodingAgents/<Name>/<Name>.wiki.md`
+covering install channel, scripts in the folder, config dirs, and
+historical quirks. The one-liners below are a scan-friendly index
+into the most surprising or load-bearing detail per agent — follow
+the link for full context. Listed in install order.
 
-- **Claude** — install has *two* paths: the npm package
-  `@anthropic-ai/claude-code` and Anthropic's native installer that
-  drops a binary at `~/.local/bin/claude.exe`. The uninstaller cleans
-  up both. If `del` fails with "Access is denied", a `claude` process
-  is still running — close it and re-run the uninstaller.
-- **Codex** — OpenRouter launcher uses on-the-fly `-c model_provider=...`
-  overrides instead of editing `~/.codex/config.toml`. Keep
-  `wire_api=chat` (OpenAI-compatible chat-completions endpoint).
-- **Gemini** — no OpenRouter / LM Studio launcher; the Gemini CLI only
-  speaks Google's own API. To route Gemini *models* via OpenRouter,
-  use the Qwen Code CLI (it's a Gemini CLI fork and accepts an OpenAI
-  base URL).
-- **Pi** — `Pi--install.cmd` first quietly uninstalls the legacy
-  `@mariozechner/pi-coding-agent` package because both ship a `pi` bin
-  and npm fails with `EEXIST` otherwise. Pi installs with
-  `--ignore-scripts` per upstream guidance. Pi has no LM Studio
-  launcher — LM Studio integration lives in Pi's `models.json`.
-- **Qwen** — requires Node 22+. If you upgrade Node manually, make sure
-  the major version is `>=22` or `Install-All.cmd :ensure_node_22`
-  will (correctly) force an upgrade.
-- **Grok** — beta software; primary install path is the official bash
-  installer (`curl -fsSL https://x.ai/cli/install.sh | bash`, run
-  through Git Bash), npm fallback is the community `grok-build`
-  package. If both paths fail, check <https://x.ai/cli> for the
-  current install method. The uninstaller cleans up
-  `%USERPROFILE%\.local\bin\grok`, `~/.x.ai\bin\grok`,
-  `~/.grok\bin\grok` and the npm package.
-- **Mistral** — installs as `uv tool install mistral-vibe`. The
-  OpenRouter launcher works by overriding `MISTRAL_BASE_URL`, which
-  only works if the current Vibe build honours that env var. Verify
-  with a short test prompt after a Vibe update.
-- **Trae** — *not on PyPI*. Installed from GitHub as
-  `trae-agent[evaluation] @ git+https://github.com/bytedance/trae-agent.git`.
-  Pinned to Python 3.12 because the `tree-sitter-languages` pin has
-  no wheels for 3.13+. The `[evaluation]` extra is required even for
-  normal use because `base_agent.py` unconditionally imports
-  `docker_manager`, which pulls in `docker` and `pexpect`.
-- **Hermes** — Nous Research's agent. Native Windows is
-  documented as **early beta** but in practice installs and
-  runs cleanly. The installer is the upstream PowerShell
-  one-liner (`iex (irm .../install.ps1)`); no admin rights
-  needed. It provisions Python 3.11 via uv, Node, PortableGit,
-  ripgrep, ffmpeg and a Playwright-managed Chromium under
-  `%LOCALAPPDATA%\hermes`. **The actual binary lives at
-  `%LOCALAPPDATA%\hermes\hermes-agent\venv\Scripts\hermes.exe`**,
-  not in a `\bin` subdir — every Hermes script in this repo
-  prepends that exact path. The uninstaller calls Hermes' own
-  `hermes uninstall` subcommand and then prunes that PATH
-  entry from the User registry (Hermes' own uninstaller does
-  not always clean it on Windows). OpenRouter launcher passes
-  `--provider openrouter --model <slug>`; `OPENROUTER_API_KEY`
-  is recognised natively.
-- **Codebuff** — terminal coding agent backed by the
-  codebuff.com platform. Installed via `npm install -g
-  codebuff@latest`. On Windows it needs `bash.exe` to run its
-  shell-execution tool; the installer pulls Git for Windows if
-  missing (you already have it for Grok). **No OpenRouter
-  launcher**: Codebuff handles model routing internally via its
-  own backend and does not document a way to BYO an OpenRouter
-  key at the CLI. Sign in with `codebuff` on first run.
-- **Oh-My-Pi** — TypeScript coding-first fork of Pi (you also
-  ship the original Pi). Installed via the upstream PowerShell
-  installer in **binary** mode (`-Binary` flag) so no Bun is
-  required at install time; the prebuilt EXE lands under
-  `%LOCALAPPDATA%\omp\omp.exe` and that dir is added to the
-  User PATH. omp needs `bash.exe` at runtime; the install
-  script pulls Git for Windows if missing. The upstream tool
-  has no uninstaller, so `Oh-My-Pi--uninstall.cmd` removes the
-  install dir manually and prunes the PATH entry from the
-  registry. OpenRouter via `--model openrouter/<provider>/<model>`.
-  **Two installer gotchas we already work around** — both
-  hidden in `Oh-My-Pi--install.cmd`, no action needed unless
-  upstream rewrites their `install.ps1`:
-    1. The upstream usage pattern `& ([scriptblock]::Create((irm
-       ...))) -Binary` uses nested parens that cmd cannot parse;
-       we stage the script to a temp file instead.
-    2. `install.ps1` contains Unicode characters (✓, ⚠) but
-       ships with **no BOM**. Windows PowerShell 5.1 reads
-       BOM-less files as Windows-1252, which mangles the
-       multi-byte UTF-8 and crashes the parser with `Unexpected
-       token 'Path", "Machine")'`. We download via
-       `Net.WebClient`, decode as UTF-8, and re-save **with a
-       UTF-8 BOM** before invoking. Watch for this pattern in
-       any future PowerShell-installer agent.
-- **OpenSquilla** — token-efficient microkernel agent. **Not
-  on PyPI**: the upstream installer only accepts a published
-  wheel URL from GitHub Releases. `OpenSquilla--install.cmd`
-  hits the GitHub API on every run to discover the latest
-  `.whl` asset, then installs via
-  `uv tool install --python 3.12 --upgrade "opensquilla[recommended] @ <url>"`.
-  Re-run to upgrade. The OpenRouter launcher persists the
-  provider via `opensquilla configure --section provider
-  --provider openrouter --api-key-env OPENROUTER_API_KEY
-  --model <slug>` and then `opensquilla chat --model <slug>`.
-  `opensquilla` has no `--version` flag, so the install
-  script reads the version from `uv tool list`. If you see
-  `DLL load failed`, install the VC++ Redistributable.
-- **Aider** — the classic AI pair-programmer for the terminal.
-  Installed via `uv tool install --force --python 3.12
-  --upgrade aider-chat`. Needs Git installed at runtime to
-  track edits; the installer pulls Git for Windows if missing.
-  OpenRouter via `--model openrouter/<provider>/<model>` with
-  `OPENROUTER_API_KEY` in the environment.
-  `aider --list-models openrouter/` enumerates every routable
-  model Aider knows about.
-- **Junie** — JetBrains' AI coding agent for the terminal.
-  Installed via the upstream PowerShell installer that drops a
-  shim at `~/.local/bin\junie.bat` and binaries under
-  `~/.local/share\junie`. Junie self-updates: re-running the
-  installer reinstalls the current release; the running binary
-  applies pending updates on next launch. OpenRouter BYOK via
-  `junie --openrouter-api-key %OPENROUTER_API_KEY% --model
-  <slug>`; the launcher does that for you. No uninstall
-  command upstream, so `Junie--uninstall.cmd` removes the shim
-  and data dir manually.
-- **VT Code** — Rust-based coding agent with code-understanding
-  tooling and shell safety. **Windows builds are flagged
-  "best-effort, may lag behind macOS/Linux"** by upstream — and
-  in practice the most recent few releases often ship no
-  Windows asset at all. The upstream PowerShell installer
-  *intends* to walk back to the latest Windows release, but
-  its HEAD-request probe silently fails in non-TTY contexts
-  (e.g. when launched from cmd via our install scripts), so
-  it falsely reports "no Windows asset". We bypass it
-  entirely: query the GitHub API for the last 20 releases,
-  pick the first whose **assets list** includes
-  `vtcode-<tag>-x86_64-pc-windows-msvc.zip`, then download and
-  extract to `~/.local/bin\vtcode.exe`. Re-run to upgrade.
-  OpenRouter via `vtcode --provider openrouter --model <slug>
-  chat`. If no recent release has a Windows asset at all,
-  fall back to `cargo install vtcode` (needs Rust toolchain).
-- **Amazon Q / Kiro** — runs *inside WSL*. The installer is staged:
-  Stage 1 installs WSL (requires a reboot), Stage 2 installs Ubuntu,
-  Stage 3 installs the CLI inside WSL via the official
-  `kirocli-x86_64-linux.zip`. Each run detects where it left off and
-  continues. AWS sign-in via `q login` runs on first `q chat`.
+- **Claude** — npm + Anthropic's native `~/.local/bin/claude.exe` (uninstaller cleans both). → [Claude.wiki.md](CodingAgents/Claude/Claude.wiki.md)
+- **Codex** — npm; OpenRouter via on-the-fly `-c model_provider=...` overrides; `wire_api=responses`. → [Codex.wiki.md](CodingAgents/Codex/Codex.wiki.md)
+- **Gemini** — npm; ⚠️ **deprecated 2026-06-18** for Pro/Ultra/free Code Assist users; migrate to Antigravity. → [Gemini.wiki.md](CodingAgents/Gemini/Gemini.wiki.md)
+- **Antigravity** — Google's Go-based Gemini-CLI successor (`agy`); self-updates; install dir `%LOCALAPPDATA%\agy\bin`. → [Antigravity.wiki.md](CodingAgents/Antigravity/Antigravity.wiki.md)
+- **Pi** — npm; install nukes legacy `@mariozechner/pi-coding-agent` first to avoid `EEXIST`; LM Studio via `models.json`. → [Pi.wiki.md](CodingAgents/Pi/Pi.wiki.md)
+- **Qwen** — npm; **requires Node 22+**; recommended for routing Gemini-family models via OpenRouter (it's a Gemini-CLI fork). → [Qwen.wiki.md](CodingAgents/Qwen/Qwen.wiki.md)
+- **Grok** — beta; bash installer (Git Bash) with `grok-build` npm fallback; xAI-only. → [Grok.wiki.md](CodingAgents/Grok/Grok.wiki.md)
+- **Mistral** — `uv tool install mistral-vibe`; OpenRouter via `MISTRAL_BASE_URL` (re-verify after Vibe updates). → [Mistral.wiki.md](CodingAgents/Mistral/Mistral.wiki.md)
+- **Trae** — `uv tool install` from GitHub (Python 3.12); `[evaluation]` extra required even for normal use. → [Trae.wiki.md](CodingAgents/Trae/Trae.wiki.md)
+- **Hermes** — Nous Research PowerShell installer; binary at `…\hermes-agent\venv\Scripts\hermes.exe` (non-obvious subdir). → [Hermes.wiki.md](CodingAgents/Hermes/Hermes.wiki.md)
+- **Codebuff** — npm; needs `bash.exe` at runtime; **no OpenRouter** (platform-managed routing). → [Codebuff.wiki.md](CodingAgents/Codebuff/Codebuff.wiki.md)
+- **Oh-My-Pi** — PowerShell installer in `-Binary` mode; two workarounds: nested-paren parse, UTF-8 BOM. → [Oh-My-Pi.wiki.md](CodingAgents/Oh-My-Pi/Oh-My-Pi.wiki.md)
+- **OpenSquilla** — `uv tool install` from latest GitHub-Releases `.whl`; no `--version` flag (use `uv tool list`). → [OpenSquilla.wiki.md](CodingAgents/OpenSquilla/OpenSquilla.wiki.md)
+- **Aider** — `uv tool install aider-chat`; OpenRouter via `--model openrouter/<provider>/<model>`. → [Aider.wiki.md](CodingAgents/Aider/Aider.wiki.md)
+- **Junie** — JetBrains PowerShell installer → `~/.local/bin\junie.bat`; self-updates; OpenRouter BYOK via `--openrouter-api-key`. → [Junie.wiki.md](CodingAgents/Junie/Junie.wiki.md)
+- **VT Code** — direct GitHub-Releases zip → `~/.local/bin\vtcode.exe` (skips broken upstream `install.ps1`); Windows builds best-effort. → [VTCode.wiki.md](CodingAgents/VTCode/VTCode.wiki.md)
+- **Amazon Q / Kiro** — runs *inside WSL*; staged installer survives a Windows reboot; AWS Nova only. → [AmazonQ.wiki.md](CodingAgents/AmazonQ/AmazonQ.wiki.md)
 
 ### Adding a brand-new coding agent
 
@@ -371,25 +271,34 @@ To keep the project coherent, follow this checklist:
    they install in the `[1/3]` shared-deps block and survive a
    re-run.
 5. **Wire the agent into `Install-All.cmd` and `Uninstall-All.cmd`**.
-   Install order is: Claude, Codex, Gemini, Pi, Qwen, Grok, Mistral,
-   Trae, Hermes, Codebuff, Oh-My-Pi, OpenSquilla, Aider, Junie,
-   VT Code, then Amazon Q **last** (reboot). Uninstall is the reverse.
+   Install order is: Claude, Codex, Gemini, Antigravity, Pi, Qwen,
+   Grok, Mistral, Trae, Hermes, Codebuff, Oh-My-Pi, OpenSquilla,
+   Aider, Junie, VT Code, then Amazon Q **last** (reboot).
+   Uninstall is the reverse.
 6. **Add the agent's config dir to the "leaves alone" list** in both
    `Uninstall-All.cmd` and the agent's own uninstaller.
-7. **Add a row** to the [agent matrix above](#the-twenty-agents-at-a-glance)
-   and a per-agent note in [maintenance notes](#per-agent-maintenance-notes).
-   Bump the "**N agents at a glance**" count in the intro
-   paragraph, the table of contents anchor, and the section
-   heading so they stay in sync — they're three separate
-   places to update.
-8. **Optional: `<Name>--openrouter.cmd`** if the agent speaks an
+7. **Add a row** to the [agent matrix above](#the-seventeen-agents-at-a-glance)
+   and a one-line entry in [maintenance notes](#per-agent-maintenance-notes)
+   linking to the new per-agent wiki. Bump the "**N agents at a glance**"
+   count in the intro paragraph, the table of contents anchor, and the
+   section heading so they stay in sync — they're three separate places
+   to update.
+8. **Create `CodingAgents\<Name>\<Name>.wiki.md`** — the per-agent
+   reference doc. Copy the structure from the closest existing wiki
+   (e.g. [Codex.wiki.md](CodingAgents/Codex/Codex.wiki.md)): an
+   "At a glance" table, the actual scripts in the folder with one-line
+   purposes, the config dirs the uninstaller leaves alone, and
+   maintenance notes. Add it to `AgenticCliOptions.projitems` so it
+   shows up in the Solution Explorer.
+9. **Optional: `<Name>--openrouter.cmd`** if the agent speaks an
    OpenAI- or Anthropic-compatible API. It must read the shared
    `OPENROUTER_API_KEY` env var and accept an overridable
    `OPENROUTER_MODEL` default.
-9. **Optional: `<Name>--settings-lmstudio.cmd`** if the agent can be
-   pointed at an OpenAI-compatible base URL. Auto-detect the loaded
-   model from `${LMSTUDIO_URL}/v1/models`.
-10. **Smoke-test the install end-to-end.** Set
+10. **Optional: `<Name>--local-lmstudio.cmd`** if the agent can be
+    pointed at an OpenAI-compatible base URL. Auto-detect the loaded
+    model from `${LMSTUDIO_URL}/v1/models`. Ship a placeholder
+    `<Name>--remote-lmstudio.cmd` for symmetry.
+11. **Smoke-test the install end-to-end.** Set
     `AGENTS_INSTALL_ALL=1` so the script runs unattended, run
     `<Name>--install.cmd`, then run the binary's `--version`
     flag (or its closest equivalent — some agents like
