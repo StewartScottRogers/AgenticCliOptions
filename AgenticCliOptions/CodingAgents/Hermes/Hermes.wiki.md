@@ -20,8 +20,8 @@ Nous Research's terminal coding agent. Native Windows is an **early beta** but i
 
 | Script | Purpose |
 |---|---|
-| `Hermes--install.cmd` | Runs the upstream PowerShell installer via `_hermes-install-patched.ps1` (which patches the `playwright install chromium` call to suppress a misleading warning box). |
-| `_hermes-install-patched.ps1` | Sibling PowerShell helper: downloads upstream `install.ps1`, patches one line, then iex's it. |
+| `Hermes--install.cmd` | Runs the upstream PowerShell installer via `Hhermes-install-patched.ps1` (which patches the `playwright install chromium` call to suppress a misleading warning box). |
+| `Hhermes-install-patched.ps1` | Sibling PowerShell helper: downloads upstream `install.ps1`, patches one line, then iex's it. |
 | `Hermes--run.cmd` | Launch against the Nous API. |
 | `Hermes--openrouter.cmd` | Route through OpenRouter via Hermes's native `--provider openrouter` flag. |
 | `Hermes--uninstall.cmd` | Calls Hermes's own `hermes uninstall` subcommand, then prunes the User PATH entry from the registry. |

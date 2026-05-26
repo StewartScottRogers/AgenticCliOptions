@@ -29,7 +29,7 @@ REM  warning box, which otherwise hides the real progress output. The
 REM  patch is anchored on the exact upstream line -- if upstream
 REM  reformats it, the helper warns and falls back to the unpatched
 REM  install (still succeeds, warning reappears).
-set "PATCH_SCRIPT=%~dp0_hermes-install-patched.ps1"
+set "PATCH_SCRIPT=%~dp0Hhermes-install-patched.ps1"
 
 echo.
 echo Installing / updating Hermes Agent via the official PowerShell
