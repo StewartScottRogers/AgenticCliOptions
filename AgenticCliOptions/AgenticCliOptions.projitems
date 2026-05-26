@@ -55,6 +55,7 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hermes--local-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hermes--remote-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hermes.wiki.md" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Hermes\Hhermes-install-patched.ps1" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--is-installed.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--local-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Junie\Junie--remote-lmstudio.cmd" />
@@ -148,6 +149,7 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\_apply-plugins.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\_apply-plugins.ps1" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\_install-plugin.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\_pick-plugin.ps1" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\Install-Plugin.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\Uninstall-Plugin.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\context7-mcp\plugin.json" />

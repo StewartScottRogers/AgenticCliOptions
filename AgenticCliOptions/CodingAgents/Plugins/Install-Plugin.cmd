@@ -39,28 +39,31 @@ echo                   currently-installed agent
 exit /b 0
 
 :pick
-echo.
-echo Available plugins:
-set "IDX=0"
-for /d %%P in ("%ROOT%*") do (
-    if exist "%%~P\plugin.json" (
-        set /a IDX+=1
-        set "PLUGIN_!IDX!=%%~nxP"
-        echo   !IDX!^) %%~nxP
-    )
+REM  Delegate to the PS picker so the menu can render each plugin's
+REM  description and supported agents (parsed from plugin.json). PS
+REM  writes the chosen name to a temp file; we read it back and
+REM  fall through to :run. Exit code 2 means the user pressed Enter
+REM  without picking - treat as a silent cancel, same as before.
+set "PICKFILE=%TEMP%\plugin-pick-%RANDOM%%RANDOM%.txt"
+if exist "%PICKFILE%" del "%PICKFILE%" >nul 2>nul
+REM  %ROOT% ends with a backslash; "%ROOT%" would render as
+REM  "...\Plugins\" which PowerShell parses as an escaped quote and
+REM  then swallows the next arg. Trim the trailing backslash.
+set "PICKROOT=%ROOT:~0,-1%"
+powershell -NoProfile -ExecutionPolicy Bypass -File "%ROOT%_pick-plugin.ps1" -PluginsRoot "%PICKROOT%" -OutFile "%PICKFILE%" -Action install
+set "PICKRC=%ERRORLEVEL%"
+if "%PICKRC%"=="2" (
+    if exist "%PICKFILE%" del "%PICKFILE%" >nul 2>nul
+    endlocal & exit /b 0
 )
-if !IDX! EQU 0 (
-    echo   ^(no plugins found under %ROOT%^)
-    endlocal & exit /b 1
+if not "%PICKRC%"=="0" (
+    if exist "%PICKFILE%" del "%PICKFILE%" >nul 2>nul
+    endlocal & exit /b %PICKRC%
 )
-echo.
-set "PICK="
-set /p "PICK=  Plugin name or number: "
-if not defined PICK ( endlocal & exit /b 0 )
-set "ISNUM=1"
-for /f "delims=0123456789" %%X in ("!PICK!") do set "ISNUM="
-if defined ISNUM call set "PICK=%%PLUGIN_!PICK!%%"
-set "PLUGIN=!PICK!"
+set "PLUGIN="
+for /f "usebackq delims=" %%L in ("%PICKFILE%") do set "PLUGIN=%%L"
+del "%PICKFILE%" >nul 2>nul
+if not defined PLUGIN ( endlocal & exit /b 1 )
 
 :run
 if not exist "%ROOT%%PLUGIN%\plugin.json" (
