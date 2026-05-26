@@ -1,0 +1,18 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "__LMSTUDIO_URL__",
+    "ANTHROPIC_AUTH_TOKEN": "lmstudio"
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -command \"try { Write-Output ('LMStudio model currently loaded: ' + (Invoke-RestMethod '__LMSTUDIO_URL__/v1/models').data[0].id) } catch { Write-Output 'LMStudio: could not determine loaded model' }\""
+          }
+        ]
+      }
+    ]
+  }
+}

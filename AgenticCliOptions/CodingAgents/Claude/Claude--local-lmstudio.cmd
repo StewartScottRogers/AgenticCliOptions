@@ -5,10 +5,10 @@ REM ============================================================
 REM  Claude Code via LM Studio
 REM  ------------------------------------------------------------
 REM  Claude Code talks to LM Studio's Anthropic-shaped endpoint
-REM  via ANTHROPIC_BASE_URL, which is set inside the sibling JSON:
-REM      LMStudio.Claude.Settings.json
-REM  That settings file ALSO hard-codes the URL - if you change
-REM  LMSTUDIO_URL here, update the JSON to match.
+REM  via ANTHROPIC_BASE_URL, which is set inside a per-run JSON.
+REM  The launcher renders LMStudio.Claude.Settings.template.json
+REM  with the auto-detected LMSTUDIO_URL substituted in, writes
+REM  the result to %TEMP%, and passes it to `claude --settings`.
 REM
 REM  Default model for this agent: qwen3-coder-30b
 REM  Override with:
@@ -41,8 +41,12 @@ if /I not "%LMSTUDIO_ACTUAL%"=="%LMSTUDIO_MODEL%" (
     set "LMSTUDIO_MODEL=%LMSTUDIO_ACTUAL%"
 )
 
+REM Render a per-run settings JSON from the template with the resolved URL injected
+set "CLAUDE_LMSTUDIO_SETTINGS=%TEMP%\claude-lmstudio-settings-%RANDOM%.json"
+powershell -NoProfile -Command "(Get-Content -Raw '%~dp0LMStudio.Claude.Settings.template.json') -replace '__LMSTUDIO_URL__', $env:LMSTUDIO_URL | Set-Content -Path $env:CLAUDE_LMSTUDIO_SETTINGS -Encoding ASCII"
+
 echo Launching Claude Code via LM Studio model: %LMSTUDIO_MODEL%
-call claude --verbose --dangerously-skip-permissions --settings LMStudio.Claude.Settings.json --model "%LMSTUDIO_MODEL%"
+call claude --verbose --dangerously-skip-permissions --settings "%CLAUDE_LMSTUDIO_SETTINGS%" --model "%LMSTUDIO_MODEL%"
 popd
 goto :end
 

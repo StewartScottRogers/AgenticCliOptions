@@ -4,11 +4,11 @@ setlocal
 REM ============================================================
 REM  Qwen Code CLI (Qwen Coder) via LM Studio
 REM  ------------------------------------------------------------
-REM  Qwen Code talks to LM Studio's OpenAI-compatible API. The
-REM  endpoint and auth type live in .qwen\settings.json next to
-REM  this script - Qwen Code discovers it automatically because
-REM  the launcher runs from its own folder. If you change
-REM  LMSTUDIO_URL here, update OPENAI_BASE_URL in that JSON too.
+REM  Qwen Code talks to LM Studio's OpenAI-compatible API and
+REM  auto-discovers .qwen\settings.json from cwd. The launcher
+REM  renders .qwen\settings.template.json with the auto-detected
+REM  LMSTUDIO_URL substituted in, drops it into a temp dir, and
+REM  runs qwen from there so it picks up the per-run settings.
 REM
 REM  Default model for this agent: qwen3-coder-30b
 REM  Override with:
@@ -23,8 +23,13 @@ if not defined LMSTUDIO_MODEL  set "LMSTUDIO_MODEL=qwen3-coder-30b"
 
 REM ---- no edits needed below this line -----------------------
 
+REM Render a per-run .qwen\settings.json from the template into a temp dir, then run qwen from there
+set "QWEN_LMSTUDIO_TMP=%TEMP%\qwen-lmstudio-%RANDOM%"
+if not exist "%QWEN_LMSTUDIO_TMP%\.qwen" mkdir "%QWEN_LMSTUDIO_TMP%\.qwen"
+powershell -NoProfile -Command "(Get-Content -Raw '%~dp0.qwen\settings.template.json') -replace '__LMSTUDIO_URL__', $env:LMSTUDIO_URL | Set-Content -Path (Join-Path $env:QWEN_LMSTUDIO_TMP '.qwen\settings.json') -Encoding ASCII"
+
 set "ORIG_DIR=%CD%"
-pushd "%~dp0"
+pushd "%QWEN_LMSTUDIO_TMP%"
 
 if exist "%USERPROFILE%\.lmstudio\bin\lms.exe" set "PATH=%USERPROFILE%\.lmstudio\bin;%PATH%"
 where lms >nul 2>nul && call lms load "%LMSTUDIO_MODEL%" --gpu max --ttl 3600 >nul 2>nul
