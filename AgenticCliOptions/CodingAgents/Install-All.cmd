@@ -220,9 +220,13 @@ echo ============================================================
 echo  Install status  --  every agent in the catalogue
 echo ============================================================
 echo.
-echo    +----+----------------+------------+--------------------------------+
-echo    ^| #  ^| Agent          ^| Status     ^| Default model                  ^|
-echo    +----+----------------+------------+--------------------------------+
+echo    Probing each installed CLI for its version - this runs every
+echo    installed agent once (AmazonQ via WSL), so it can take a few
+echo    seconds...
+echo.
+echo    +----+----------------+------------+---------------+--------------------------------+
+echo    ^| #  ^| Agent          ^| Status     ^| Version       ^| Default model                  ^|
+echo    +----+----------------+------------+---------------+--------------------------------+
 set "N=0"
 set "OK_COUNT=0"
 set "MISS_COUNT=0"
@@ -247,16 +251,26 @@ for %%A in (%ALL_AGENTS%) do (
     call :is_installed %%A
     if errorlevel 1 (
         set /a MISS_COUNT+=1
-        echo    ^| !NP! ^| !AP! ^| missing    ^| !MP! ^|
+        set "VP=-              "
+        set "VP=!VP:~0,13!"
+        echo    ^| !NP! ^| !AP! ^| missing    ^| !VP! ^| !MP! ^|
     ) else (
         set /a OK_COUNT+=1
-        echo    ^| !NP! ^| !AP! ^| installed  ^| !MP! ^|
+        REM Run the agent's CLI to read its installed version. '?' means
+        REM the CLI is installed but did not report a parseable version.
+        call :get_version %%A
+        if "!VER!"=="" set "VER=?"
+        set "VP=!VER!             "
+        set "VP=!VP:~0,13!"
+        echo    ^| !NP! ^| !AP! ^| installed  ^| !VP! ^| !MP! ^|
     )
 )
-echo    +----+----------------+------------+--------------------------------+
+echo    +----+----------------+------------+---------------+--------------------------------+
 echo.
 echo    Installed: !OK_COUNT!   Missing: !MISS_COUNT!   Total: !N!
 echo.
+echo    Version = what the installed CLI reports ("?" = installed but
+echo    no parseable version; "-" = not installed).
 echo    Default model = env var (if set) else the launcher's built-in
 echo    default. For agents whose CLI has no --model flag (Mistral,
 echo    Grok, AmazonQ, Codebuff) the "managed" labels mean the CLI
@@ -656,6 +670,91 @@ if exist "%ROOT%%~1\%~1--is-installed.cmd" (
     exit /b
 )
 exit /b 1
+
+REM ============================================================
+REM  Helper: read the installed CLI version for an agent.
+REM  ------------------------------------------------------------
+REM  Runs the agent's binary once and sets VER to the first
+REM  X.Y[.Z] token in its --version output, so banners like
+REM  "2.1.154 (Claude Code)", "codex-cli 0.135.0" or
+REM  "vibe 2.12.1" all reduce to the bare version. VER is left
+REM  empty if the version cannot be determined (the caller shows
+REM  "?"). Only called for agents already known to be installed.
+REM
+REM  Two agents are special: OpenSquilla has no --version flag
+REM  (uv records the installed version), and AmazonQ's CLI runs
+REM  inside WSL (q, or kiro-cli on newer builds).
+REM ============================================================
+:get_version
+set "VER="
+if /I "%~1"=="OpenSquilla" (
+    REM  No --version flag; uv records the installed version.
+    for /f "tokens=2" %%v in ('uv tool list 2^>nul ^| findstr /I /B /C:"opensquilla"') do if not defined VER call :scan_line "%%v"
+    exit /b 0
+)
+if /I "%~1"=="AmazonQ" (
+    REM  CLI runs inside WSL (q, or kiro-cli on newer builds).
+    for /f "delims=" %%v in ('wsl -e bash -lc "q --version 2>/dev/null || kiro-cli --version 2>/dev/null" 2^>nul') do if not defined VER call :scan_line "%%v"
+    exit /b 0
+)
+call :agent_bin %~1
+if not defined VBIN exit /b 0
+REM  Prefer stdout (clean for most CLIs). Scan every line, not just the
+REM  first, so a leading banner/warning line does not hide the version.
+for /f "delims=" %%v in ('!VBIN! --version 2^>nul') do if not defined VER call :scan_line "%%v"
+if defined VER exit /b 0
+REM  Fallback: some CLIs (e.g. Pi) print --version to stderr. Retry with
+REM  stderr merged in. Done only on miss so stderr warnings from the
+REM  others cannot shadow their real stdout version.
+for /f "delims=" %%v in ('!VBIN! --version 2^>^&1') do if not defined VER call :scan_line "%%v"
+exit /b 0
+
+:scan_line
+REM  %~1 = one line of --version output. Replace separators with spaces
+REM  so a version embedded in a token (e.g. "omp/15.5.10") or banner
+REM  ("2.1.154 (Claude Code)") is isolated, then take the first token
+REM  that looks like a version.
+set "VS=%~1"
+if not defined VS exit /b 0
+set "VS=!VS:(= !"
+set "VS=!VS:)= !"
+set "VS=!VS:,= !"
+set "VS=!VS:/= !"
+for %%t in (!VS!) do if not defined VER call :ver_token "%%t"
+exit /b 0
+
+:ver_token
+REM  Accept the first token that looks like a version: optional leading
+REM  'v', then digits, a dot, and more digits (e.g. v1.2, 0.135.0).
+set "T=%~1"
+if "!T:~0,1!"=="v" set "T=!T:~1!"
+echo !T!| findstr /R "^[0-9][0-9]*\.[0-9]" >nul && set "VER=!T!"
+exit /b 0
+
+REM ============================================================
+REM  Helper: map agent name -> the executable to run for --version.
+REM  Leaves VBIN unset for agents handled specially in :get_version
+REM  (OpenSquilla, AmazonQ).
+REM ============================================================
+:agent_bin
+set "VBIN="
+if /I "%~1"=="Claude"       set "VBIN=claude"    & exit /b 0
+if /I "%~1"=="Codex"        set "VBIN=codex"     & exit /b 0
+if /I "%~1"=="Gemini"       set "VBIN=gemini"    & exit /b 0
+if /I "%~1"=="Antigravity"  set "VBIN=agy"       & exit /b 0
+if /I "%~1"=="Pi"           set "VBIN=pi"        & exit /b 0
+if /I "%~1"=="Qwen"         set "VBIN=qwen"      & exit /b 0
+if /I "%~1"=="Grok"         set "VBIN=grok"      & exit /b 0
+if /I "%~1"=="Mistral"      set "VBIN=vibe"      & exit /b 0
+if /I "%~1"=="Trae"         set "VBIN=trae-cli"  & exit /b 0
+if /I "%~1"=="Hermes"       set "VBIN=hermes"    & exit /b 0
+if /I "%~1"=="Codebuff"     set "VBIN=codebuff"  & exit /b 0
+if /I "%~1"=="Oh-My-Pi"     set "VBIN=omp"       & exit /b 0
+if /I "%~1"=="Aider"        set "VBIN=aider"     & exit /b 0
+if /I "%~1"=="Junie"        set "VBIN=junie"     & exit /b 0
+if /I "%~1"=="VTCode"       set "VBIN=vtcode"    & exit /b 0
+if /I "%~1"=="Opencode"     set "VBIN=opencode"  & exit /b 0
+exit /b 0
 
 REM ============================================================
 REM  Helper: map agent name -> name of the env var that holds

@@ -236,7 +236,7 @@ tells you what it does without opening it:
 | `<Agent>--openrouter.cmd`       | Launch via OpenRouter, using `OPENROUTER_API_KEY` and an overridable `OPENROUTER_MODEL`.  |
 | `<Agent>--local-lmstudio.cmd`   | Launch against a local LM Studio server (auto-detects the loaded model from `${LMSTUDIO_URL}/v1/models`). |
 | `<Agent>--remote-lmstudio.cmd`  | Placeholder for a future remote-LM-Studio launcher. Today, set `LMSTUDIO_URL` to the remote host and call the local launcher. |
-| `<Agent>--is-installed.cmd`     | Probe used by `Install-All.cmd --status` (and the interactive menu) to render the install-status table. Exits 0 if installed, 1 otherwise. |
+| `<Agent>--is-installed.cmd`     | Probe used by `Install-All.cmd --status` (and the interactive menu) to render the install-status table. Exits 0 if installed, 1 otherwise. The status table also runs each installed CLI's `--version` and extracts the bare version number for a **Version** column (`?` = installed but no parseable version, e.g. Gemini when its `settings.json` is malformed; `-` = not installed). |
 | `<Agent>.wiki.md`               | Per-agent reference doc: at-a-glance table, scripts in the folder, config dirs, and historical quirks. |
 
 Conventions baked into every script:
