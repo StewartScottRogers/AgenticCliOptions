@@ -68,10 +68,12 @@ disappears.
 
   The chosen model per agent is overridable via env var (`CLAUDE_MODEL`,
   `QWEN_MODEL`, `OPENROUTER_MODEL`, …).
-- **Fleet orchestration** — `Install-All.cmd` / `Uninstall-All.cmd` give a
-  single interactive picker over the catalogue, install shared deps once,
-  respect ordering constraints (AmazonQ runs last because it can demand a
-  reboot), and report a status table.
+- **Fleet orchestration** — `Install-All.cmd` / `Update-All.cmd` /
+  `Uninstall-All.cmd` give a single interactive picker over the catalogue,
+  install shared deps once, respect ordering constraints (AmazonQ runs last
+  because it can demand a reboot), and report a status table. `Update-All`
+  re-runs each *installed* agent's installer — every installer doubles as its
+  own updater (see *Idempotent everything* below).
 - **Plugins / extensions** — manifest-driven plugins under
   `CodingAgents/Plugins/` with `scope: shared` (fanned out to every supporting
   agent) or `scope: per-agent` (locked to one). Every agent's install /
@@ -160,6 +162,7 @@ contract.
     │
     └── CodingAgents/               # everything per-agent + shared launchers
         ├── Install-All.cmd                 # turn-key install for every agent
+        ├── Update-All.cmd                  # upgrade every installed agent
         ├── Uninstall-All.cmd               # remove every agent CLI
         ├── Install-lmstudio.cmd            # install LM Studio + bring server up
         ├── Uninstall-lmstudio.cmd          # remove LM Studio app (config kept)
@@ -210,7 +213,8 @@ index of per-agent wikis.
 
 | Script                    | What it does                                                                                     |
 |---------------------------|--------------------------------------------------------------------------------------------------|
-| `Install-All.cmd`         | Installs shared deps once (Node LTS, uv, Git), then runs each agent's `*--install.cmd` in order. Amazon Q runs last because its WSL bootstrap may force a Windows reboot — the script is **safe to re-run** afterwards. Sets `AGENTS_INSTALL_ALL=1` so child scripts skip their final `pause`. |
+| `Install-All.cmd`         | Installs shared deps once (Node LTS, uv, Git), then runs each agent's `*--install.cmd` in order. Amazon Q runs last because its WSL bootstrap may force a Windows reboot — the script is **safe to re-run** afterwards. Sets `AGENTS_INSTALL_ALL=1` so child scripts skip their final `pause`. The menu also exposes `M)` to update everything installed (delegates to `Update-All.cmd`). |
+| `Update-All.cmd`          | Re-runs each **installed** agent's `*--install.cmd` (which doubles as its updater — npm `@latest`, `uv tool --upgrade`, GitHub-latest, etc.) in install order; not-installed agents are skipped. Sets `AGENTS_INSTALL_ALL=1` to suppress child pauses. Two near-no-ops are expected: Antigravity self-updates in the background, and AmazonQ's WSL installer skips when the CLI is already present. |
 | `Uninstall-All.cmd`       | Calls every agent's `*--uninstall.cmd` in reverse order. Leaves shared deps and per-agent config in place — see the script header for the manual steps to wipe those too. |
 | `Install-lmstudio.cmd`    | Probes `LMSTUDIO_URL` (defaults to a LAN host) and `127.0.0.1:1234`; if no server answers, installs the LM Studio app via winget, locates `lms.exe`, starts the server, and re-probes. Idempotent. |
 | `Uninstall-lmstudio.cmd`  | Stops the local server (`lms server stop`) and uninstalls the LM Studio app via winget. **Preserves** `%USERPROFILE%\.lmstudio` (config + the `lms` CLI) and `%APPDATA%\LMStudio` so re-installing restores everything. |
@@ -245,9 +249,11 @@ Conventions baked into every script:
 - **Idempotent uninstall**. Each one tolerates the "not installed"
   case as success rather than failure, so re-running them is safe.
 - **No interactive prompts when called from the parent**. Install-All
-  / Uninstall-All set `AGENTS_INSTALL_ALL=1` / `AGENTS_UNINSTALL_ALL=1`,
-  and every child script skips its final `pause` when that variable is
-  defined.
+  / Update-All / Uninstall-All set `AGENTS_INSTALL_ALL=1` /
+  `AGENTS_UNINSTALL_ALL=1`, and every child script skips its final `pause`
+  when that variable is defined. (Update-All reuses `AGENTS_INSTALL_ALL`
+  since it calls the install scripts; the menu sets `AGENTS_UPDATE_ALL=1`
+  so Update-All itself skips its standalone end-pause.)
 - **Config dirs are sacred**. Uninstall scripts deliberately leave
   `%USERPROFILE%\.<agent>` alone so reinstall restores sessions and
   API keys exactly as they were.
@@ -433,8 +439,11 @@ helpers it needs.
 The install scripts are also *update* scripts — they always install
 `@latest` / `--upgrade`. So routine maintenance is just:
 
-1. Re-run `Install-All.cmd` from time to time (monthly is plenty for
-   most teams). Each agent fetches its latest published release.
+1. Run `Update-All.cmd` (or press `M)` in the `Install-All.cmd` menu) from
+   time to time (monthly is plenty for most teams). It re-runs the installer
+   for every *installed* agent, so each fetches its latest published release;
+   agents you never installed are skipped. Re-running `Install-All.cmd`
+   achieves the same upgrade but will also offer to add missing agents.
 2. If you only use one agent, run just that folder's `*--install.cmd`.
 3. After an LM Studio update, re-run `Install-lmstudio.cmd` so the
    `lms` CLI and the local server come back up cleanly.

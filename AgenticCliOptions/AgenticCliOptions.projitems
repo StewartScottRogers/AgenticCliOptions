@@ -144,6 +144,7 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--openrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\VTCode--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Update-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Uninstall-All.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Uninstall-lmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\_apply-plugins.cmd" />

@@ -107,12 +107,14 @@ if !TOTAL! EQU 0 (
     echo    Every agent in the catalogue is already installed:
     echo     !SKIPPED!
     echo.
-    echo      S^) show install status       U^) uninstall everything       Q^) quit
+    echo      M^) update everything        S^) show install status      Q^) quit
+    echo      U^) uninstall everything
     echo      L^) install LM Studio         X^) uninstall LM Studio
     echo      P^) install a plugin          Y^) uninstall a plugin
     echo.
     set "INPUT="
     set /p "INPUT=   Your choice: "
+    if /I "!INPUT!"=="M" goto :update_all
     if /I "!INPUT!"=="S" goto :show_status
     if /I "!INPUT!"=="L" goto :install_lmstudio
     if /I "!INPUT!"=="X" goto :uninstall_lmstudio
@@ -152,6 +154,7 @@ for /l %%R in (1,1,!HALF!) do (
 echo    +----+----------------+----+----------------+
 echo.
 echo      A^) install all of the above   S^) show install status   U^) uninstall everything   Q^) quit
+echo      M^) update everything installed
 echo      L^) install LM Studio          X^) uninstall LM Studio
 echo      P^) install a plugin           Y^) uninstall a plugin
 echo.
@@ -167,6 +170,7 @@ if /I "!INPUT!"=="Q" (
     exit /b 0
 )
 if /I "!INPUT!"=="U" goto :uninstall_all
+if /I "!INPUT!"=="M" goto :update_all
 if /I "!INPUT!"=="S" goto :show_status
 if /I "!INPUT!"=="L" goto :install_lmstudio
 if /I "!INPUT!"=="X" goto :uninstall_lmstudio
@@ -304,6 +308,49 @@ echo.
 pause
 REM Clear any cached per-agent install results so the menu and
 REM status table reflect the freshly-uninstalled state.
+for %%A in (%ALL_AGENTS%) do set "RESULT_%%A="
+goto :menu
+
+REM ---- Hand off to Update-All.cmd -------------------------------
+REM  AGENTS_UPDATE_ALL tells the child to suppress its own final
+REM  pause; we pause once on return so the user can read the
+REM  result before the menu is redrawn. Update-All re-runs each
+REM  installed agent's installer (which doubles as its updater) and
+REM  skips agents that are not installed.
+:update_all
+echo.
+echo ============================================================
+echo  Update every installed coding agent CLI
+echo ============================================================
+echo.
+if not exist "%ROOT%Update-All.cmd" (
+    echo    ERROR: Update-All.cmd not found next to this script.
+    echo    Looked in: %ROOT%
+    echo.
+    pause
+    goto :menu
+)
+echo    This re-runs each installed agent's installer, which pulls
+echo    the latest version and upgrades it in place. Agents that
+echo    are not installed are skipped. Shared deps are left alone.
+echo.
+set "GO="
+set /p "GO=   Update everything installed? [Y/n]: "
+set "G1=!GO:~0,1!"
+if /I "!G1!"=="N" (
+    echo    Cancelled - nothing updated.
+    echo.
+    pause
+    goto :menu
+)
+echo.
+set "AGENTS_UPDATE_ALL=1"
+call "%ROOT%Update-All.cmd"
+set "AGENTS_UPDATE_ALL="
+echo.
+pause
+REM Clear cached per-agent install results so the menu and status
+REM table re-probe fresh after the update run.
 for %%A in (%ALL_AGENTS%) do set "RESULT_%%A="
 goto :menu
 
