@@ -1,6 +1,6 @@
 # AgenticCliOptions
 
-A turn-key Windows toolkit that installs, configures, runs and removes **eighteen
+A turn-key Windows toolkit that installs, configures, runs and removes **nineteen
 terminal-based coding-agent CLIs** side by side, plus an optional local
 **LM Studio** OpenAI-compatible server. Everything is driven by plain
 `.cmd` scripts so the workflow is "double-click, walk away".
@@ -15,7 +15,7 @@ inside Visual Studio / Rider's Solution Explorer.
 ## Table of contents
 
 - [Purpose](#purpose)
-- [The eighteen agents at a glance](#the-eighteen-agents-at-a-glance)
+- [The nineteen agents at a glance](#the-nineteen-agents-at-a-glance)
 - [Solution layout](#solution-layout)
 - [Top-level scripts](#top-level-scripts)
 - [Per-agent script conventions](#per-agent-script-conventions)
@@ -116,7 +116,7 @@ contract.
 
 ---
 
-## The eighteen agents at a glance
+## The nineteen agents at a glance
 
 | Agent          | Vendor       | Install channel                | Native creds                              | OpenRouter launcher | LM Studio launcher |
 |----------------|--------------|--------------------------------|-------------------------------------------|---------------------|--------------------|
@@ -134,6 +134,7 @@ contract.
 | **Oh-My-Pi**   | can1357      | PowerShell installer (`omp.sh/install.ps1 -Binary`) | `OPENROUTER_API_KEY` (and many others) | yes | no |
 | **OpenSquilla** | OpenSquilla | `uv tool install` from latest GitHub release wheel | `OPENROUTER_API_KEY` (via `onboard --api-key-env`) | yes | no |
 | **Aider**      | Aider community | `uv tool install aider-chat` | `OPENROUTER_API_KEY` (and many others) | yes | no |
+| **Tau**        | Hugging Face | `uv tool install tau-ai` (Python 3.12+) | `/login` or provider API keys | yes (built-in `openrouter` provider) | yes (registers a provider via `tau setup`) |
 | **Junie**      | JetBrains    | official PowerShell installer (`install.ps1`) → `~/.local/bin\junie.bat` | Junie subscription or `--openrouter-api-key` BYOK | yes | no |
 | **VT Code**    | vinhnx       | official PowerShell installer (`install.ps1`) → `~/.local/bin\vtcode.exe` | `OPENROUTER_API_KEY` (and many others) | yes (Windows builds **best-effort**) | no |
 | **opencode**   | SST          | npm `opencode-ai` | Per-provider via `opencode auth login <provider>` (writes to `~/.config/opencode/auth.json`) | yes (first-class built-in provider) | yes (per-run `OPENCODE_CONFIG` JSON declaring a custom provider — no `--base-url` CLI flag) |
@@ -270,7 +271,7 @@ Conventions baked into every script:
 | Dependency              | Used by                                                                                          | Installed by                           |
 |-------------------------|--------------------------------------------------------------------------------------------------|----------------------------------------|
 | Node.js LTS (>= 22)     | Claude, Codex, Gemini, Pi, Qwen, Codebuff (and Grok npm fallback)                                | `winget install OpenJS.NodeJS.LTS`     |
-| uv (Astral)             | Mistral, Trae, Hermes (used internally by its installer), OpenSquilla, Aider                     | `winget install astral-sh.uv`          |
+| uv (Astral)             | Mistral, Trae, Hermes (used internally by its installer), OpenSquilla, Aider, Tau                | `winget install astral-sh.uv`          |
 | Git for Windows         | Grok, Codebuff, Oh-My-Pi, Aider (provides `bash.exe` + `git.exe` at runtime)                     | `winget install Git.Git`               |
 | WSL + Ubuntu            | Amazon Q (no native Windows build)                                                               | `wsl --install` + `wsl --install -d Ubuntu` |
 | Python 3.11 / 3.12      | Trae (`tree-sitter-languages` pin → 3.12); Hermes installer pins 3.11; OpenSquilla pins 3.12     | uv downloads them automatically        |
@@ -305,6 +306,7 @@ clean slate.
 | Oh-My-Pi  | `%USERPROFILE%\.omp`, `%LOCALAPPDATA%\omp`          |
 | OpenSquilla | `%USERPROFILE%\.opensquilla`                      |
 | Aider     | `%USERPROFILE%\.aider.conf.yml`, `%USERPROFILE%\.aider.tags.cache.v3` |
+| Tau       | `%USERPROFILE%\.tau` (sessions, `catalog.toml`, `providers.json`) |
 | Junie     | `%USERPROFILE%\.local\share\junie`, `%USERPROFILE%\.junie` |
 | VT Code   | `%LOCALAPPDATA%\vinhnx\vtcode\config`, `%LOCALAPPDATA%\vinhnx\vtcode\data` |
 | opencode  | `%USERPROFILE%\.config\opencode` (XDG-style on Windows; contains `opencode.json`, `auth.json`, sessions) |

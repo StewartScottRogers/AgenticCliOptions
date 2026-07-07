@@ -34,7 +34,7 @@ REM  own final 'pause', so the whole run is unattended.
 set "AGENTS_INSTALL_ALL=1"
 
 REM  Master agent list - same order as Install-All (AmazonQ last).
-set "ALL_AGENTS=Claude Codex Gemini Antigravity Pi Qwen Grok Mistral Trae Hermes Codebuff Oh-My-Pi OpenSquilla Aider Junie VTCode Opencode AmazonQ"
+set "ALL_AGENTS=Claude Codex Gemini Antigravity Pi Qwen Grok Mistral Trae Hermes Codebuff Oh-My-Pi OpenSquilla Aider Tau Junie VTCode Opencode AmazonQ"
 
 echo ============================================================
 echo  Updating every installed coding agent CLI in this project

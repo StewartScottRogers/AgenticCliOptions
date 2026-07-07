@@ -28,7 +28,7 @@ REM  final 'pause', so the whole run is unattended.
 set "AGENTS_INSTALL_ALL=1"
 
 REM  Master agent list. Order matters: AmazonQ kept last on purpose.
-set "ALL_AGENTS=Claude Codex Gemini Antigravity Pi Qwen Grok Mistral Trae Hermes Codebuff Oh-My-Pi OpenSquilla Aider Junie VTCode Opencode AmazonQ"
+set "ALL_AGENTS=Claude Codex Gemini Antigravity Pi Qwen Grok Mistral Trae Hermes Codebuff Oh-My-Pi OpenSquilla Aider Tau Junie VTCode Opencode AmazonQ"
 
 REM ---- Parse command line ---------------------------------------
 set "INTERACTIVE="
@@ -751,6 +751,7 @@ if /I "%~1"=="Hermes"       set "VBIN=hermes"    & exit /b 0
 if /I "%~1"=="Codebuff"     set "VBIN=codebuff"  & exit /b 0
 if /I "%~1"=="Oh-My-Pi"     set "VBIN=omp"       & exit /b 0
 if /I "%~1"=="Aider"        set "VBIN=aider"     & exit /b 0
+if /I "%~1"=="Tau"          set "VBIN=tau"       & exit /b 0
 if /I "%~1"=="Junie"        set "VBIN=junie"     & exit /b 0
 if /I "%~1"=="VTCode"       set "VBIN=vtcode"    & exit /b 0
 if /I "%~1"=="Opencode"     set "VBIN=opencode"  & exit /b 0
@@ -775,6 +776,7 @@ if /I "%~1"=="Oh-My-Pi"     set "MV=OMP_MODEL"         & exit /b 0
 if /I "%~1"=="Opencode"     set "MV=OPENCODE_MODEL"    & exit /b 0
 if /I "%~1"=="OpenSquilla"  set "MV=OPENSQUILLA_MODEL" & exit /b 0
 if /I "%~1"=="Pi"           set "MV=PI_MODEL"          & exit /b 0
+if /I "%~1"=="Tau"          set "MV=TAU_MODEL"         & exit /b 0
 if /I "%~1"=="VTCode"       set "MV=VTCODE_MODEL"      & exit /b 0
 REM Qwen has no native run.cmd but its OpenRouter launcher reads
 REM QWEN_MODEL (not the shared OPENROUTER_MODEL).
@@ -805,6 +807,7 @@ if /I "%~1"=="Oh-My-Pi"     set "DM=openrouter/anthropic/claude-sonnet-4.5" & ex
 if /I "%~1"=="Opencode"     set "DM=anthropic/claude-sonnet-4-5"            & exit /b 0
 if /I "%~1"=="OpenSquilla"  set "DM=anthropic/claude-sonnet-4.5"            & exit /b 0
 if /I "%~1"=="Pi"           set "DM=anthropic/claude-sonnet-4.5"            & exit /b 0
+if /I "%~1"=="Tau"          set "DM=claude-sonnet-4-6"                      & exit /b 0
 if /I "%~1"=="VTCode"       set "DM=qwen/qwen3-coder"                       & exit /b 0
 if /I "%~1"=="Qwen"         set "DM=qwen/qwen3-coder"                       & exit /b 0
 if /I "%~1"=="Trae"         set "DM=anthropic/claude-sonnet-4.5"            & exit /b 0
