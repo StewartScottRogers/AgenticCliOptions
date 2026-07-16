@@ -371,3 +371,5 @@ CodingAgents/VTCode/.vtcode/
 
 # Claude Code session lock / per-project state
 .claude/
+/AgenticCliOptions/CodingAgents/Claude/data
+/data/cipher-sessions.db-shm
