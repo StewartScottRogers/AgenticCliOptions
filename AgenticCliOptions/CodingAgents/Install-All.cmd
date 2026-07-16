@@ -108,7 +108,7 @@ if !TOTAL! EQU 0 (
     echo     !SKIPPED!
     echo.
     echo      M^) update everything        S^) show install status      Q^) quit
-    echo      U^) uninstall everything
+    echo      U^) uninstall everything     T^) manage agent terminals
     echo      L^) install LM Studio         X^) uninstall LM Studio
     echo      P^) install a plugin          Y^) uninstall a plugin
     echo.
@@ -120,6 +120,7 @@ if !TOTAL! EQU 0 (
     if /I "!INPUT!"=="X" goto :uninstall_lmstudio
     if /I "!INPUT!"=="P" goto :install_plugin
     if /I "!INPUT!"=="Y" goto :uninstall_plugin
+    if /I "!INPUT!"=="T" goto :terminals
     if /I "!INPUT!"=="U" goto :uninstall_all
     if /I "!INPUT!"=="Q" (endlocal & exit /b 0)
     goto :menu
@@ -154,7 +155,7 @@ for /l %%R in (1,1,!HALF!) do (
 echo    +----+----------------+----+----------------+
 echo.
 echo      A^) install all of the above   S^) show install status   U^) uninstall everything   Q^) quit
-echo      M^) update everything installed
+echo      M^) update everything installed  T^) manage agent terminals
 echo      L^) install LM Studio          X^) uninstall LM Studio
 echo      P^) install a plugin           Y^) uninstall a plugin
 echo.
@@ -176,6 +177,7 @@ if /I "!INPUT!"=="L" goto :install_lmstudio
 if /I "!INPUT!"=="X" goto :uninstall_lmstudio
 if /I "!INPUT!"=="P" goto :install_plugin
 if /I "!INPUT!"=="Y" goto :uninstall_plugin
+if /I "!INPUT!"=="T" goto :terminals
 if /I "!INPUT!"=="A" (
     set "SELECTED=%ALL_AGENTS%"
     goto :reorder
@@ -366,6 +368,29 @@ pause
 REM Clear cached per-agent install results so the menu and status
 REM table re-probe fresh after the update run.
 for %%A in (%ALL_AGENTS%) do set "RESULT_%%A="
+goto :menu
+
+REM ---- Hand off to the AgentTerminals catalogue ----------------
+REM  Agent terminals (multiplexers like Herdr that host the coding
+REM  agents) live in a sibling shared project at the repo root:
+REM  ..\..\AgentTerminals\. Forward into its own interactive
+REM  Install-All menu; it loops and returns here when the user
+REM  quits it, so we just redraw this menu on return.
+:terminals
+echo.
+echo ============================================================
+echo  Agent terminals  (multiplexers that host the coding agents)
+echo ============================================================
+echo.
+set "TERMINALS_MENU=%ROOT%..\..\AgentTerminals\Install-All.cmd"
+if not exist "%TERMINALS_MENU%" (
+    echo    ERROR: AgentTerminals\Install-All.cmd not found.
+    echo    Looked in: %ROOT%..\..\AgentTerminals\
+    echo.
+    pause
+    goto :menu
+)
+call "%TERMINALS_MENU%"
 goto :menu
 
 REM ---- Hand off to Install-lmstudio.cmd -------------------------
