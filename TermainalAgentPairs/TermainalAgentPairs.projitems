@@ -9,7 +9,7 @@
     <Import_RootNamespace>TermainalAgentPairs</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)_hrdr-launch.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)hrdrClaudeLmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)hrdrClaudeOpenrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)hrdrClaudeNative.cmd" />
   </ItemGroup>
