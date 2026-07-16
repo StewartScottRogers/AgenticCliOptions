@@ -4,4 +4,5 @@
     <File Path="RunClaude.cmd" />
   </Folder>
   <Project Path="AgenticCliOptions/AgenticCliOptions.shproj" Id="fdb96c13-5cbf-4e02-8523-6185b8618714" />
+  <Project Path="AgentTerminals/AgentTerminals.shproj" Id="e679b6b2-9928-4c45-ad3b-8df62d4eef48" />
 </Solution>
