@@ -13,7 +13,7 @@ REM  already set so child scripts suppress their own pause.
 REM ============================================================
 
 set "ROOT=%~dp0"
-set "ALL_TERMINALS=Herdr"
+set "ALL_TERMINALS=Herdr Zellij WezTerm Mprocs"
 
 if not defined AGENTS_UPDATE_ALL (
     set "AGENTS_UPDATE_ALL=1"

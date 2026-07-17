@@ -9,8 +9,18 @@ Same shape as CodingAgents: one folder per terminal, each with a small set of `.
 | Terminal | What it is | Folder |
 |---|---|---|
 | [Herdr](Herdr/Herdr.wiki.md) | Agent-aware terminal multiplexer / orchestrator (Rust; tmux for the agent age) | `Herdr\` |
+| [Zellij](Zellij/Zellij.wiki.md) | Rust terminal workspace / multiplexer — "a modern tmux"; native on Windows since 0.44.0 | `Zellij\` |
+| [WezTerm](WezTerm/WezTerm.wiki.md) | GPU terminal emulator **with a built-in multiplexer** (Rust; first-class Windows) | `WezTerm\` |
+| [Mprocs](Mprocs/Mprocs.wiki.md) | Declarative parallel-process runner — bring up a fixed line-up of agents from one YAML | `Mprocs\` |
 
 _More terminals get added here as folders alongside `Herdr\`._
+
+### Considered but not (yet) added
+
+These are strong tools that don't currently fit this catalogue's **native-Windows, dependency-light** bar:
+
+- **[Claude Squad](https://github.com/smtg-ai/claude-squad)** (`cs`) — excellent agent orchestrator (isolated git-worktree workspaces per agent), but it hard-depends on **tmux + gh**, and tmux has no native Windows build (needs WSL/MSYS2). Revisit if a native-Windows path lands.
+- **[Vibe Kanban](https://github.com/BloopAI/vibe-kanban)** — kanban-board orchestrator over agent worktrees (`npx vibe-kanban`), but upstream has **announced it is sunsetting**, so it's not a safe long-term add.
 
 ## Life-cycle scripts (per terminal)
 

@@ -19,5 +19,23 @@
     <None Include="$(MSBuildThisFileDirectory)Herdr\Herdr--update.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Herdr\Herdr--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Herdr\Herdr.wiki.md" />
+    <None Include="$(MSBuildThisFileDirectory)Zellij\Zellij--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Zellij\Zellij--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Zellij\Zellij--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Zellij\Zellij--update.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Zellij\Zellij--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Zellij\Zellij.wiki.md" />
+    <None Include="$(MSBuildThisFileDirectory)WezTerm\WezTerm--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)WezTerm\WezTerm--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)WezTerm\WezTerm--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)WezTerm\WezTerm--update.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)WezTerm\WezTerm--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)WezTerm\WezTerm.wiki.md" />
+    <None Include="$(MSBuildThisFileDirectory)Mprocs\Mprocs--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Mprocs\Mprocs--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Mprocs\Mprocs--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Mprocs\Mprocs--update.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Mprocs\Mprocs--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Mprocs\Mprocs.wiki.md" />
   </ItemGroup>
 </Project>

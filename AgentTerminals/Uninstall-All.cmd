@@ -14,7 +14,7 @@ REM  already set so child scripts suppress their own pause.
 REM ============================================================
 
 set "ROOT=%~dp0"
-set "ALL_TERMINALS=Herdr"
+set "ALL_TERMINALS=Herdr Zellij WezTerm Mprocs"
 
 if not defined AGENTS_UNINSTALL_ALL (
     echo This removes every agent terminal in the catalogue:
