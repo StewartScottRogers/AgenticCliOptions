@@ -24,7 +24,7 @@ set "AGENTS_INSTALL_ALL=1"
 
 REM  Master terminal catalogue. Add new terminals here (a folder
 REM  NAME\ with NAME--install.cmd + NAME--is-installed.cmd).
-set "ALL_TERMINALS=Herdr Zellij WezTerm Mprocs"
+set "ALL_TERMINALS=Herdr Zellij WezTerm Mprocs Wmux Tabby ConEmu Psmux WindowsTerminal"
 
 set "SELECTED="
 set "STATUS_ONLY="

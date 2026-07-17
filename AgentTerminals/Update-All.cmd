@@ -13,7 +13,7 @@ REM  already set so child scripts suppress their own pause.
 REM ============================================================
 
 set "ROOT=%~dp0"
-set "ALL_TERMINALS=Herdr Zellij WezTerm Mprocs"
+set "ALL_TERMINALS=Herdr Zellij WezTerm Mprocs Wmux Tabby ConEmu Psmux WindowsTerminal"
 
 if not defined AGENTS_UPDATE_ALL (
     set "AGENTS_UPDATE_ALL=1"

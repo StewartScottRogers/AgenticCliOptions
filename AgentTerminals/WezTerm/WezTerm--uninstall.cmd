@@ -29,7 +29,7 @@ if errorlevel 1 (
 
 winget list -e --id wez.wezterm >nul 2>nul
 if errorlevel 1 (
-    echo WezTerm (wez.wezterm) is not installed via winget.
+    echo WezTerm [wez.wezterm] is not installed via winget.
     echo Nothing to remove.
     goto :verify
 )

@@ -12,15 +12,26 @@ Same shape as CodingAgents: one folder per terminal, each with a small set of `.
 | [Zellij](Zellij/Zellij.wiki.md) | Rust terminal workspace / multiplexer — "a modern tmux"; native on Windows since 0.44.0 | `Zellij\` |
 | [WezTerm](WezTerm/WezTerm.wiki.md) | GPU terminal emulator **with a built-in multiplexer** (Rust; first-class Windows) | `WezTerm\` |
 | [Mprocs](Mprocs/Mprocs.wiki.md) | Declarative parallel-process runner — bring up a fixed line-up of agents from one YAML | `Mprocs\` |
+| [Wmux](Wmux/Wmux.wiki.md) | **Agent-aware** native-Windows multiplexer (ConPTY; messaging, approval gates, worktree fan-out) | `Wmux\` |
+| [Tabby](Tabby/Tabby.wiki.md) | Customizable cross-platform GPU terminal with tabs + split panes | `Tabby\` |
+| [ConEmu](ConEmu/ConEmu.wiki.md) | Veteran Windows console with tabs + free-grid split panes (Cmder is built on it) | `ConEmu\` |
+| [Psmux](Psmux/Psmux.wiki.md) | Native-Windows **tmux** clone in Rust — speaks tmux, reads `.tmux.conf`, no WSL | `Psmux\` |
+| [WindowsTerminal](WindowsTerminal/WindowsTerminal.wiki.md) | Microsoft's native terminal — tabs + split panes (`wt`); no session persistence | `WindowsTerminal\` |
 
 _More terminals get added here as folders alongside `Herdr\`._
+
+The catalogue spans two shapes: **agent-aware** hosts (Herdr, Wmux) that track/coordinate agents, and **general multiplexers/terminals** (Zellij, WezTerm, Mprocs, Tabby, ConEmu, Psmux, Windows Terminal) that simply run several agents in parallel panes. All are native on Windows.
 
 ### Considered but not (yet) added
 
 These are strong tools that don't currently fit this catalogue's **native-Windows, dependency-light** bar:
 
 - **[Claude Squad](https://github.com/smtg-ai/claude-squad)** (`cs`) — excellent agent orchestrator (isolated git-worktree workspaces per agent), but it hard-depends on **tmux + gh**, and tmux has no native Windows build (needs WSL/MSYS2). Revisit if a native-Windows path lands.
+- **[Conductor](https://conductor.build/)** (Melty Labs) — polished parallel-agent desktop app, but **macOS / Apple-Silicon only**.
 - **[Vibe Kanban](https://github.com/BloopAI/vibe-kanban)** — kanban-board orchestrator over agent worktrees (`npx vibe-kanban`), but upstream has **announced it is sunsetting**, so it's not a safe long-term add.
+- **[amux](https://github.com/prettysmartdev/amux)** — Docker-sandboxed agent multiplexer; native Windows support is still "on the way" (and the name is shared by several unrelated projects). Revisit once Windows is first-class.
+
+_(The Windows-first **wmux** — `openwong2kim.wmux` — that once sat here is now shipped in `Wmux\`.)_
 
 ## Life-cycle scripts (per terminal)
 

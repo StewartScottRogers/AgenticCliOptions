@@ -37,5 +37,35 @@
     <None Include="$(MSBuildThisFileDirectory)Mprocs\Mprocs--update.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Mprocs\Mprocs--uninstall.cmd" />
     <None Include="$(MSBuildThisFileDirectory)Mprocs\Mprocs.wiki.md" />
+    <None Include="$(MSBuildThisFileDirectory)Wmux\Wmux--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Wmux\Wmux--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Wmux\Wmux--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Wmux\Wmux--update.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Wmux\Wmux--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Wmux\Wmux.wiki.md" />
+    <None Include="$(MSBuildThisFileDirectory)Tabby\Tabby--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Tabby\Tabby--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Tabby\Tabby--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Tabby\Tabby--update.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Tabby\Tabby--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Tabby\Tabby.wiki.md" />
+    <None Include="$(MSBuildThisFileDirectory)ConEmu\ConEmu--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)ConEmu\ConEmu--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)ConEmu\ConEmu--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)ConEmu\ConEmu--update.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)ConEmu\ConEmu--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)ConEmu\ConEmu.wiki.md" />
+    <None Include="$(MSBuildThisFileDirectory)Psmux\Psmux--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Psmux\Psmux--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Psmux\Psmux--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Psmux\Psmux--update.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Psmux\Psmux--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)Psmux\Psmux.wiki.md" />
+    <None Include="$(MSBuildThisFileDirectory)WindowsTerminal\WindowsTerminal--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)WindowsTerminal\WindowsTerminal--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)WindowsTerminal\WindowsTerminal--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)WindowsTerminal\WindowsTerminal--update.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)WindowsTerminal\WindowsTerminal--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)WindowsTerminal\WindowsTerminal.wiki.md" />
   </ItemGroup>
 </Project>

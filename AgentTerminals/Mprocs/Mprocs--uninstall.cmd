@@ -53,7 +53,7 @@ if errorlevel 1 (
     echo mprocs removed.
 ) else (
     echo NOTE: 'mprocs' is still resolvable on PATH. It may be a second
-    echo copy (e.g. 'cargo install mprocs' or a scoop package). Run
+    echo copy [e.g. 'cargo install mprocs' or a scoop package]. Run
     echo 'where mprocs' to investigate.
 )
 echo.

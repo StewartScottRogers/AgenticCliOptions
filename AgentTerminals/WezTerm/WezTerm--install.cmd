@@ -27,7 +27,7 @@ where winget >nul 2>nul
 if errorlevel 1 (
     echo ERROR: winget was not found. WezTerm is distributed through the
     echo Windows Package Manager. Install "App Installer" from the
-    echo Microsoft Store (which provides winget), then re-run this script.
+    echo Microsoft Store [which provides winget], then re-run this script.
     echo Alternatively grab the installer from https://wezterm.org/install/windows.html
     goto :failed
 )

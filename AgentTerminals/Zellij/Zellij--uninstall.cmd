@@ -53,7 +53,7 @@ if errorlevel 1 (
     echo Zellij removed.
 ) else (
     echo NOTE: 'zellij' is still resolvable on PATH. It may be a second
-    echo copy (e.g. 'cargo install zellij' or a winget package). Run
+    echo copy [e.g. 'cargo install zellij' or a winget package]. Run
     echo 'where zellij' to investigate.
 )
 echo.
