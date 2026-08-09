@@ -12,11 +12,11 @@ REM  herdr's native Claude integration hook (installed on first
 REM  run if missing).
 REM
 REM  Requires herdr (see AgentTerminals\Herdr\). Model override:
-REM      setx CLAUDE_MODEL "claude-opus-4-7"
-REM  (default: claude-sonnet-4-5)
+REM      setx CLAUDE_MODEL "claude-opus-5"
+REM  (default: claude-sonnet-5)
 REM ============================================================
 
-if not defined CLAUDE_MODEL set "CLAUDE_MODEL=claude-sonnet-4-5"
+if not defined CLAUDE_MODEL set "CLAUDE_MODEL=claude-sonnet-5"
 
 REM  Reuse the tested native launcher as the in-pane command so the
 REM  Anthropic backend/model handling stays in one place.

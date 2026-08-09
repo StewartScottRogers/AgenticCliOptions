@@ -21,7 +21,7 @@ REM  Optional: choose which model OpenRouter routes to. Honours the
 REM  environment if OPENROUTER_MODEL is already set; otherwise the
 REM  default below is used. Browse slugs at
 REM  https://openrouter.ai/models
-if not defined OPENROUTER_MODEL  set "OPENROUTER_MODEL=anthropic/claude-sonnet-4.5"
+if not defined OPENROUTER_MODEL  set "OPENROUTER_MODEL=anthropic/claude-sonnet-5"
 
 REM ---- no edits needed below this line -----------------------
 

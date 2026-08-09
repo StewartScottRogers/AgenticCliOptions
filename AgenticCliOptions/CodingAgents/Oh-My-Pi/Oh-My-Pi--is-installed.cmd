@@ -5,7 +5,7 @@ if defined AGENTS_INSTALL_ALL exit /b %RC%
 if defined OMP_MODEL (
     set "_SRC="
 ) else (
-    set "OMP_MODEL=openrouter/anthropic/claude-sonnet-4.5"
+    set "OMP_MODEL=openrouter/anthropic/claude-sonnet-5"
     set "_SRC=  (built-in default; setx OMP_MODEL to override)"
 )
 if "%RC%"=="0" (

@@ -13,10 +13,10 @@ REM  Default model is always passed via --model. opencode requires
 REM  the 'provider/model' slug form. Override by setting
 REM  OPENCODE_MODEL once (persists for new terminals):
 REM
-REM      setx OPENCODE_MODEL "anthropic/claude-sonnet-4-5"
+REM      setx OPENCODE_MODEL "anthropic/claude-sonnet-5"
 REM ============================================================
 
-if not defined OPENCODE_MODEL set "OPENCODE_MODEL=anthropic/claude-sonnet-4-5"
+if not defined OPENCODE_MODEL set "OPENCODE_MODEL=anthropic/claude-sonnet-5"
 
 set "ORIG_DIR=%CD%"
 pushd "%~dp0"

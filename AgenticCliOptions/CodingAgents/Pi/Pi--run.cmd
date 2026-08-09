@@ -30,7 +30,7 @@ REM
 REM      setx PI_MODEL "openai/gpt-5"
 REM ============================================================
 
-if not defined PI_MODEL set "PI_MODEL=anthropic/claude-sonnet-4.5"
+if not defined PI_MODEL set "PI_MODEL=anthropic/claude-sonnet-5"
 
 set "ORIG_DIR=%CD%"
 pushd "%~dp0"

@@ -11,7 +11,7 @@ REM
 REM  Default model is always passed via --model. Override by setting
 REM  VTCODE_MODEL once (persists for new terminals):
 REM
-REM      setx VTCODE_MODEL "anthropic/claude-sonnet-4.5"
+REM      setx VTCODE_MODEL "anthropic/claude-sonnet-5"
 REM ============================================================
 
 if not defined VTCODE_MODEL set "VTCODE_MODEL=qwen/qwen3-coder"

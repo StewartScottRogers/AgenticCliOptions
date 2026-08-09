@@ -5,7 +5,7 @@ if defined AGENTS_INSTALL_ALL exit /b %RC%
 if defined AIDER_MODEL (
     set "_SRC="
 ) else (
-    set "AIDER_MODEL=openrouter/anthropic/claude-sonnet-4.5"
+    set "AIDER_MODEL=openrouter/anthropic/claude-sonnet-5"
     set "_SRC=  (built-in default; setx AIDER_MODEL to override)"
 )
 if "%RC%"=="0" (

@@ -13,7 +13,7 @@ REM
 REM      setx OMP_MODEL "openrouter/openai/gpt-5"
 REM ============================================================
 
-if not defined OMP_MODEL set "OMP_MODEL=openrouter/anthropic/claude-sonnet-4.5"
+if not defined OMP_MODEL set "OMP_MODEL=openrouter/anthropic/claude-sonnet-5"
 
 call :prepend_path "%LOCALAPPDATA%\omp"
 

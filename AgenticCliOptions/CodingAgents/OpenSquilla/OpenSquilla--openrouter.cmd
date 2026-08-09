@@ -18,7 +18,7 @@ REM  (idempotent), then launch the chat. Browse model slugs at
 REM  https://openrouter.ai/models
 REM ============================================================
 
-if not defined OPENROUTER_MODEL  set "OPENROUTER_MODEL=anthropic/claude-sonnet-4.5"
+if not defined OPENROUTER_MODEL  set "OPENROUTER_MODEL=anthropic/claude-sonnet-5"
 
 REM ---- no edits needed below this line -----------------------
 

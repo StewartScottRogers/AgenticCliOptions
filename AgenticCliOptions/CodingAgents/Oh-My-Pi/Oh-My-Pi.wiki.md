@@ -11,7 +11,7 @@ TypeScript coding-first fork of Pi from [can1357](https://github.com/can1357).
 | **Vendor** | can1357 |
 | **Install channel** | PowerShell installer (`omp.sh/install.ps1 -Binary`) → `%LOCALAPPDATA%\omp\omp.exe` |
 | **Native auth** | `OPENROUTER_API_KEY` (and many others) |
-| **Default model** | `openrouter/anthropic/claude-sonnet-4.5` (override: `setx OMP_MODEL "..."`) |
+| **Default model** | `openrouter/anthropic/claude-sonnet-5` (override: `setx OMP_MODEL "..."`) |
 | **OpenRouter launcher** | yes (`--model openrouter/<provider>/<model>`) |
 | **LM Studio launcher** | no (stub) |
 | **Runtime deps** | `bash.exe` (installer pulls Git for Windows if missing); **no Bun** needed thanks to the `-Binary` flag |

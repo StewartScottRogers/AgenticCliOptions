@@ -15,18 +15,18 @@ REM
 REM  Switch providers/models in-session with /login and /model.
 REM
 REM  This launcher pins one provider + model for the session. The
-REM  built-in default is Anthropic's claude-sonnet-4-6. Override by
+REM  built-in default is Anthropic's claude-sonnet-5. Override by
 REM  setting either once (persists for new terminals):
 REM
 REM      setx TAU_PROVIDER "openrouter"
-REM      setx TAU_MODEL    "anthropic/claude-sonnet-4.5"
+REM      setx TAU_MODEL    "anthropic/claude-sonnet-5"
 REM
 REM  Model IDs are provider-scoped - see the provider's catalog
 REM  entry (run 'tau providers' to list what's configured).
 REM ============================================================
 
 if not defined TAU_PROVIDER set "TAU_PROVIDER=anthropic"
-if not defined TAU_MODEL    set "TAU_MODEL=claude-sonnet-4-6"
+if not defined TAU_MODEL    set "TAU_MODEL=claude-sonnet-5"
 
 where tau >nul 2>nul
 if errorlevel 1 goto :notinstalled

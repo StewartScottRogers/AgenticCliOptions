@@ -24,7 +24,7 @@ REM  (ByteDance's Seed models have been delisted from OpenRouter).
 REM  Browse slugs at https://openrouter.ai/models
 REM ============================================================
 
-if not defined OPENROUTER_MODEL  set "OPENROUTER_MODEL=anthropic/claude-sonnet-4.5"
+if not defined OPENROUTER_MODEL  set "OPENROUTER_MODEL=anthropic/claude-sonnet-5"
 
 REM ---- no edits needed below this line -----------------------
 

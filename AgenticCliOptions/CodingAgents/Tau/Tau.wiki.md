@@ -11,7 +11,7 @@ Hugging Face's minimalist terminal coding agent (`tau-ai`).
 | **Vendor** | Hugging Face |
 | **Install channel** | PyPI `tau-ai` via `uv tool` (Python 3.12+) |
 | **Native auth** | `/login` slash command or provider API keys |
-| **Default model** | `claude-sonnet-4-6` on provider `anthropic` (override: `setx TAU_MODEL "..."` / `setx TAU_PROVIDER "..."`) |
+| **Default model** | `claude-sonnet-5` on provider `anthropic` (override: `setx TAU_MODEL "..."` / `setx TAU_PROVIDER "..."`) |
 | **OpenRouter launcher** | yes (built-in `openrouter` provider) |
 | **LM Studio launcher** | yes (registers a provider via `tau setup`) |
 | **Runtime deps** | uv + CPython 3.12 (uv auto-downloads Python) |
@@ -34,7 +34,7 @@ Hugging Face's minimalist terminal coding agent (`tau-ai`).
 
 ## Maintenance notes
 
-Tau is Pi-derived: its built-in provider catalog is generated from Pi's API-provider metadata, so model slugs and provider names (`openai`, `anthropic`, `openrouter`, `huggingface`, ...) match Pi's. Model IDs are **provider-scoped** - e.g. `claude-sonnet-4-6` under `anthropic`, but `anthropic/claude-sonnet-4.5` under `openrouter`. Run `tau providers` to see what's configured and `tau --version` for the installed version.
+Tau is Pi-derived: its built-in provider catalog is generated from Pi's API-provider metadata, so model slugs and provider names (`openai`, `anthropic`, `openrouter`, `huggingface`, ...) match Pi's. Model IDs are **provider-scoped** - e.g. `claude-sonnet-5` under `anthropic`, but `anthropic/claude-sonnet-5` under `openrouter`. Run `tau providers` to see what's configured and `tau --version` for the installed version.
 
 `tau setup --provider <name> --base-url <url> --api-key-env <VAR>` registers any OpenAI-compatible endpoint into `~/.tau/catalog.toml`; the LM Studio launcher uses this each run (the upsert is idempotent).
 

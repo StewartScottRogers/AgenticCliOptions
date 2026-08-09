@@ -15,11 +15,11 @@ REM  Requires herdr (see AgentTerminals\Herdr\) and an OpenRouter
 REM  API key. Set the key once, then open a new terminal:
 REM      setx OPENROUTER_API_KEY "sk-or-...your-key..."
 REM  Optional model overrides (browse slugs at openrouter.ai/models):
-REM      setx OPENROUTER_MODEL "anthropic/claude-sonnet-4.5"
+REM      setx OPENROUTER_MODEL "anthropic/claude-sonnet-5"
 REM      setx OPENROUTER_SMALL_MODEL "anthropic/claude-haiku-4.5"
 REM ============================================================
 
-if not defined OPENROUTER_MODEL       set "OPENROUTER_MODEL=anthropic/claude-sonnet-4.5"
+if not defined OPENROUTER_MODEL       set "OPENROUTER_MODEL=anthropic/claude-sonnet-5"
 if not defined OPENROUTER_SMALL_MODEL  set "OPENROUTER_SMALL_MODEL=anthropic/claude-haiku-4.5"
 
 REM  Fail fast in THIS terminal (clearer than surfacing the error

@@ -18,7 +18,7 @@ model_providers:
 models:
     trae_agent_model:
         model_provider: openai
-        model: anthropic/claude-sonnet-4.5
+        model: anthropic/claude-sonnet-5
         max_tokens: 4096
         temperature: 0.5
         top_p: 1

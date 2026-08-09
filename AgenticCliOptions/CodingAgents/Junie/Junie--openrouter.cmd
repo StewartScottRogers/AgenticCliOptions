@@ -17,7 +17,7 @@ REM  Combined with --provider openrouter and --model <alias>,
 REM  this bypasses Junie's default JetBrains-managed routing.
 REM
 REM  IMPORTANT: Junie has its own model registry and rejects
-REM  raw OpenRouter slugs (e.g. "anthropic/claude-sonnet-4.5").
+REM  raw OpenRouter slugs (e.g. "anthropic/claude-sonnet-5").
 REM  Use Junie aliases instead: sonnet, opus, gpt, grok, or
 REM  dated names like claude-sonnet-4-6, claude-opus-4-7,
 REM  gpt-5.5, etc. Run 'junie --model invalid' once to see the

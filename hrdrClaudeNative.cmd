@@ -17,10 +17,10 @@ REM  attaches this console to the herd.
 REM
 REM  Model override:
 REM      setx CLAUDE_MODEL "claude-sonnet-5"
-REM  (default: claude-opus-4-8 -- the latest, most capable model)
+REM  (default: claude-opus-5 -- the latest, most capable model)
 REM ============================================================
 
-if not defined CLAUDE_MODEL set "CLAUDE_MODEL=claude-opus-4-8"
+if not defined CLAUDE_MODEL set "CLAUDE_MODEL=claude-opus-5"
 
 REM  Use this repo's RunClaude.cmd as the in-pane command so the
 REM  Claude Code launch (flags, model, cwd) stays in one place.

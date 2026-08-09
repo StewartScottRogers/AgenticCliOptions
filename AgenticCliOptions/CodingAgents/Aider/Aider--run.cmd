@@ -14,7 +14,7 @@ REM
 REM      setx AIDER_MODEL "gpt-5"
 REM ============================================================
 
-if not defined AIDER_MODEL set "AIDER_MODEL=openrouter/anthropic/claude-sonnet-4.5"
+if not defined AIDER_MODEL set "AIDER_MODEL=openrouter/anthropic/claude-sonnet-5"
 
 where aider >nul 2>nul
 if errorlevel 1 goto :notinstalled

@@ -11,7 +11,7 @@ Anthropic's terminal coding agent.
 | **Vendor** | Anthropic |
 | **Install channel** | npm `@anthropic-ai/claude-code` (and Anthropic's native installer at `~/.local/bin/claude.exe`) |
 | **Native auth** | Anthropic / Claude Code subscription |
-| **Default model** | `claude-sonnet-4-5` (override: `setx CLAUDE_MODEL "..."`) |
+| **Default model** | `claude-sonnet-5` (override: `setx CLAUDE_MODEL "..."`) |
 | **OpenRouter launcher** | yes |
 | **LM Studio launcher** | yes (driven by the sibling settings JSON) |
 | **Runtime deps** | Node.js LTS (>= 22) — installer pulls via winget if missing |

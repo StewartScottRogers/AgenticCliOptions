@@ -18,7 +18,7 @@ REM  pattern that bypasses omp's normal coalescing. Browse
 REM  slugs at https://openrouter.ai/models
 REM ============================================================
 
-if not defined OPENROUTER_MODEL  set "OPENROUTER_MODEL=openrouter/anthropic/claude-sonnet-4.5"
+if not defined OPENROUTER_MODEL  set "OPENROUTER_MODEL=openrouter/anthropic/claude-sonnet-5"
 
 REM ---- no edits needed below this line -----------------------
 

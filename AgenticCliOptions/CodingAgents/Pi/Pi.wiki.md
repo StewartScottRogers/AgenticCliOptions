@@ -11,7 +11,7 @@ Earendil's terminal coding agent.
 | **Vendor** | Earendil |
 | **Install channel** | npm `@earendil-works/pi-coding-agent` (installed with `--ignore-scripts`) |
 | **Native auth** | `/login` slash command or provider API keys |
-| **Default model** | `anthropic/claude-sonnet-4.5` (override: `setx PI_MODEL "..."`) |
+| **Default model** | `anthropic/claude-sonnet-5` (override: `setx PI_MODEL "..."`) |
 | **OpenRouter launcher** | yes |
 | **LM Studio launcher** | no (LM Studio integration lives in Pi's `models.json` instead) |
 | **Runtime deps** | Node.js LTS (>= 22) |

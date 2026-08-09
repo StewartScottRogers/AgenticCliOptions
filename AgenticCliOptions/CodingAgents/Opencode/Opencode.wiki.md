@@ -11,7 +11,7 @@ SST's open-source, provider-neutral terminal AI coding agent.
 | **Vendor** | SST (open source, Apache 2.0) |
 | **Install channel** | npm `opencode-ai` |
 | **Native auth** | Per-provider via `opencode auth login <provider>` (persists in `~/.config/opencode/auth.json`) |
-| **Default model** | `anthropic/claude-sonnet-4-5` (override: `setx OPENCODE_MODEL "..."`) — model invocation is always `provider/model` |
+| **Default model** | `anthropic/claude-sonnet-5` (override: `setx OPENCODE_MODEL "..."`) — model invocation is always `provider/model` |
 | **OpenRouter launcher** | yes (first-class built-in provider) |
 | **LM Studio launcher** | yes (per-run `OPENCODE_CONFIG` JSON declaring a custom provider — opencode has no `--base-url` CLI flag) |
 | **Runtime deps** | Node.js LTS (>= 22) |

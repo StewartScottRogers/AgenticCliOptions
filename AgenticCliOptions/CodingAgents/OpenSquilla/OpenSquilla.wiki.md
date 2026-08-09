@@ -11,7 +11,7 @@ Token-efficient microkernel coding agent.
 | **Vendor** | OpenSquilla |
 | **Install channel** | `uv tool install --python 3.12 --upgrade "opensquilla[recommended] @ <github-wheel-url>"` |
 | **Native auth** | `OPENROUTER_API_KEY` (via `opensquilla configure --api-key-env`) |
-| **Default model** | `anthropic/claude-sonnet-4.5` (override: `setx OPENSQUILLA_MODEL "..."`) |
+| **Default model** | `anthropic/claude-sonnet-5` (override: `setx OPENSQUILLA_MODEL "..."`) |
 | **OpenRouter launcher** | yes |
 | **LM Studio launcher** | no (stub) |
 | **Runtime deps** | uv + Python 3.12 (uv handles both); VC++ Redistributable for some wheels |

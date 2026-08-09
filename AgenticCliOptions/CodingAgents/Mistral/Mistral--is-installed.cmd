@@ -9,7 +9,7 @@ if defined OPENROUTER_MODEL (
     set "_OR=%OPENROUTER_MODEL%"
     set "_ORSRC="
 ) else (
-    set "_OR=anthropic/claude-sonnet-4.5"
+    set "_OR=anthropic/claude-sonnet-5"
     set "_ORSRC=  (built-in default; setx OPENROUTER_MODEL to override)"
 )
 if "%RC%"=="0" (

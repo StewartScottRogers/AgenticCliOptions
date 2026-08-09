@@ -20,7 +20,7 @@ REM  To list every OpenRouter model Aider knows about:
 REM      aider --list-models openrouter/
 REM ============================================================
 
-if not defined OPENROUTER_MODEL  set "OPENROUTER_MODEL=openrouter/anthropic/claude-sonnet-4.5"
+if not defined OPENROUTER_MODEL  set "OPENROUTER_MODEL=openrouter/anthropic/claude-sonnet-5"
 
 REM ---- no edits needed below this line -----------------------
 

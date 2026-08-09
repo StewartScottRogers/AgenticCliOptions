@@ -11,7 +11,7 @@ The classic AI pair-programmer for the terminal, from the Aider community.
 | **Vendor** | Aider community |
 | **Install channel** | `uv tool install --force --python 3.12 --upgrade aider-chat` |
 | **Native auth** | `OPENROUTER_API_KEY` (and many others) |
-| **Default model** | `openrouter/anthropic/claude-sonnet-4.5` (override: `setx AIDER_MODEL "..."`) |
+| **Default model** | `openrouter/anthropic/claude-sonnet-5` (override: `setx AIDER_MODEL "..."`) |
 | **OpenRouter launcher** | yes |
 | **LM Studio launcher** | no (stub — use Qwen / Codex / Claude for local routing) |
 | **Runtime deps** | Git (installer pulls Git for Windows if missing); Python 3.12 (uv downloads it) |

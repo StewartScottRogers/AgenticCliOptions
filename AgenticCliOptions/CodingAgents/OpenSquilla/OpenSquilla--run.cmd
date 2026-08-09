@@ -11,10 +11,10 @@ REM
 REM  Default model is always passed via --model. Override by setting
 REM  OPENSQUILLA_MODEL once (persists for new terminals):
 REM
-REM      setx OPENSQUILLA_MODEL "anthropic/claude-opus-4-7"
+REM      setx OPENSQUILLA_MODEL "anthropic/claude-opus-5"
 REM ============================================================
 
-if not defined OPENSQUILLA_MODEL set "OPENSQUILLA_MODEL=anthropic/claude-sonnet-4.5"
+if not defined OPENSQUILLA_MODEL set "OPENSQUILLA_MODEL=anthropic/claude-sonnet-5"
 
 where opensquilla >nul 2>nul
 if errorlevel 1 goto :notinstalled

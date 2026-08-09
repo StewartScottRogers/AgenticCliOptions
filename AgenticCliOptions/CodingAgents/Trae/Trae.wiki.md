@@ -11,7 +11,7 @@ ByteDance's terminal coding agent (Trae Agent).
 | **Vendor** | ByteDance |
 | **Install channel** | `uv tool install --python 3.12 --upgrade "trae-agent[evaluation] @ git+https://github.com/bytedance/trae-agent.git"` |
 | **Native auth** | Provider-agnostic via env vars (OpenAI, Anthropic, etc.) |
-| **Default model** | `anthropic/claude-sonnet-4.5` (override: `setx OPENROUTER_MODEL "..."` — Trae shares the OpenRouter wrapper var) |
+| **Default model** | `anthropic/claude-sonnet-5` (override: `setx OPENROUTER_MODEL "..."` — Trae shares the OpenRouter wrapper var) |
 | **OpenRouter launcher** | yes |
 | **LM Studio launcher** | yes |
 | **Runtime deps** | uv + Python 3.12 (uv handles both); see notes for why 3.13 is rejected |

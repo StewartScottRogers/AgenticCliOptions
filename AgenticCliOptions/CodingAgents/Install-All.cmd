@@ -245,7 +245,7 @@ for %%A in (%ALL_AGENTS%) do (
         call :agent_default_model %%A
         set "MODEL=!DM!"
     )
-    REM Clip long slugs (e.g. openrouter/anthropic/claude-sonnet-4.5)
+    REM Clip long slugs (e.g. openrouter/anthropic/claude-sonnet-5)
     REM with an ellipsis so the table stays aligned at 30 chars.
     if not "!MODEL:~30,1!"=="" set "MODEL=!MODEL:~0,27!..."
     set "MP=!MODEL!                                "
@@ -821,25 +821,25 @@ REM  <Agent>--is-installed.cmd.
 REM ============================================================
 :agent_default_model
 set "DM="
-if /I "%~1"=="Aider"        set "DM=openrouter/anthropic/claude-sonnet-4.5" & exit /b 0
-if /I "%~1"=="Antigravity"  set "DM=antigravity-managed"                   & exit /b 0
-if /I "%~1"=="Claude"       set "DM=claude-sonnet-4-5"                      & exit /b 0
-if /I "%~1"=="Codex"        set "DM=gpt-5.5"                                & exit /b 0
-if /I "%~1"=="Gemini"       set "DM=gemini-2.5-pro"                         & exit /b 0
-if /I "%~1"=="Hermes"       set "DM=Hermes-4-405B"                          & exit /b 0
-if /I "%~1"=="Junie"        set "DM=sonnet"                                 & exit /b 0
-if /I "%~1"=="Oh-My-Pi"     set "DM=openrouter/anthropic/claude-sonnet-4.5" & exit /b 0
-if /I "%~1"=="Opencode"     set "DM=anthropic/claude-sonnet-4-5"            & exit /b 0
-if /I "%~1"=="OpenSquilla"  set "DM=anthropic/claude-sonnet-4.5"            & exit /b 0
-if /I "%~1"=="Pi"           set "DM=anthropic/claude-sonnet-4.5"            & exit /b 0
-if /I "%~1"=="Tau"          set "DM=claude-sonnet-4-6"                      & exit /b 0
-if /I "%~1"=="VTCode"       set "DM=qwen/qwen3-coder"                       & exit /b 0
-if /I "%~1"=="Qwen"         set "DM=qwen/qwen3-coder"                       & exit /b 0
-if /I "%~1"=="Trae"         set "DM=anthropic/claude-sonnet-4.5"            & exit /b 0
-if /I "%~1"=="Mistral"      set "DM=mistral-managed"                        & exit /b 0
-if /I "%~1"=="Grok"         set "DM=xai-managed"                            & exit /b 0
-if /I "%~1"=="AmazonQ"      set "DM=aws-managed"                            & exit /b 0
-if /I "%~1"=="Codebuff"     set "DM=codebuff-managed"                       & exit /b 0
+if /I "%~1"=="Aider"        set "DM=openrouter/anthropic/claude-sonnet-5" & exit /b 0
+if /I "%~1"=="Antigravity"  set "DM=antigravity-managed"                  & exit /b 0
+if /I "%~1"=="Claude"       set "DM=claude-sonnet-5"                      & exit /b 0
+if /I "%~1"=="Codex"        set "DM=gpt-5.5"                              & exit /b 0
+if /I "%~1"=="Gemini"       set "DM=gemini-2.5-pro"                       & exit /b 0
+if /I "%~1"=="Hermes"       set "DM=Hermes-4-405B"                        & exit /b 0
+if /I "%~1"=="Junie"        set "DM=sonnet"                               & exit /b 0
+if /I "%~1"=="Oh-My-Pi"     set "DM=openrouter/anthropic/claude-sonnet-5" & exit /b 0
+if /I "%~1"=="Opencode"     set "DM=anthropic/claude-sonnet-5"            & exit /b 0
+if /I "%~1"=="OpenSquilla"  set "DM=anthropic/claude-sonnet-5"            & exit /b 0
+if /I "%~1"=="Pi"           set "DM=anthropic/claude-sonnet-5"            & exit /b 0
+if /I "%~1"=="Tau"          set "DM=claude-sonnet-5"                      & exit /b 0
+if /I "%~1"=="VTCode"       set "DM=qwen/qwen3-coder"                     & exit /b 0
+if /I "%~1"=="Qwen"         set "DM=qwen/qwen3-coder"                     & exit /b 0
+if /I "%~1"=="Trae"         set "DM=anthropic/claude-sonnet-5"            & exit /b 0
+if /I "%~1"=="Mistral"      set "DM=mistral-managed"                      & exit /b 0
+if /I "%~1"=="Grok"         set "DM=xai-managed"                          & exit /b 0
+if /I "%~1"=="AmazonQ"      set "DM=aws-managed"                          & exit /b 0
+if /I "%~1"=="Codebuff"     set "DM=codebuff-managed"                     & exit /b 0
 exit /b 0
 
 REM ============================================================
