@@ -44,7 +44,7 @@ Multi-backend out of the box: Gemini 3 Pro, Claude Sonnet 4.5, and GPT-OSS are a
 
 The OpenRouter and LM Studio launchers are **honest stubs**. The upstream config schema for adding a custom OpenAI-compatible provider (the equivalent of `~/.codex/config.toml`'s `model_providers` block) is not yet documented in a form trustworthy enough to script. Update those launchers once Google publishes the schema. In the meantime, route via `Qwen--openrouter.cmd`, `Codex--openrouter.cmd`, or `Claude--openrouter.cmd`.
 
-**Gemini CLI deprecation context:** On 2026-06-18, Gemini CLI stops serving Pro/Ultra/free Code Assist users (Enterprise keeps it). Antigravity is the supported successor for those users — see the [Gemini](../Gemini/Gemini.wiki.md) per-agent wiki for the deprecation note.
+**Gemini CLI deprecation context:** As of 2026-06-18, Gemini CLI no longer serves Pro/Ultra/free Code Assist users (Enterprise keeps it). Antigravity is the supported successor for those users — see the [Gemini](../Gemini/Gemini.wiki.md) per-agent wiki for the deprecation note.
 
 ## Plugins
 

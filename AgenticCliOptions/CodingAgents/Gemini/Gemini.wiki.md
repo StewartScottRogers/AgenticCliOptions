@@ -6,7 +6,7 @@ Google's terminal coding agent.
 
 ## ⚠️ Deprecation: 2026-06-18
 
-On **2026-06-18**, Gemini CLI stops serving requests for Google AI Pro, Ultra, and free Gemini Code Assist users. Enterprise tier (Gemini Code Assist Standard / Enterprise) keeps access.
+As of **2026-06-18**, Gemini CLI no longer serves requests for Google AI Pro, Ultra, and free Gemini Code Assist users. Enterprise tier (Gemini Code Assist Standard / Enterprise) keeps access.
 
 **Migration:** install [Antigravity CLI](../Antigravity/Antigravity.wiki.md) — Google's Go-based successor — and run `agy plugin import gemini` to convert extensions and settings.
 
@@ -41,7 +41,7 @@ On **2026-06-18**, Gemini CLI stops serving requests for Google AI Pro, Ultra, a
 
 No OpenRouter / LM Studio launcher; the Gemini CLI only speaks Google's own API. To route Gemini *models* via OpenRouter today, use the [Qwen Code CLI](../Qwen/Qwen.wiki.md) (it's a Gemini CLI fork and accepts an OpenAI base URL).
 
-After 2026-06-18, prefer Antigravity for non-Enterprise users.
+Unless you are on the Enterprise tier, prefer Antigravity — the 2026-06-18 cutoff has passed.
 
 ## Plugins
 

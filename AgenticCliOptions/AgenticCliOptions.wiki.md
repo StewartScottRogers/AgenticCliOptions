@@ -179,7 +179,7 @@ contract.
         │
         ├── AmazonQ/      AmazonQ--{install,run,uninstall}.cmd
         ├── Claude/       Claude--{install,run,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
-        │                 LMStudio.Claude.Settings.json
+        │                 LMStudio.Claude.Settings.template.json
         ├── Codex/        Codex--{install,run,uninstall,openrouter,local-lmstudio,remote-lmstudio}.cmd
         ├── Gemini/       Gemini--{install,run,uninstall}.cmd
         ├── Antigravity/  Antigravity--{install,run,uninstall,openrouter,local-lmstudio,remote-lmstudio,is-installed}.cmd
@@ -193,6 +193,7 @@ contract.
         ├── Oh-My-Pi/     Oh-My-Pi--{install,uninstall,openrouter,run}.cmd
         ├── OpenSquilla/  OpenSquilla--{install,uninstall,openrouter,run}.cmd
         ├── Aider/        Aider--{install,uninstall,openrouter,run}.cmd
+        ├── Tau/          Tau--{install,uninstall,openrouter,run}.cmd
         ├── Junie/        Junie--{install,uninstall,openrouter,run}.cmd
         ├── VTCode/       VTCode--{install,uninstall,openrouter,run}.cmd
         └── Opencode/     Opencode--{install,uninstall,run,openrouter,local-lmstudio,remote-lmstudio,is-installed}.cmd

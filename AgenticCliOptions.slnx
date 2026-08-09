@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Solution Items/">
     <File Path="Agents.cmd" />
+    <File Path="hrdrClaudeNative.cmd" />
     <File Path="OpenRouter.url" />
     <File Path="RunClaude.cmd" />
   </Folder>

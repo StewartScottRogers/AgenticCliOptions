@@ -189,8 +189,23 @@
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\uninstall\codex.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\uninstall\gemini.cmd" />
     <None Include="$(MSBuildThisFileDirectory)CodingAgents\Plugins\cipher-mcp\uninstall\opencode.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\_resolve-lmstudio-url.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\_resolve-lmstudio-url.ps1" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Tau\Tau--install.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Tau\Tau--is-installed.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Tau\Tau--local-lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Tau\Tau--openrouter.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Tau\Tau--remote-lmstudio.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Tau\Tau--run.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Tau\Tau--uninstall.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Tau\Tau.wiki.md" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\Trae\trae_config.yaml" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\.vtcode\README.md" />
+    <None Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\.vtcode\terminals\INDEX.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\LMStudio.Claude.Settings.json" />
+    <Content Include="$(MSBuildThisFileDirectory)CodingAgents\Claude\LMStudio.Claude.Settings.template.json" />
+    <Content Include="$(MSBuildThisFileDirectory)CodingAgents\Qwen\.qwen\settings.template.json" />
+    <Content Include="$(MSBuildThisFileDirectory)CodingAgents\VTCode\.vtcode\tool-policy.json" />
   </ItemGroup>
 </Project>

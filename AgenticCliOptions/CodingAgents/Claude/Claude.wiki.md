@@ -23,11 +23,11 @@ Anthropic's terminal coding agent.
 | `Claude--install.cmd` | Install / update the npm package. Re-runnable. |
 | `Claude--run.cmd` | Launch against the Anthropic API using `CLAUDE_MODEL`. |
 | `Claude--openrouter.cmd` | Route through OpenRouter via `ANTHROPIC_BASE_URL=https://openrouter.ai/api` + `OPENROUTER_API_KEY`. |
-| `Claude--local-lmstudio.cmd` | Launch against a local LM Studio server. Reads `LMStudio.Claude.Settings.json`. |
+| `Claude--local-lmstudio.cmd` | Launch against a local LM Studio server. Renders `LMStudio.Claude.Settings.template.json`. |
 | `Claude--remote-lmstudio.cmd` | Set `LMSTUDIO_URL` then call the local launcher. |
 | `Claude--uninstall.cmd` | Removes BOTH the npm install and the native `~/.local/bin/claude.exe` shim. |
 | `Claude--is-installed.cmd` | Probe used by `Install-All.cmd --status`. |
-| `LMStudio.Claude.Settings.json` | `--settings` file passed by the LM Studio launcher: sets `ANTHROPIC_BASE_URL` + a `UserPromptSubmit` hook that echoes the loaded model id. |
+| `LMStudio.Claude.Settings.template.json` | Template for the `--settings` file passed by the LM Studio launcher: sets `ANTHROPIC_BASE_URL` + a `UserPromptSubmit` hook that echoes the loaded model id. The launcher substitutes `__LMSTUDIO_URL__` and writes the rendered file to a temp path. |
 
 ## Config (NOT removed by uninstall)
 

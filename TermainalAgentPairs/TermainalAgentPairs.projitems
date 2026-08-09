@@ -12,5 +12,6 @@
     <None Include="$(MSBuildThisFileDirectory)hrdrClaudeLmstudio.cmd" />
     <None Include="$(MSBuildThisFileDirectory)hrdrClaudeOpenrouter.cmd" />
     <None Include="$(MSBuildThisFileDirectory)hrdrClaudeNative.cmd" />
+    <None Include="$(MSBuildThisFileDirectory)_hrdr-launch.cmd" />
   </ItemGroup>
 </Project>
