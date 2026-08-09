@@ -4,11 +4,13 @@ setlocal EnableDelayedExpansion
 REM ============================================================
 REM  Agents  --  single entry point for the whole repo
 REM  ------------------------------------------------------------
-REM  One launcher to reach both catalogues:
+REM  One launcher to reach all three catalogues:
 REM    1) Coding Agents  -> AgenticCliOptions\CodingAgents\Install-All.cmd
 REM         Claude, Codex, Gemini, Pi, Qwen ... (the agents)
 REM    2) Agent Terminals -> AgentTerminals\Install-All.cmd
 REM         Herdr ... (the multiplexers that host the agents)
+REM    3) Agent Tools     -> AgentTools\Install-All.cmd
+REM         superfile ... (TUI utilities that run beside the agents)
 REM
 REM  Each choice hands off to that catalogue's own interactive
 REM  Install-All menu (install / uninstall / update / status).
@@ -19,6 +21,7 @@ REM ============================================================
 set "ROOT=%~dp0"
 set "AGENTS_MENU=%ROOT%AgenticCliOptions\CodingAgents\Install-All.cmd"
 set "TERMINALS_MENU=%ROOT%AgentTerminals\Install-All.cmd"
+set "TOOLS_MENU=%ROOT%AgentTools\Install-All.cmd"
 
 :menu
 cls
@@ -28,6 +31,7 @@ echo ============================================================
 echo.
 echo     1^) Coding Agents     Claude, Codex, Gemini, Pi, Qwen, ...
 echo     2^) Agent Terminals   Herdr, ... (multiplexers for agents)
+echo     3^) Agent Tools       superfile, ... (utilities beside agents)
 echo.
 echo     Q^) quit
 echo.
@@ -37,6 +41,7 @@ if not defined INPUT goto :menu
 if /I "!INPUT!"=="Q" (endlocal & exit /b 0)
 if "!INPUT!"=="1" goto :coding_agents
 if "!INPUT!"=="2" goto :terminals
+if "!INPUT!"=="3" goto :tools
 goto :menu
 
 :coding_agents
@@ -61,4 +66,16 @@ if not exist "%TERMINALS_MENU%" (
     goto :menu
 )
 call "%TERMINALS_MENU%"
+goto :menu
+
+:tools
+if not exist "%TOOLS_MENU%" (
+    echo.
+    echo ERROR: Agent Tools menu not found at:
+    echo     %TOOLS_MENU%
+    echo.
+    pause
+    goto :menu
+)
+call "%TOOLS_MENU%"
 goto :menu
